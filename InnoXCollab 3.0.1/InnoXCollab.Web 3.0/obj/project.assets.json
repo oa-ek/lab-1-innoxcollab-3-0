@@ -8,19 +8,19 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\serhi\\.nuget\\packages\\": {}
+    "C:\\Users\\dim4i\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\C#\\ForKleban\\lab-1-innoxcollab-3-0\\InnoXCollab 3.0.1\\InnoXCollab.Web 3.0\\InnoXCollab.Web 3.0.csproj",
+      "projectUniqueName": "C:\\Users\\dim4i\\Source\\Repos\\innoxcollab-3-0\\InnoXCollab 3.0.1\\InnoXCollab.Web 3.0\\InnoXCollab.Web 3.0.csproj",
       "projectName": "InnoXCollab.Web 3.0",
-      "projectPath": "D:\\C#\\ForKleban\\lab-1-innoxcollab-3-0\\InnoXCollab 3.0.1\\InnoXCollab.Web 3.0\\InnoXCollab.Web 3.0.csproj",
-      "packagesPath": "C:\\Users\\serhi\\.nuget\\packages\\",
-      "outputPath": "D:\\C#\\ForKleban\\lab-1-innoxcollab-3-0\\InnoXCollab 3.0.1\\InnoXCollab.Web 3.0\\obj\\",
+      "projectPath": "C:\\Users\\dim4i\\Source\\Repos\\innoxcollab-3-0\\InnoXCollab 3.0.1\\InnoXCollab.Web 3.0\\InnoXCollab.Web 3.0.csproj",
+      "packagesPath": "C:\\Users\\dim4i\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\dim4i\\Source\\Repos\\innoxcollab-3-0\\InnoXCollab 3.0.1\\InnoXCollab.Web 3.0\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\serhi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\dim4i\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

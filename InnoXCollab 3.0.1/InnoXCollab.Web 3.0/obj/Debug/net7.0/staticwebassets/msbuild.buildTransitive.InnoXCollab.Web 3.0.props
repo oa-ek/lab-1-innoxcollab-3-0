@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\InnoXCollab.Web 3.0.props" />
+</Project>

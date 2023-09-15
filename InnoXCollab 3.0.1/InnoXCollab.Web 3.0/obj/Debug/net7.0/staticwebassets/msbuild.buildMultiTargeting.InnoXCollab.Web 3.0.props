@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\InnoXCollab.Web 3.0.props" />
+</Project>
