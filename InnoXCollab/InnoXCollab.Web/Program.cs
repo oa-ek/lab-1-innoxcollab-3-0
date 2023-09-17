@@ -1,7 +1,13 @@
+using InnoXCollab.Web.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+builder.Services.AddDbContext<InnoXCollabContext>(options => 
+options.UseSqlServer(builder.Configuration.GetConnectionString("InnoXCollabConnectionString")));
 
 var app = builder.Build();
 

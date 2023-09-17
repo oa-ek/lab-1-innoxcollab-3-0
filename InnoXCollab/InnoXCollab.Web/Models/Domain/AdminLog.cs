@@ -1,17 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using InnoXCollab.Web.Models.Domain.Interfaces;
 
 namespace InnoXCollab.Web.Models.Domain
 {
-    public class AdminLog
+    public class AdminLog : IEntity<Guid>
     {
         [Key]
-        public int LogID { get; set; }
-        public int UserID { get; set; }
+        public Guid Id { get; set; }
+        
         public DateTime LogDateTime { get; set; }
         public string Action { get; set; }
 
-        [ForeignKey("UserID")]
+
+        public Guid UserId { get; set; }
+
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
     }
 }
