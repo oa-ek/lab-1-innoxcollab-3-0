@@ -8,14 +8,8 @@ namespace InnoXCollab.Web.Models.Domain
     {
         [Key]
         public Guid Id { get; set; }
-        
         public DateTime LogDateTime { get; set; }
         public string Action { get; set; }
-
-
-        public Guid UserId { get; set; }
-
-        [ForeignKey("UserId")]
         public virtual User User { get; set; }
     }
 }

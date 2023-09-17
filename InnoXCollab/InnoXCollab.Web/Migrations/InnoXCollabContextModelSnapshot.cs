@@ -22,21 +22,6 @@ namespace InnoXCollab.Web.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EventEventTag", b =>
-                {
-                    b.Property<Guid>("EventTagsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EventsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("EventTagsId", "EventsId");
-
-                    b.HasIndex("EventsId");
-
-                    b.ToTable("EventEventTag");
-                });
-
             modelBuilder.Entity("EventInvestor", b =>
                 {
                     b.Property<Guid>("EventsId")
@@ -50,6 +35,21 @@ namespace InnoXCollab.Web.Migrations
                     b.HasIndex("InvestorsId");
 
                     b.ToTable("EventInvestor");
+                });
+
+            modelBuilder.Entity("EventTag", b =>
+                {
+                    b.Property<Guid>("EventsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EventsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("EventTag");
                 });
 
             modelBuilder.Entity("EventTransaction", b =>
@@ -100,9 +100,6 @@ namespace InnoXCollab.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("EventTypeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("HoldingPlace")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -117,46 +114,19 @@ namespace InnoXCollab.Web.Migrations
                     b.Property<string>("ShortDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("TypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventTypeId");
+                    b.HasIndex("TypeId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Events");
-                });
-
-            modelBuilder.Entity("InnoXCollab.Web.Models.Domain.EventTag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("EventTagName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EventTags");
-                });
-
-            modelBuilder.Entity("InnoXCollab.Web.Models.Domain.EventType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("EventTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EventTypes");
                 });
 
             modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Investor", b =>
@@ -165,13 +135,13 @@ namespace InnoXCollab.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("InvestorAmount")
+                    b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("InvestorEmail")
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("InvestorName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -180,20 +150,35 @@ namespace InnoXCollab.Web.Migrations
                     b.ToTable("Investors");
                 });
 
+            modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("InvestorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("TransactionAmount")
+                    b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("TransactionDate")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("InvestorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -202,46 +187,46 @@ namespace InnoXCollab.Web.Migrations
                     b.ToTable("Transactions");
                 });
 
+            modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Type", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Types");
+                });
+
             modelBuilder.Entity("InnoXCollab.Web.Models.Domain.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserRole")
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("EventEventTag", b =>
-                {
-                    b.HasOne("InnoXCollab.Web.Models.Domain.EventTag", null)
-                        .WithMany()
-                        .HasForeignKey("EventTagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InnoXCollab.Web.Models.Domain.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("EventInvestor", b =>
@@ -255,6 +240,21 @@ namespace InnoXCollab.Web.Migrations
                     b.HasOne("InnoXCollab.Web.Models.Domain.Investor", null)
                         .WithMany()
                         .HasForeignKey("InvestorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventTag", b =>
+                {
+                    b.HasOne("InnoXCollab.Web.Models.Domain.Event", null)
+                        .WithMany()
+                        .HasForeignKey("EventsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InnoXCollab.Web.Models.Domain.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -287,9 +287,9 @@ namespace InnoXCollab.Web.Migrations
 
             modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Event", b =>
                 {
-                    b.HasOne("InnoXCollab.Web.Models.Domain.EventType", "EventType")
+                    b.HasOne("InnoXCollab.Web.Models.Domain.Type", "Type")
                         .WithMany("Events")
-                        .HasForeignKey("EventTypeId")
+                        .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -299,7 +299,7 @@ namespace InnoXCollab.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("EventType");
+                    b.Navigation("Type");
 
                     b.Navigation("User");
                 });
@@ -315,7 +315,7 @@ namespace InnoXCollab.Web.Migrations
                     b.Navigation("Investor");
                 });
 
-            modelBuilder.Entity("InnoXCollab.Web.Models.Domain.EventType", b =>
+            modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Type", b =>
                 {
                     b.Navigation("Events");
                 });

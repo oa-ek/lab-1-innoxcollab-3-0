@@ -12,37 +12,13 @@ namespace InnoXCollab.Web.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "EventTags",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventTagName = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventTags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EventTypes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Investors",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    InvestorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InvestorEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InvestorAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,13 +26,37 @@ namespace InnoXCollab.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Types",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Types", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -69,8 +69,8 @@ namespace InnoXCollab.Web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TransactionAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     InvestorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -115,45 +115,21 @@ namespace InnoXCollab.Web.Migrations
                     HoldingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HoldingPlace = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    TypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Events_EventTypes_EventTypeId",
-                        column: x => x.EventTypeId,
-                        principalTable: "EventTypes",
+                        name: "FK_Events_Types_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "Types",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Events_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EventEventTag",
-                columns: table => new
-                {
-                    EventTagsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventEventTag", x => new { x.EventTagsId, x.EventsId });
-                    table.ForeignKey(
-                        name: "FK_EventEventTag_EventTags_EventTagsId",
-                        column: x => x.EventTagsId,
-                        principalTable: "EventTags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EventEventTag_Events_EventsId",
-                        column: x => x.EventsId,
-                        principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -178,6 +154,30 @@ namespace InnoXCollab.Web.Migrations
                         name: "FK_EventInvestor_Investors_InvestorsId",
                         column: x => x.InvestorsId,
                         principalTable: "Investors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventTag",
+                columns: table => new
+                {
+                    EventsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TagsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventTag", x => new { x.EventsId, x.TagsId });
+                    table.ForeignKey(
+                        name: "FK_EventTag_Events_EventsId",
+                        column: x => x.EventsId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EventTag_Tags_TagsId",
+                        column: x => x.TagsId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -212,24 +212,24 @@ namespace InnoXCollab.Web.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventEventTag_EventsId",
-                table: "EventEventTag",
-                column: "EventsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EventInvestor_InvestorsId",
                 table: "EventInvestor",
                 column: "InvestorsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Events_EventTypeId",
+                name: "IX_Events_TypeId",
                 table: "Events",
-                column: "EventTypeId");
+                column: "TypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_UserId",
                 table: "Events",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventTag_TagsId",
+                table: "EventTag",
+                column: "TagsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventTransaction_TransactionsId",
@@ -249,16 +249,16 @@ namespace InnoXCollab.Web.Migrations
                 name: "AdminLogs");
 
             migrationBuilder.DropTable(
-                name: "EventEventTag");
+                name: "EventInvestor");
 
             migrationBuilder.DropTable(
-                name: "EventInvestor");
+                name: "EventTag");
 
             migrationBuilder.DropTable(
                 name: "EventTransaction");
 
             migrationBuilder.DropTable(
-                name: "EventTags");
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Events");
@@ -267,7 +267,7 @@ namespace InnoXCollab.Web.Migrations
                 name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "EventTypes");
+                name: "Types");
 
             migrationBuilder.DropTable(
                 name: "Users");

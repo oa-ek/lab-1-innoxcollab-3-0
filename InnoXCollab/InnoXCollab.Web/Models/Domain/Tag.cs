@@ -3,13 +3,11 @@ using InnoXCollab.Web.Models.Domain.Interfaces;
 
 namespace InnoXCollab.Web.Models.Domain
 {
-    public class EventType : IEntity<Guid>
+    public class Tag : IEntity<Guid>
     {
         [Key]
         public Guid Id { get; set; }
-
-        public string EventTypeName { get; set; }
-
+        public string Name { get; set; }
         public virtual ICollection<Event> Events { get; set; }
     }
 }

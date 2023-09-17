@@ -8,16 +8,9 @@ namespace InnoXCollab.Web.Models.Domain
     {
         [Key]
         public Guid Id { get; set; }
-        public decimal TransactionAmount { get; set; }
-
-        public DateTime TransactionDate { get; set; }
-
-        public Guid InvestorId { get; set; }
-
-        [ForeignKey(nameof(InvestorId))]
-
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
         public virtual Investor Investor { get; set; }
-        
         public virtual ICollection<Event> Events { get; set; }
 
 

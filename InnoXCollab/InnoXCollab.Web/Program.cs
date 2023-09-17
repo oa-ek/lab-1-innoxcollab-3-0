@@ -1,4 +1,6 @@
 using InnoXCollab.Web.Data;
+using InnoXCollab.Web.Models.Domain;
+using InnoXCollab.Web.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,8 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddDbContext<InnoXCollabContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("InnoXCollabConnectionString")));
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 

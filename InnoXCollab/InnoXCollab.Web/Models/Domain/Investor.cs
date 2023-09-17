@@ -7,13 +7,9 @@ namespace InnoXCollab.Web.Models.Domain
     {
         [Key]
         public Guid Id { get; set; }
-
-        public string InvestorName { get; set; }
-
-        public string? InvestorEmail { get; set; }
-
-        public decimal InvestorAmount { get; set; }
-
+        public string Name { get; set; }
+        public string? Email { get; set; }
+        public decimal Amount { get; set; }
         public virtual ICollection<Event> Events { get; set; }
     }
 }
