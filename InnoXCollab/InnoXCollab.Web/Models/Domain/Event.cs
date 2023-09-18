@@ -13,10 +13,10 @@ namespace InnoXCollab.Web.Models.Domain
         public string Description { get; set; }
         public DateTime HoldingTime { get; set; }
         public string HoldingPlace { get; set; }
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
         public virtual Type Type { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; } 
         public virtual ICollection<Investor> Investors { get; set; }
     }
 }

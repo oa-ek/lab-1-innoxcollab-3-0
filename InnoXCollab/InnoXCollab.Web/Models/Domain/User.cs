@@ -13,7 +13,13 @@ namespace InnoXCollab.Web.Models.Domain
         public string Role { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public virtual ICollection<Event> Events { get; set; }
-        public virtual ICollection<AdminLog> AdminLogs { get; set; }
+		public virtual ICollection<Event> Events { get; set; }
+		public virtual ICollection<AdminLog> AdminLogs { get; set; }
+		// questionable properties
+		public string? Nationality { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Gender { get; set; }
+        public string? Address { get; set; }
+
     }
 }

@@ -12,7 +12,5 @@ namespace InnoXCollab.Web.Models.Domain
         public DateTime Date { get; set; }
         public virtual Investor Investor { get; set; }
         public virtual ICollection<Event> Events { get; set; }
-
-
     }
 }
