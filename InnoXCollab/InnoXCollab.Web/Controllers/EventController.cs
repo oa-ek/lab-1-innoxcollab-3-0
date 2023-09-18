@@ -30,5 +30,34 @@ namespace InnoXCollab.Web.Controllers
             return View(model);
 		}
 
+        [HttpPost]
+
+        public async Task<IActionResult> Create(CreateEventRequest createEventRequest)
+        {
+            var @event = new Event
+            {
+                Name = createEventRequest.Name,
+                Description = createEventRequest.Description,
+                HoldingTime = createEventRequest.HoldingTime
+            };
+
+            var selectedTags = new List<Tag>();
+
+            foreach (var selectedTagId in createEventRequest.SelectedTags)
+            {
+                var selectedTagIdAsGuid = Guid.Parse(selectedTagId);
+                var existingTag = await tagRepository.GetAsync(selectedTagIdAsGuid);
+
+                if (existingTag != null)
+                {
+                    selectedTags.Add(existingTag);
+                }
+            }
+
+            @event.Tags = selectedTags;
+
+            return View();
+        }
+
     }
 }
