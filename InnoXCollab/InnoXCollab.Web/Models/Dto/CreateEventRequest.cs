@@ -11,21 +11,19 @@ namespace InnoXCollab.Web.Models.Dto
         public string ShortDescription { get; set; }
         public DateTime HoldingTime { get; set; } = DateTime.Now;
         public string HoldingPlace { get; set; } = string.Empty;
-
         public string FeaturedImageUrl { get; set; } = string.Empty;
         public string UrlHandle { get; set; } = string.Empty;
-        public string Type { get; set; } = string.Empty;
-
         public decimal StartPrice { get; set; }
 
-        // Display Tags
+		// Display types
+		public IEnumerable<SelectListItem> Types { get; set; }
+        public string SelectedType { get; set; }
 
-        public IEnumerable<SelectListItem> Tags { get; set; }
-
+		// Display Tags
+		public IEnumerable<SelectListItem> Tags { get; set; }
         public string[] SelectedTags { get; set; } = Array.Empty<string>();
 
         // Investor
-
-        public string Investor { get; set; }
+        public string? Investor { get; set; }
     }
 }

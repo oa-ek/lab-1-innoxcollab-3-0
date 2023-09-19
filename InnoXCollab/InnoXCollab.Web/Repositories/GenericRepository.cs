@@ -66,7 +66,7 @@ namespace InnoXCollab.Web.Repositories
 			foreach (var include in includes)
 				query = query.Include(include);
 
-			return await Task.FromResult(query);
+			return query;
 		}
 
 	}

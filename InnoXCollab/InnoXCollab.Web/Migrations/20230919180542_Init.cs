@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace InnoXCollab.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -208,6 +210,16 @@ namespace InnoXCollab.Web.Migrations
                         principalTable: "Transactions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Types",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("79735ce4-d1f1-48e3-80b4-430d7c3f6d3c"), "Хакатон" },
+                    { new Guid("a87de825-9d73-4ac9-8146-202a60322bac"), "Грант" },
+                    { new Guid("d36d46cf-ae23-4473-a9e2-f44e9d834266"), "Акселератор" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InnoXCollab.Web.Migrations
 {
     [DbContext(typeof(InnoXCollabContext))]
-    [Migration("20230918152840_init")]
-    partial class init
+    [Migration("20230919180542_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -208,6 +208,23 @@ namespace InnoXCollab.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Types");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("79735ce4-d1f1-48e3-80b4-430d7c3f6d3c"),
+                            Name = "Хакатон"
+                        },
+                        new
+                        {
+                            Id = new Guid("d36d46cf-ae23-4473-a9e2-f44e9d834266"),
+                            Name = "Акселератор"
+                        },
+                        new
+                        {
+                            Id = new Guid("a87de825-9d73-4ac9-8146-202a60322bac"),
+                            Name = "Грант"
+                        });
                 });
 
             modelBuilder.Entity("InnoXCollab.Web.Models.Domain.User", b =>
