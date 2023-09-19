@@ -100,8 +100,10 @@ namespace InnoXCollab.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FeaturedImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("HoldingPlace")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("HoldingTime")
@@ -114,10 +116,13 @@ namespace InnoXCollab.Web.Migrations
                     b.Property<string>("ShortDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TypeId")
+                    b.Property<Guid?>("TypeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("UrlHandle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -135,11 +140,11 @@ namespace InnoXCollab.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("InvestmentAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -208,16 +213,28 @@ namespace InnoXCollab.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
@@ -289,15 +306,11 @@ namespace InnoXCollab.Web.Migrations
                 {
                     b.HasOne("InnoXCollab.Web.Models.Domain.Type", "Type")
                         .WithMany("Events")
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TypeId");
 
                     b.HasOne("InnoXCollab.Web.Models.Domain.User", "User")
                         .WithMany("Events")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Type");
 

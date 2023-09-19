@@ -12,10 +12,8 @@ namespace InnoXCollab.Web.Models.Domain
         public string? ShortDescription { get; set; }
         public string Description { get; set; }
         public DateTime HoldingTime { get; set; }
-
         public string? FeaturedImageUrl { get; set; }
         public string? UrlHandle { get; set; }
-
         public string? HoldingPlace { get; set; }
         public virtual User? User { get; set; }
         public virtual Type? Type { get; set; }

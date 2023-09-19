@@ -1,9 +1,12 @@
-﻿using InnoXCollab.Web.Models;
+﻿using InnoXCollab.Web.Data;
+using InnoXCollab.Web.Models;
 using InnoXCollab.Web.Models.Domain;
+using InnoXCollab.Web.Models.Domain.Interfaces;
 using InnoXCollab.Web.Models.Dto;
 using InnoXCollab.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 
 namespace InnoXCollab.Web.Controllers
@@ -38,7 +41,15 @@ namespace InnoXCollab.Web.Controllers
             {
                 Name = createEventRequest.Name,
                 Description = createEventRequest.Description,
-                HoldingTime = createEventRequest.HoldingTime
+                ShortDescription = createEventRequest.ShortDescription,
+                HoldingTime = createEventRequest.HoldingTime,
+                HoldingPlace = createEventRequest.HoldingPlace,
+                FeaturedImageUrl = createEventRequest.FeaturedImageUrl,
+                UrlHandle = createEventRequest.UrlHandle,
+                User = null, // temporary decisions here
+                Type = null,
+                Transactions = new List<Transaction>(),
+                Investors = new List<Investor>()
             };
 
             var selectedTags = new List<Tag>();
@@ -56,8 +67,18 @@ namespace InnoXCollab.Web.Controllers
 
             @event.Tags = selectedTags;
 
-            return View();
+            await eventRepository.AddAsync(@event);
+
+            return RedirectToAction("Create");
         }
 
-    }
+
+        [HttpGet]
+        public async Task<IActionResult> List()
+        {
+            var events = await eventRepository.IncludeAsync(x => x.Tags);
+            return View(events);
+        }
+
+	}
 }

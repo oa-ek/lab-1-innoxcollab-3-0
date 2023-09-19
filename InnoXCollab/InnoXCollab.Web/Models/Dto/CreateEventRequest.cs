@@ -8,6 +8,7 @@ namespace InnoXCollab.Web.Models.Dto
         public string Name { get; set; }
         
         public string Description { get; set; }
+        public string ShortDescription { get; set; }
         public DateTime HoldingTime { get; set; } = DateTime.Now;
         public string HoldingPlace { get; set; } = string.Empty;
 

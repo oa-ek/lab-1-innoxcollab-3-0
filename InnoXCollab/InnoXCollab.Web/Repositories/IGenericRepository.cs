@@ -1,5 +1,6 @@
 ﻿using InnoXCollab.Web.Models.Domain;
 using InnoXCollab.Web.Models.Domain.Interfaces;
+using System.Linq.Expressions;
 
 namespace InnoXCollab.Web.Repositories
 {
@@ -10,5 +11,6 @@ namespace InnoXCollab.Web.Repositories
 		public Task<TEntity> AddAsync(TEntity obj);
 		public Task<TEntity?> UpdateAsync(TEntity obj);
 		public Task<TEntity?> DeleteAsync(Guid id);
+		public Task<IQueryable<TEntity>> IncludeAsync(params Expression<Func<TEntity, object>>[] includes); 
 	}
 }

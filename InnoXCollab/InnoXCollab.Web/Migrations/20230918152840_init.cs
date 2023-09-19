@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InnoXCollab.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace InnoXCollab.Web.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    InvestmentAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,7 +57,11 @@ namespace InnoXCollab.Web.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nationality = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,9 +117,11 @@ namespace InnoXCollab.Web.Migrations
                     ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HoldingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HoldingPlace = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FeaturedImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UrlHandle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HoldingPlace = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -124,14 +130,12 @@ namespace InnoXCollab.Web.Migrations
                         name: "FK_Events_Types_TypeId",
                         column: x => x.TypeId,
                         principalTable: "Types",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Events_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

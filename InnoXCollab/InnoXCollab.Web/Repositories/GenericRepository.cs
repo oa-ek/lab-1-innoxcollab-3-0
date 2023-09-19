@@ -2,6 +2,7 @@
 using InnoXCollab.Web.Models.Domain;
 using InnoXCollab.Web.Models.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace InnoXCollab.Web.Repositories
 {
@@ -57,5 +58,16 @@ namespace InnoXCollab.Web.Repositories
 			}
 			return null;
 		}
+
+		public async Task<IQueryable<TEntity>> IncludeAsync(params Expression<Func<TEntity, object>>[] includes)
+		{
+			IQueryable<TEntity> query = entities;
+
+			foreach (var include in includes)
+				query = query.Include(include);
+
+			return await Task.FromResult(query);
+		}
+
 	}
 }

@@ -10,6 +10,7 @@
 
 <div class="container py-5">
     <form method="post">
+
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input type="text" class="form-control" id="name" asp-for="Name" />
@@ -31,11 +32,6 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Investor</label>
-            <input type="text" class="form-control" id="investor" asp-for="Investor" />
-        </div>
-
-        <div class="mb-3">
             <label class="form-label">Tags</label>
             <select class="form-select" asp-items="@Model.Tags"
                     asp-for="SelectedTags"></select>
@@ -46,5 +42,6 @@
                 Create
             </button>
         </div>
+
     </form>
 </div>

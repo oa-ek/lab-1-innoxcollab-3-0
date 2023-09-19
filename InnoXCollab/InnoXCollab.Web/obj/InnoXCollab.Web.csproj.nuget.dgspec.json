@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\serhi\\Source\\Repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj": {}
+    "C:\\Users\\dim4i\\source\\repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj": {}
   },
   "projects": {
-    "C:\\Users\\serhi\\Source\\Repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj": {
+    "C:\\Users\\dim4i\\source\\repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\serhi\\Source\\Repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
+        "projectUniqueName": "C:\\Users\\dim4i\\source\\repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
         "projectName": "InnoXCollab.Web",
-        "projectPath": "C:\\Users\\serhi\\Source\\Repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
-        "packagesPath": "C:\\Users\\serhi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\serhi\\Source\\Repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\obj\\",
+        "projectPath": "C:\\Users\\dim4i\\source\\repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
+        "packagesPath": "C:\\Users\\dim4i\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dim4i\\source\\repos\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\serhi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dim4i\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
