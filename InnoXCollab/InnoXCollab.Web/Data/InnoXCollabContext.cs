@@ -15,7 +15,6 @@ namespace InnoXCollab.Web.Data
         public DbSet<Models.Domain.Type> Types { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Investor> Investors { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

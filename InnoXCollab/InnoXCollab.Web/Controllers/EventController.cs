@@ -13,21 +13,22 @@ namespace InnoXCollab.Web.Controllers
 {
     public class EventController : Controller
     {
-		private readonly IGenericRepository<Event> eventRepository;
+        private readonly IGenericRepository<Event> eventRepository;
         private readonly IGenericRepository<Tag> tagRepository;
-		private readonly IGenericRepository<Models.Domain.Type> typeRepository;
+        private readonly IGenericRepository<Models.Domain.Type> typeRepository;
 
-		public EventController(IGenericRepository<Event> eventRepository,
+        public EventController(IGenericRepository<Event> eventRepository,
             IGenericRepository<Tag> tagRepository,
-            IGenericRepository<Models.Domain.Type> typeRepository) {
+            IGenericRepository<Models.Domain.Type> typeRepository)
+        {
             this.eventRepository = eventRepository;
             this.tagRepository = tagRepository;
-			this.typeRepository = typeRepository;
-		}
+            this.typeRepository = typeRepository;
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> Create() 
-		{
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
             var tags = await tagRepository.GetAllAsync();
             var types = await typeRepository.GetAllAsync();
 
@@ -37,7 +38,7 @@ namespace InnoXCollab.Web.Controllers
                 Types = types.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
             };
             return View(model);
-		}
+        }
 
         [HttpPost]
 
@@ -53,18 +54,15 @@ namespace InnoXCollab.Web.Controllers
                 FeaturedImageUrl = createEventRequest.FeaturedImageUrl,
                 UrlHandle = createEventRequest.UrlHandle,
                 User = null, // temporary decisions here
-                Type = null,
             };
 
-			var investors = new List<Investor>
-			{
-				new Investor
-				{
-					Name = createEventRequest.Investor,
-					InvestmentAmount = createEventRequest.StartPrice
-				}
-			};
-			var selectedTags = new List<Tag>();
+            var investor = new Investor
+            {
+                Name = createEventRequest.Investor,
+                InvestmentAmount = createEventRequest.StartPrice
+            };
+
+            var selectedTags = new List<Tag>();
 
             foreach (var selectedTagId in createEventRequest.SelectedTags)
             {
@@ -78,7 +76,12 @@ namespace InnoXCollab.Web.Controllers
             }
 
             @event.Tags = selectedTags;
-            @event.Investors = investors;
+            @event.Investor = investor;
+
+            var selectedTypeId = Guid.Parse(createEventRequest.SelectedType);
+            var existingType = await typeRepository.GetAsync(selectedTypeId);
+            @event.Type = existingType;
+
             await eventRepository.AddAsync(@event);
 
             return RedirectToAction("Create");
@@ -88,10 +91,14 @@ namespace InnoXCollab.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var events = await eventRepository.IncludeAsync(x => x.Tags,
-                x => x.Transactions, x => x.Investors);
-            return View(events);
+            var events = await eventRepository.IncludeAsync(x => x.Tags);
+            return View(events.ToList());
         }
 
-	}
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            return View();
+        }
+    }
 }

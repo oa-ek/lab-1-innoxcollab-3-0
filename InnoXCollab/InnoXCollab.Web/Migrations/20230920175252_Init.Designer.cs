@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InnoXCollab.Web.Migrations
 {
     [DbContext(typeof(InnoXCollabContext))]
-    [Migration("20230919180542_Init")]
+    [Migration("20230920175252_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -24,21 +24,6 @@ namespace InnoXCollab.Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("EventInvestor", b =>
-                {
-                    b.Property<Guid>("EventsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("InvestorsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("EventsId", "InvestorsId");
-
-                    b.HasIndex("InvestorsId");
-
-                    b.ToTable("EventInvestor");
-                });
 
             modelBuilder.Entity("EventTag", b =>
                 {
@@ -53,21 +38,6 @@ namespace InnoXCollab.Web.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("EventTag");
-                });
-
-            modelBuilder.Entity("EventTransaction", b =>
-                {
-                    b.Property<Guid>("EventsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TransactionsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("EventsId", "TransactionsId");
-
-                    b.HasIndex("TransactionsId");
-
-                    b.ToTable("EventTransaction");
                 });
 
             modelBuilder.Entity("InnoXCollab.Web.Models.Domain.AdminLog", b =>
@@ -112,6 +82,9 @@ namespace InnoXCollab.Web.Migrations
                     b.Property<DateTime>("HoldingTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("InvestorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -129,6 +102,8 @@ namespace InnoXCollab.Web.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InvestorId");
 
                     b.HasIndex("TypeId");
 
@@ -173,28 +148,6 @@ namespace InnoXCollab.Web.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Transaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("InvestorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvestorId");
-
-                    b.ToTable("Transactions");
-                });
-
             modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Type", b =>
                 {
                     b.Property<Guid>("Id")
@@ -212,17 +165,17 @@ namespace InnoXCollab.Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("79735ce4-d1f1-48e3-80b4-430d7c3f6d3c"),
+                            Id = new Guid("310cb7cb-f417-4417-a09d-4a5b10a4486a"),
                             Name = "Хакатон"
                         },
                         new
                         {
-                            Id = new Guid("d36d46cf-ae23-4473-a9e2-f44e9d834266"),
+                            Id = new Guid("852e34a9-c1f8-4486-bb61-1111e4789d64"),
                             Name = "Акселератор"
                         },
                         new
                         {
-                            Id = new Guid("a87de825-9d73-4ac9-8146-202a60322bac"),
+                            Id = new Guid("1d7dcf4a-b5e2-4fcf-b2e6-498061bfc79b"),
                             Name = "Грант"
                         });
                 });
@@ -266,21 +219,6 @@ namespace InnoXCollab.Web.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EventInvestor", b =>
-                {
-                    b.HasOne("InnoXCollab.Web.Models.Domain.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InnoXCollab.Web.Models.Domain.Investor", null)
-                        .WithMany()
-                        .HasForeignKey("InvestorsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("EventTag", b =>
                 {
                     b.HasOne("InnoXCollab.Web.Models.Domain.Event", null)
@@ -292,21 +230,6 @@ namespace InnoXCollab.Web.Migrations
                     b.HasOne("InnoXCollab.Web.Models.Domain.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventTransaction", b =>
-                {
-                    b.HasOne("InnoXCollab.Web.Models.Domain.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InnoXCollab.Web.Models.Domain.Transaction", null)
-                        .WithMany()
-                        .HasForeignKey("TransactionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -324,6 +247,12 @@ namespace InnoXCollab.Web.Migrations
 
             modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Event", b =>
                 {
+                    b.HasOne("InnoXCollab.Web.Models.Domain.Investor", "Investor")
+                        .WithMany("Events")
+                        .HasForeignKey("InvestorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("InnoXCollab.Web.Models.Domain.Type", "Type")
                         .WithMany("Events")
                         .HasForeignKey("TypeId");
@@ -332,20 +261,16 @@ namespace InnoXCollab.Web.Migrations
                         .WithMany("Events")
                         .HasForeignKey("UserId");
 
+                    b.Navigation("Investor");
+
                     b.Navigation("Type");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Transaction", b =>
+            modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Investor", b =>
                 {
-                    b.HasOne("InnoXCollab.Web.Models.Domain.Investor", "Investor")
-                        .WithMany()
-                        .HasForeignKey("InvestorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Investor");
+                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("InnoXCollab.Web.Models.Domain.Type", b =>

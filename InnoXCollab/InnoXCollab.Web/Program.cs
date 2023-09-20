@@ -12,6 +12,8 @@ builder.Services.AddDbContext<InnoXCollabContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("InnoXCollabConnectionString")));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IGenericRepository<Event>), typeof(EventRepository));
+
 
 var app = builder.Build();
 

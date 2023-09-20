@@ -4,7 +4,7 @@ using InnoXCollab.Web.Models.Domain.Interfaces;
 
 namespace InnoXCollab.Web.Models.Domain
 {
-    public class Transaction : IEntity<Guid>
+    public class Transaction : IEntity<Guid> // FOR FUTURE PURPOSES
     {
         [Key]
         public Guid Id { get; set; }

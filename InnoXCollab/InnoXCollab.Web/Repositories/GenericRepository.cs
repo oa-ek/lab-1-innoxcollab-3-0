@@ -8,8 +8,8 @@ namespace InnoXCollab.Web.Repositories
 {
 	public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IEntity<Guid>
 	{
-		private readonly InnoXCollabContext ctx;
-		private readonly DbSet<TEntity> entities;
+		protected readonly InnoXCollabContext ctx;
+		protected readonly DbSet<TEntity> entities;
 
 		public GenericRepository(InnoXCollabContext innoXCollabContext)
 		{
@@ -27,7 +27,6 @@ namespace InnoXCollab.Web.Repositories
 		public async Task<TEntity?> DeleteAsync(Guid id)
 		{
 			var obj = await entities.FindAsync(id);
-			// entities.Remove(x => x.Id == id); ????
 			if (obj != null)
 			{
 				entities.Remove(obj);
@@ -42,11 +41,19 @@ namespace InnoXCollab.Web.Repositories
 			return await entities.ToListAsync();
 		}
 
-		public async Task<TEntity?> GetAsync(Guid id)
+		public async Task<TEntity?> GetAsync(Guid id, params Expression<Func<TEntity, object>>[] includes)
 		{
-			return await entities.FirstOrDefaultAsync(x => x.Id == id);
+			var query = entities.AsQueryable();
+
+			foreach (var include in includes)
+			{
+				query = query.Include(include);
+			}
+
+			return await query.FirstOrDefaultAsync(x => x.Id == id);
 		}
-		public async Task<TEntity?> UpdateAsync(TEntity obj)
+
+		public virtual async Task<TEntity?> UpdateAsync(TEntity obj)
 		{
 			var existingEntity = await entities.FindAsync(obj.Id);
 
@@ -66,7 +73,7 @@ namespace InnoXCollab.Web.Repositories
 			foreach (var include in includes)
 				query = query.Include(include);
 
-			return query;
+			return await Task.FromResult(query);
 		}
 
 	}
