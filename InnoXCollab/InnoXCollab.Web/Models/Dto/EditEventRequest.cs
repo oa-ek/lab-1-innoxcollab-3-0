@@ -27,5 +27,7 @@ namespace InnoXCollab.Web.Models.Dto
 		public string SelectedType { get; set; }
 
 		public Investor Investor { get; set; }
-	}
+
+        public string? ImageUrl { get; set; }
+    }
 }

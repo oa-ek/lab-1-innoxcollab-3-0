@@ -50,7 +50,7 @@ namespace InnoXCollab.Web.Controllers
                 ShortDescription = createEventRequest.ShortDescription,
                 HoldingTime = createEventRequest.HoldingTime,
                 HoldingPlace = createEventRequest.HoldingPlace,
-                FeaturedImageUrl = createEventRequest.FeaturedImageUrl,
+                ImageUrl = createEventRequest.ImageUrl,
                 UrlHandle = createEventRequest.UrlHandle,
                 User = null, // temporary decisions here
             };
@@ -119,7 +119,7 @@ namespace InnoXCollab.Web.Controllers
                     SelectedTags = @event.Tags.Select(x => x.Id.ToString()).ToArray(),
                     Types = typesDomainModel.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }),
                     SelectedType = @event.Type.Id.ToString(),
-
+                    ImageUrl = @event.ImageUrl,
                     Investor = @event.Investor
 
                 };
@@ -141,7 +141,7 @@ namespace InnoXCollab.Web.Controllers
                 ShortDescription = null,
                 HoldingTime = editEventRequest.HoldingTime,
                 HoldingPlace = null,
-                FeaturedImageUrl = null,
+                ImageUrl = editEventRequest.ImageUrl,
                 UrlHandle = null,
                 User = null,
                 Investor = editEventRequest.Investor// temporary decisions here

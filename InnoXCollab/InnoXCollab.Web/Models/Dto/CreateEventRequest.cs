@@ -11,7 +11,6 @@ namespace InnoXCollab.Web.Models.Dto
         public string ShortDescription { get; set; }
         public DateTime HoldingTime { get; set; } = DateTime.Now;
         public string HoldingPlace { get; set; } = string.Empty;
-        public string FeaturedImageUrl { get; set; } = string.Empty;
         public string UrlHandle { get; set; } = string.Empty;
         public decimal StartPrice { get; set; }
 
@@ -25,5 +24,7 @@ namespace InnoXCollab.Web.Models.Dto
 
         // Investor
         public string? Investor { get; set; }
+
+        public string? ImageUrl { get; set; }
     }
 }

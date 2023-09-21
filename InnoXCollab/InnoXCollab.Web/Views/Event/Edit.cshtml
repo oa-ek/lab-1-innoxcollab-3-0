@@ -30,6 +30,21 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Image Upload</label>
+                <input type="file" class="form-control" id="ImageUpload" />
+
+                @if (Model.ImageUrl != null)
+                {
+                    <img src="@Model.ImageUrl" id="imageDisplay" style="display:block;width:250px;" />
+                }
+                else
+                {
+                    <img src="" id="imageDisplay" style="display:none;width:250px;" />
+                }
+            </div>
+
+
+            <div class="mb-3">
                 <label class="form-label">Investor</label>
                 <input type="text" class="form-control" id="investor" asp-for="Investor.Name"/>
             </div>
@@ -63,7 +78,10 @@
                     Delete
                 </button>
             </div>
-           
+
+            <div class="mb-3">
+                <input type="hidden" id="imageUrl" asp-for="ImageUrl" readonly />
+            </div>
         </form>
     }
     else
@@ -72,3 +90,34 @@
     }
 
 </div>
+
+@section Scripts {
+    <script>
+
+        const featuredUploadElement = document.getElementById('featureImageUpload');
+        const featuredImageUrlElement = document.getElementById('featureImageUrl');
+        const featuredImageDisplayElement = document.getElementById('featuredImageDisplay');
+
+        async function uploadFeaturedImage(e) {
+            console.log(e.target.files[0]);
+
+            let data = new FormData();
+            data.append('file', e.target.files[0]);
+
+            await fetch('/api/Images', {
+                method: 'POST',
+                headers: {
+                    'Accept': '*/*',
+                },
+                body: data
+            }).then(response => response.json())
+                .then(result => {
+                    featuredImageUrlElement.value = result.link;
+                    featuredImageDisplayElement.src = result.link;
+                    featuredImageDisplayElement.style.display = 'block';
+                })
+        }
+
+        featuredUploadElement.addEventListener('change', uploadFeaturedImage);
+    </script>
+}

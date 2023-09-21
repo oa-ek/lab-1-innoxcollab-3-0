@@ -99,7 +99,7 @@ namespace InnoXCollab.Web.Migrations
                     ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HoldingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FeaturedImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UrlHandle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HoldingPlace = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -156,9 +156,9 @@ namespace InnoXCollab.Web.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("1d7dcf4a-b5e2-4fcf-b2e6-498061bfc79b"), "Грант" },
-                    { new Guid("310cb7cb-f417-4417-a09d-4a5b10a4486a"), "Хакатон" },
-                    { new Guid("852e34a9-c1f8-4486-bb61-1111e4789d64"), "Акселератор" }
+                    { new Guid("2f80ae84-391f-46b9-a58f-ee77a098e821"), "Акселератор" },
+                    { new Guid("404619fb-d761-4a1e-8fd8-f585ca65c51e"), "Хакатон" },
+                    { new Guid("7d19b7c6-be6b-4cc1-9ec0-3bfbf7a7243c"), "Грант" }
                 });
 
             migrationBuilder.CreateIndex(

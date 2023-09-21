@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InnoXCollab.Web.Migrations
 {
     [DbContext(typeof(InnoXCollabContext))]
-    [Migration("20230920175252_Init")]
+    [Migration("20230921113340_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -73,14 +73,14 @@ namespace InnoXCollab.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FeaturedImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HoldingPlace")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("HoldingTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("InvestorId")
                         .HasColumnType("uniqueidentifier");
@@ -165,17 +165,17 @@ namespace InnoXCollab.Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("310cb7cb-f417-4417-a09d-4a5b10a4486a"),
+                            Id = new Guid("404619fb-d761-4a1e-8fd8-f585ca65c51e"),
                             Name = "Хакатон"
                         },
                         new
                         {
-                            Id = new Guid("852e34a9-c1f8-4486-bb61-1111e4789d64"),
+                            Id = new Guid("2f80ae84-391f-46b9-a58f-ee77a098e821"),
                             Name = "Акселератор"
                         },
                         new
                         {
-                            Id = new Guid("1d7dcf4a-b5e2-4fcf-b2e6-498061bfc79b"),
+                            Id = new Guid("7d19b7c6-be6b-4cc1-9ec0-3bfbf7a7243c"),
                             Name = "Грант"
                         });
                 });

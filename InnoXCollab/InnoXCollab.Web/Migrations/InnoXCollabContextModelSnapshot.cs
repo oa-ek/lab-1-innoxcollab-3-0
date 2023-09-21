@@ -70,14 +70,14 @@ namespace InnoXCollab.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FeaturedImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HoldingPlace")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("HoldingTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("InvestorId")
                         .HasColumnType("uniqueidentifier");
@@ -162,17 +162,17 @@ namespace InnoXCollab.Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("adaef6e6-8917-4b1e-9137-e4c68b1b8d3c"),
+                            Id = new Guid("404619fb-d761-4a1e-8fd8-f585ca65c51e"),
                             Name = "Хакатон"
                         },
                         new
                         {
-                            Id = new Guid("4122dea3-6bad-43e8-943f-a145153110c4"),
+                            Id = new Guid("2f80ae84-391f-46b9-a58f-ee77a098e821"),
                             Name = "Акселератор"
                         },
                         new
                         {
-                            Id = new Guid("4125d4b0-b357-4c7e-ac8e-64ee4bf9a7d9"),
+                            Id = new Guid("7d19b7c6-be6b-4cc1-9ec0-3bfbf7a7243c"),
                             Name = "Грант"
                         });
                 });

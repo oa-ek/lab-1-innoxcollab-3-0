@@ -13,6 +13,10 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("InnoXCollabConne
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericRepository<Event>), typeof(EventRepository));
+builder.Services.AddScoped(typeof(IGenericRepository<Tag>), typeof(TagRepository));
+builder.Services.AddScoped<IImageRepository, CloudinaryImageRepository>();
+
+
 
 
 var app = builder.Build();

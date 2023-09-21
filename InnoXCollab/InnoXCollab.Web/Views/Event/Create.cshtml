@@ -27,6 +27,13 @@
         </div>
 
         <div class="mb-3">
+            <label class="form-label">Image Upload</label>
+            <input type="file" class="form-control" id="imageUpload" />
+
+            <img src="" id="imageDisplay" style="display:none;width:250px"
+        </div>
+
+        <div class="mb-3">
             <label class="form-label">Investor</label>
             <input type="text" class="form-control" id="investor" asp-for="Investor" />
         </div>
@@ -54,5 +61,39 @@
             </button>
         </div>
 
+        <div class="mb-3">
+            <input type="hidden" id="imageUrl" asp-for="ImageUrl" readonly/>
+        </div>
+
     </form>
 </div>
+
+@section Scripts{
+    <script>
+        const imageUploadElement = document.getElementById('imageUpload');
+        const imageDisplayElement = document.getElementById('imageDisplay');
+        const imageUrlElement = document.getElementById('imageUrl');
+
+        async function UploadImage(e) {
+            console.log(e.target.files[0]);
+
+            let data = new FormData();
+            data.append('file', e.target.files[0]);
+
+            await fetch('/api/Images', {
+                method: 'POST',
+                headers: {
+                    'Accept': '*/*',
+                },
+                body: data
+            }).then(response => response.json())
+                .then(result => {
+                    imageDisplayElement.src = result.link; // Corrected variable name
+                    imageDisplayElement.style.display = 'block';
+                    imageUrlElement.value = result.link;
+                })
+        }
+
+        imageUploadElement.addEventListener('change', UploadImage)
+    </script>
+}
