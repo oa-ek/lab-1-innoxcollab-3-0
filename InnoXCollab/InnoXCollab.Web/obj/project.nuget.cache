@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0+wQXpmRKAaW6BZ4HkaF0/6cXX0oUV4k7yBZlRmYKXbrs7S4D0vKJjz4oNbhpmcdY1D73/Gc1APMvJ0e5AAiow==",
+  "dgSpecHash": "31jxZWyGIfsJeOFpcOlPr9JCcT6fFtb6RtvRpNmTEJzdlcvg608LKTmD9IDn93EzyTgnd+sgWLv8E3+cEjV3Kw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\serhi\\Downloads\\lab-1-innoxcollab-3-0-lab1-branch\\lab-1-innoxcollab-3-0-lab1-branch\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
+  "projectFilePath": "D:\\C#\\TEN\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\serhi\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\serhi\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

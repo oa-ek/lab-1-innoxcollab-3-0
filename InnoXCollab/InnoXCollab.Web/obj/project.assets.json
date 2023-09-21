@@ -4033,11 +4033,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\serhi\\Downloads\\lab-1-innoxcollab-3-0-lab1-branch\\lab-1-innoxcollab-3-0-lab1-branch\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
+      "projectUniqueName": "D:\\C#\\TEN\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
       "projectName": "InnoXCollab.Web",
-      "projectPath": "C:\\Users\\serhi\\Downloads\\lab-1-innoxcollab-3-0-lab1-branch\\lab-1-innoxcollab-3-0-lab1-branch\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
+      "projectPath": "D:\\C#\\TEN\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\InnoXCollab.Web.csproj",
       "packagesPath": "C:\\Users\\serhi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\serhi\\Downloads\\lab-1-innoxcollab-3-0-lab1-branch\\lab-1-innoxcollab-3-0-lab1-branch\\InnoXCollab\\InnoXCollab.Web\\obj\\",
+      "outputPath": "D:\\C#\\TEN\\lab-1-innoxcollab-3-0\\InnoXCollab\\InnoXCollab.Web\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\serhi\\AppData\\Roaming\\NuGet\\NuGet.Config",

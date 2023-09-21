@@ -185,9 +185,6 @@ namespace InnoXCollab.Web.Controllers
                 return RedirectToAction("List");
             }
 
-           
-            return RedirectToAction("List");
-
             return RedirectToAction("Edit", new { id = editEventRequest.Id });
         }
     }
