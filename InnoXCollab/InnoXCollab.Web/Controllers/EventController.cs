@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
-
 namespace InnoXCollab.Web.Controllers
 {
     public class EventController : Controller
@@ -96,9 +95,100 @@ namespace InnoXCollab.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit()
+        public async Task<IActionResult> Edit(Guid id)
         {
-            return View();
+            var @event = await eventRepository.GetAsync(id, x => x.Tags, x => x.Investor);
+
+            var tagsDomainModel = await tagRepository.GetAllAsync();
+
+            var typesDomainModel = await typeRepository.GetAllAsync();
+
+            if (@event != null)
+            {
+                var model = new EditEventRequest
+                {
+                    Id = @event.Id,
+                    Name = @event.Name,
+                    Description = @event.Description,
+                    HoldingTime = @event.HoldingTime,
+                    Tags = tagsDomainModel.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    }),
+                    SelectedTags = @event.Tags.Select(x => x.Id.ToString()).ToArray(),
+                    Types = typesDomainModel.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }),
+                    SelectedType = @event.Type.Id.ToString(),
+
+                    Investor = @event.Investor
+
+                };
+                return View(model);
+            }
+
+            return View(null);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditEventRequest editEventRequest)
+        {
+
+            var @event = new Event
+            {
+                Id = editEventRequest.Id,
+                Name = editEventRequest.Name,
+                Description = editEventRequest.Description,
+                ShortDescription = null,
+                HoldingTime = editEventRequest.HoldingTime,
+                HoldingPlace = null,
+                FeaturedImageUrl = null,
+                UrlHandle = null,
+                User = null,
+                Investor = editEventRequest.Investor// temporary decisions here
+
+            };
+
+            var selectedTags = new List<Tag>();
+
+            foreach (string selectedTagId in editEventRequest.SelectedTags) 
+            { 
+                var selectedTagGuidId = Guid.Parse(selectedTagId);
+
+                var existingTag = await tagRepository.GetAsync(selectedTagGuidId);
+
+                if(existingTag != null)
+                {
+                    selectedTags.Add(existingTag);
+                }
+            }
+
+            @event.Tags = selectedTags;
+
+            var selectedType = await typeRepository.GetAsync(Guid.Parse(editEventRequest.SelectedType));
+
+            @event.Type = selectedType;
+
+            var updatedEvent = await eventRepository.UpdateAsync(@event);
+            if (updatedEvent != null)
+            {
+                return RedirectToAction("List");
+            }
+            return RedirectToAction("Edit", new { id = editEventRequest.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(EditEventRequest editEventRequest)
+        {
+            var deletedEvent = await eventRepository.DeleteAsync(editEventRequest.Id);
+            if (deletedEvent != null)
+            {
+                return RedirectToAction("List");
+            }
+
+           
+            return RedirectToAction("List");
+
+            return RedirectToAction("Edit", new { id = editEventRequest.Id });
         }
     }
 }
