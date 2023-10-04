@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.Core;
 using Infrastructure.MediatoR.Events;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +22,7 @@ namespace API.Extensions
             });
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
-            
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             return services;
         }
     }
