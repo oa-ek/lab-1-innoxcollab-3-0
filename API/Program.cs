@@ -1,5 +1,6 @@
 using API.Extensions;
 using Infrastructure;
+using Infrastructure.MediatoR.Events;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,7 +27,8 @@ var services = scope.ServiceProvider;
 
 try{
     var context = services.GetRequiredService<DataContext>();
-    context.Database.Migrate();
+    await context.Database.MigrateAsync();
+    await Seed.SeedData(context);
 }
 catch (Exception ex)
 {
