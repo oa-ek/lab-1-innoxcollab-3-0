@@ -1,6 +1,8 @@
-namespace Domain
+using Domain;
+
+namespace Application.MediatoR.Events
 {
-    public class Event
+    public class EventDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -10,7 +12,5 @@ namespace Domain
         public string Venue { get; set; }
         public bool IsCanceled { get; set; }
         public ICollection<Tag> Tags { get; set; }
-        public AppUser AppUser { get; set; }
-
     }
 }
