@@ -1,17 +1,18 @@
+using Application.Core;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.MediatoR.Events
+namespace Application.Events
 {
     public class List
     {
-        public class Query : IRequest<List<EventDto>> { }
+        public class Query : IRequest<Result<List<EventDto>>> { }
 
 
-        public class Handler : IRequestHandler<Query, List<EventDto>>
+        public class Handler : IRequestHandler<Query, Result<List<EventDto>>>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -21,13 +22,13 @@ namespace Application.MediatoR.Events
                 this.context = context;
                 this.mapper = mapper;
             }
-            public async Task<List<EventDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var allEvents = await context.Events
                     .ProjectTo<EventDto>(mapper.ConfigurationProvider)
                     .ToListAsync();
-                    
-                return allEvents;
+
+                return Result<List<EventDto>>.Success(allEvents);
             }
         }
     }

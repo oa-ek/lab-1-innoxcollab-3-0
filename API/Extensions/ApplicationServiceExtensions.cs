@@ -1,5 +1,5 @@
 using Application.Core;
-using Application.MediatoR.Events;
+using Application.Events;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;

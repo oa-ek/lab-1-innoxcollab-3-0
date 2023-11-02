@@ -1,17 +1,18 @@
+using Application.Core;
 using AutoMapper;
 using Domain;
 using MediatR;
 using Persistence;
 
-namespace Application.MediatoR.Events
+namespace Application.Events
 {
     public class Edit
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public Event Event { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -20,13 +21,21 @@ namespace Application.MediatoR.Events
                 this.mapper = mapper;
                 this.context = context;
             }
-            public async Task Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var @event = await context.Events.FindAsync(request.Event.Id);
 
+                if (@event is null)
+                    return null;
+
                 mapper.Map(request.Event, @event);
 
-                await context.SaveChangesAsync();
+                var result = await context.SaveChangesAsync() > 0;
+                
+                if (!result)
+                    return Result<Unit>.Failure("Failed to edit the event!");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

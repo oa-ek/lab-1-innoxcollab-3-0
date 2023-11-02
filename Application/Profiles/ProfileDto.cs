@@ -1,6 +1,6 @@
-namespace Application.MediatoR.Events
+namespace Application.Profiles
 {
-    public class UserDto
+    public class ProfileDto
     {
         public string Username { get; set; }
         public string DisplayName { get; set; }

@@ -1,6 +1,7 @@
-using Domain;
+using Application.Profiles;
+using Application.Tags;
 
-namespace Application.MediatoR.Events
+namespace Application.Events
 {
     public class EventDto
     {
@@ -11,6 +12,7 @@ namespace Application.MediatoR.Events
         public string Description { get; set; }
         public string Venue { get; set; }
         public bool IsCanceled { get; set; }
-        public ICollection<Tag> Tags { get; set; }
+        public ICollection<TagDto> Tags { get; set; }
+        public ProfileDto CreatorProfile { get; set; }
     }
 }
