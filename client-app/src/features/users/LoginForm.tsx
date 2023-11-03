@@ -47,7 +47,7 @@ export default observer(function LoginForm() {
                                             variant="body2" color="error">
                                             {errors.error}
                                         </Typography>
-                                    }
+                                    } 
                                 />
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" onChange={handleRememberMeChange} />}

@@ -12,4 +12,4 @@ export class Tag implements Tag {
 export class TagFormValues {
     id?: string = undefined;
     name: string = '';
-}
+} 

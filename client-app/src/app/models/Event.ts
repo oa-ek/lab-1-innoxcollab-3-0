@@ -12,7 +12,7 @@ export interface Event {
     venue: string;
     eventType: string;
     isCanceled: boolean;
-    isHost: boolean;
+    isHost: boolean; 
     creatorProfile?: Profile;
     blocks: EventBlock[];
     tags: Tag[]

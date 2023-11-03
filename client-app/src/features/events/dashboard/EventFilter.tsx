@@ -16,9 +16,6 @@ export default function ActivityFilter() {
                         <ListItemText>All activities</ListItemText>
                     </MenuItem>
                     <MenuItem>
-                        <ListItemText>I'm going</ListItemText>
-                    </MenuItem>
-                    <MenuItem>
                         <ListItemText>I'm hosting</ListItemText>
                     </MenuItem>
                 </MenuList>
@@ -27,4 +24,4 @@ export default function ActivityFilter() {
         </>
 
     )
-}
+} 

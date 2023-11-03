@@ -12,7 +12,7 @@ namespace Application.Core
     public class MappingProfiles : Profile
     {
         // d - destination
-        // o - options
+        // o - options!
         // s - source
         public MappingProfiles()
         {

@@ -20,7 +20,7 @@ export default observer(function HomePage() {
                                 variant="outlined" sx={{ color: "White", borderColor: "white", px: "20px", py: "10px", my: 1 }}>
                                 Go to events
                             </Button>
-                        ) : (
+                        ) : ( 
                             <Stack>
                                 <Button component={Link} to="/login"
                                     variant="outlined" sx={{ color: "White", borderColor: "white", px: "20px", py: "10px", my: 1 }}>

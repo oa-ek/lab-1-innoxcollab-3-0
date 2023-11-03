@@ -21,7 +21,7 @@ export default observer(function EventDetailedHeader({ event }: Props) {
                 <Box
                     style={{ width: '100%', height: "320px", objectFit: 'cover', backgroundColor: "grey" }}>
                 </Box>
-                {event.isCanceled &&
+                {event.isCanceled && 
                     <Chip color="error" label="Canceled" sx={{
                         position: 'absolute',
                         bottom: '85%',

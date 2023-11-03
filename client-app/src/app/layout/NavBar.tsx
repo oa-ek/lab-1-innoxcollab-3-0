@@ -56,7 +56,7 @@ export default observer(function NavBar() {
                             Create Event
                         </Button>
                     </Box>
-
+ 
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <Box

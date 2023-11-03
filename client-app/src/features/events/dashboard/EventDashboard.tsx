@@ -61,4 +61,4 @@ export default observer(function EventDashboard() {
             </Grid>
         </Container>
     )
-})
+}) 

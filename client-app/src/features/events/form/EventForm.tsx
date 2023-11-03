@@ -43,7 +43,7 @@ export default observer(function EventForm() {
         else {
             updateEvent(event).then(() => navigate(`/events/${event.id}`))
         }
-    }
+    } 
 
     if (loadingInitial) return <LoadingComponent />
 

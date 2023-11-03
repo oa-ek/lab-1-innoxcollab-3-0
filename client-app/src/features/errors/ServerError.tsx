@@ -22,4 +22,4 @@ export default observer(function ServerError() {
         </Container>
 
     )
-})
+}) 

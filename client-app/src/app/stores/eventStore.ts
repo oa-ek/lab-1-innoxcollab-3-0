@@ -64,7 +64,7 @@ export default class EventStore {
         }
 
     }
-
+ 
     private getEvent = (id: string) => {
         return this.eventRegistry.get(id);
     }

@@ -16,4 +16,4 @@ export class EventBlockFormValues {
     title: string = '';
     description: string = '';
     attachedFileUrl: string = '';
-}
+} 

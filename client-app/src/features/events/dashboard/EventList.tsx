@@ -65,7 +65,7 @@ export default observer(function EventList({ event }: Props) {
                                 </Box>
                             }
                         </div>
-                        <span>
+                        <span> 
                             <Chip color={event.eventType === "Hackathon" ? "success" : "error"}
                                 variant="outlined" label={event.eventType} />
                         </span>

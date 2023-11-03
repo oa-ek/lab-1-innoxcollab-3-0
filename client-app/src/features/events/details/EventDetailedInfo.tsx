@@ -6,7 +6,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import dayjs from 'dayjs';
 import { observer } from 'mobx-react-lite';
 
-interface Props {
+interface Props { 
     event: Event;
 }
 

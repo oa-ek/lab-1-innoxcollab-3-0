@@ -5,7 +5,7 @@ export interface Profile {
     displayName: string;
     image?: string;
     bio?: string;
-}
+} 
 
 export class Profile implements Profile {
     constructor(user: User) {

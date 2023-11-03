@@ -16,5 +16,6 @@ namespace Application.Events
         public ICollection<TagDto> Tags { get; set; }
         public ICollection<EventBlockDto> Blocks { get; set; }
         public ProfileDto CreatorProfile { get; set; }
+        
     }
 }

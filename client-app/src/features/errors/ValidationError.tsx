@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-
+ 
 interface Props {
     errors: string[];
 }
