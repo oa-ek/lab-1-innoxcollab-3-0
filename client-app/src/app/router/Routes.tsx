@@ -6,6 +6,7 @@ import EventDashboard from "../../features/events/dashboard/EventDashboard";
 import EventDetails from "../../features/events/details/EventDetails";
 import LoginForm from "../../features/users/LoginForm";
 import RegisterForm from "../../features/users/RegisterForm";
+import EventForm from "../../features/events/form/EventForm";
 
 export const routes: RouteObject[] = [
     {
@@ -14,6 +15,8 @@ export const routes: RouteObject[] = [
         children: [
             { path: 'events', element: <EventDashboard /> },
             { path: 'events/:id', element: <EventDetails /> },
+            { path: 'createEvent', element: <EventForm key="create" /> },
+            { path: 'manage/:id', element: <EventForm key="manage" /> },
             { path: 'login', element: <LoginForm /> },
             { path: 'register', element: <RegisterForm /> },
             { path: 'not-found', element: <NotFound /> },

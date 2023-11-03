@@ -10,6 +10,7 @@ export interface Event {
     shortDescription: string;
     description: string;
     venue: string;
+    eventType: string;
     isCanceled: boolean;
     isHost: boolean;
     creatorProfile?: Profile;

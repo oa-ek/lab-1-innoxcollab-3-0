@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import { Container } from '@mui/material';
 import HomePage from '../../features/home/HomePage';
 import { observer } from 'mobx-react-lite';
+import NavBar from './NavBar';
 
 function App() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function App() {
       <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
       {location.pathname === "/" ? <HomePage /> : (
         <>
+          <NavBar />
           <Container sx={{ mt: 10 }}>
             <Outlet />
           </Container>
@@ -35,4 +37,4 @@ function App() {
   )
 }
 
-export default observer (App);
+export default observer(App);

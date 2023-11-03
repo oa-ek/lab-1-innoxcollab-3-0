@@ -72,7 +72,9 @@ export default class EventStore {
     private setEvent = (event: Event) => {
         const user = store.userStore.user;
         if (user) {
-            event.isHost = event.creatorProfile?.username === user.username;
+            event.isHost = event.creatorProfile?.userName === user.userName;
+            console.log(user.userName);
+            console.log(event.creatorProfile?.userName);
         }
         this.eventRegistry.set(event.id, event);
     }

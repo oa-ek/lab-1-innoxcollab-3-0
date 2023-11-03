@@ -3,6 +3,7 @@ import { useStore } from "../../../app/stores/store";
 import { Fragment, useEffect } from "react";
 import { Container, Grid, Typography, Box } from "@mui/material";
 import EventList from "./EventList";
+import EventFilter from "./EventFilter";
 
 export default observer(function EventDashboard() {
     const { eventStore } = useStore();
@@ -55,7 +56,7 @@ export default observer(function EventDashboard() {
 
                 </Grid>
                 <Grid item xs={5}>
-                    {/*<EventFilter />*/}
+                    {<EventFilter />}
                 </Grid>
             </Grid>
         </Container>

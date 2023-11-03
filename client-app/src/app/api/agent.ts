@@ -4,6 +4,7 @@ import { router } from '../router/Routes';
 import { store } from '../stores/store';
 import { User, UserFormValues } from '../models/User';
 import { Event, EventFormValues } from '../models/Event';
+import { EventBlock } from '../models/EventBlock';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -75,7 +76,8 @@ const Events = {
     create: (event: EventFormValues) => requests.post<void>(`/events`, event),
     update: (event: EventFormValues) => requests.put<void>(`/events/${event.id}`, event),
     delete: (id: string) => requests.del<void>(`/events/${id}`),
-    cancel: (id: string) => requests.post<void>(`/events/${id}/cancel`, {})
+    cancel: (id: string) => requests.post<void>(`/events/${id}/cancel`, {}),
+    addEventBlock: (id: string, eventBlock: EventBlock) => requests.post<void>(`/events/${id}/`, eventBlock)
 }
 
 const Account = {

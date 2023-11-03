@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function NotFound() {
     return (
-        <Container sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "80vh" }}>
+        <Container sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
                 <Box display="flex">
                     <SearchIcon sx={{ fontSize: "100px" }} />
