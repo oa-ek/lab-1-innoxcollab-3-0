@@ -10,6 +10,7 @@ namespace Domain
         public string Venue { get; set; }
         public bool IsCanceled { get; set; }
         public ICollection<Tag> Tags { get; set; }
+        public ICollection<EventBlock> Blocks { get; set; } = new List<EventBlock>();
         public AppUser AppUser { get; set; }
 
     }
