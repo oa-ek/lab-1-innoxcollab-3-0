@@ -5,14 +5,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Events
+namespace Application.Accelerators
 {
     public class List
     {
-        public class Query : IRequest<Result<List<EventDto>>> { }
+        public class Query : IRequest<Result<List<AcceleratorDto>>> { }
 
 
-        public class Handler : IRequestHandler<Query, Result<List<EventDto>>>
+        public class Handler : IRequestHandler<Query, Result<List<AcceleratorDto>>>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -22,15 +22,14 @@ namespace Application.Events
                 this.context = context;
                 this.mapper = mapper;
             }
-            public async Task<Result<List<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<AcceleratorDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var events = await context.Events
-                    .ProjectTo<EventDto>(mapper.ConfigurationProvider)
+                var allEvents = await context.Accelerators
+                    .ProjectTo<AcceleratorDto>(mapper.ConfigurationProvider)
                     .ToListAsync();
 
-                return Result<List<EventDto>>.Success(events);
+                return Result<List<AcceleratorDto>>.Success(allEvents);
             }
         }
     }
-
 }

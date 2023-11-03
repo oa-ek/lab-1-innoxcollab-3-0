@@ -13,6 +13,7 @@ namespace Application.Events
         public string Venue { get; set; }
         public bool IsCanceled { get; set; }
         public ICollection<TagDto> Tags { get; set; }
+        public ICollection<EventBlockDto> Blocks { get; set; }
         public ProfileDto CreatorProfile { get; set; }
     }
 }

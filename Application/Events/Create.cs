@@ -1,8 +1,10 @@
 using Application.Core;
+using Application.Interfaces;
 using Application.Validation;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Events
@@ -18,16 +20,24 @@ namespace Application.Events
                 {
                     public CommandValidator()
                     {
-                        RuleFor(x => x.Event).SetValidator(new EventValidator<Event>());   
+                        RuleFor(x => x.Event).SetValidator(new EventValidator<Event>());
                     }
                 }
                 private readonly DataContext context;
-                public Handler(DataContext context)
+                private readonly IUserAccesor userAccesor;
+
+                public Handler(DataContext context, IUserAccesor userAccesor)
                 {
                     this.context = context;
+                    this.userAccesor = userAccesor;
                 }
                 public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
                 {
+                    var user = await context.Users
+                        .FirstOrDefaultAsync(x => x.UserName == userAccesor.GetUserName());
+
+                    request.Event.AppUser = user;
+
                     await context.Events.AddAsync(request.Event);
                     var result = await context.SaveChangesAsync() > 0;
 
@@ -38,6 +48,5 @@ namespace Application.Events
                 }
             }
         }
-
     }
 }
