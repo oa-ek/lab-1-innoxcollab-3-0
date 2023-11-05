@@ -3,6 +3,6 @@
     public class Hackathon : Event
     {
         public string ChallengeStatement { get; set; }
-        public decimal Prize { get; set; }
+        public double Prize { get; set; }
     }
 }

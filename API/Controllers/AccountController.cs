@@ -1,7 +1,9 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Services;
+using Application.Profiles;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +17,10 @@ namespace API.Controllers
     {
         private readonly UserManager<AppUser> userManager;
         private readonly TokenService tokenService;
-
-        public AccountController(UserManager<AppUser> userManager, TokenService tokenService)
+        private IMediator _mediator;
+        protected IMediator Mediator => _mediator ??=
+        HttpContext.RequestServices.GetService<IMediator>();
+        public AccountController(UserManager<AppUser> userManager, TokenService tokenService, IMediator mediatR)
         {
             this.userManager = userManager;
             this.tokenService = tokenService;
@@ -26,7 +30,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await userManager.FindByEmailAsync(loginDto.Email);
+            var user = await userManager.Users.Include(x => x.Photos).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if (user is null)
                 return Unauthorized();
@@ -36,7 +40,7 @@ namespace API.Controllers
             if (!result)
                 return Unauthorized();
 
-            return CreateUserObject(user);
+            return await CreateUserObject(user);
         }
 
         [AllowAnonymous]
@@ -58,27 +62,57 @@ namespace API.Controllers
             var result = await userManager.CreateAsync(user, registerDto.Password);
 
             if (result.Succeeded)
-                return CreateUserObject(user);
+            {
+                await userManager.AddToRoleAsync(user, "User");
+                return await CreateUserObject(user);
+            }
 
             return BadRequest(result.Errors);
         }
 
-        [HttpGet]
+        [HttpGet("current")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
-            return CreateUserObject(user);
+            var user = await userManager.Users.Include(p => p.Photos)
+                .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            return await CreateUserObject(user);
         }
 
-        private UserDto CreateUserObject(AppUser user)
+        private async Task<UserDto> CreateUserObject(AppUser user)
         {
+            if (user is null)
+                return null;
+
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Image = null,
-                Token = tokenService.CreateToken(user),
+                Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
+                Token = await tokenService.CreateToken(user),
                 UserName = user.UserName
             };
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllAccounts()
+        {
+            return Ok(await Mediator.Send(new List.Query()));
+        }
+
+        // [Authorize(Roles = "Admin")]
+        // [HttpDelete("{userName}")]
+        // public async Task<IActionResult> DeleteAccount(string userName)
+        // {
+        //     if (userName is null)
+        //         return BadRequest();
+
+        //     var user = await userManager.FindByNameAsync(userName);
+
+        //     if (user is null)
+        //         return NotFound("Such user doesn't exists");
+
+        //     await userManager.DeleteAsync(user);
+        //     return Ok();
+        // }
     }
 }

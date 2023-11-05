@@ -5,32 +5,57 @@ namespace Persistence
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
+            if (!context.Roles.Any())
+            {
+                string[] roleNames = { "Admin", "Moderator", "User" };
+                foreach (var roleName in roleNames)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
             if (!context.Events.Any())
             {
+                var investors = new List<Investor>
+                {
+                    new() {
+                        Name = "PEPEGA INVESTMENT",
+                        WebsiteUrl = "https://pepegainvestment.com"
+                    },
+                    new() {
+                        Name = "George Soros",
+                        WebsiteUrl = "https://georgesoros.com"
+                    }
+                };
                 var users = new List<AppUser>
                 {
                     new() {
                         DisplayName = "Bob",
                         UserName = "bob",
-                        Email = "bob@test.com"
+                        Email = "bob@test.com",
+
                     },
                     new() {
                         DisplayName = "Jane",
                         UserName = "jane",
-                        Email = "jane@test.com"
+                        Email = "jane@test.com",
+                        Investor = investors[1]
                     },
                     new() {
                         DisplayName = "Tom",
                         UserName = "tom",
-                        Email = "tom@test.com"
+                        Email = "tom@test.com",
+                        Investor = investors[0]
                     },
                 };
 
                 foreach (var user in users)
                 {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                    var result = await userManager.CreateAsync(user, "Pa$$w0rd");
+                    await userManager.AddToRoleAsync(user, "User");
+                    if (result.Succeeded && user.UserName == "bob")
+                        await userManager.AddToRoleAsync(user, "Admin");
                 }
 
                 var tags = new List<Tag>
@@ -50,8 +75,7 @@ namespace Persistence
 
                 var accelerators = new List<Accelerator>
                 {
-                    new Accelerator
-                    {
+                    new() {
                         Title = "Tech Startup Accelerator",
                         Date = DateTime.Now.AddDays(30),
                         ShortDescription = "Accelerate your tech startup",
@@ -63,8 +87,7 @@ namespace Persistence
                         ProgramOffer = "Up to $50,000 funding available",
                         Tags = tags
                     },
-                    new Accelerator
-                    {
+                    new() {
                         Title = "Social Impact Accelerator",
                         Date = DateTime.Now.AddDays(45),
                         ShortDescription = "Driving positive change in the community",
@@ -75,8 +98,7 @@ namespace Persistence
                         ProgramDuration = DateTime.Now.AddDays(90),
                         ProgramOffer = "Mentorship and networking opportunities"
                     },
-                    new Accelerator
-                    {
+                    new() {
                         Title = "AI and Machine Learning Accelerator",
                         Date = DateTime.Now.AddDays(60),
                         ShortDescription = "Empowering AI-driven startups",
@@ -91,8 +113,7 @@ namespace Persistence
 
                 var hackathons = new List<Hackathon>
                 {
-                    new Hackathon
-                    {
+                    new() {
                         Title = "CodeFest 2023",
                         Date = DateTime.Now.AddDays(60),
                         ShortDescription = "Join the ultimate coding challenge",
@@ -103,8 +124,7 @@ namespace Persistence
                         ChallengeStatement = "Create a web app that solves a real-world problem",
                         Prize = 3000
                     },
-                    new Hackathon
-                    {
+                    new() {
                         Title = "Hack4Good",
                         Date = DateTime.Now.AddDays(90),
                         ShortDescription = "Hacking for a better world",
@@ -115,8 +135,7 @@ namespace Persistence
                         ChallengeStatement = "Develop a solution for sustainable agriculture",
                         Prize = 5000
                     },
-                    new Hackathon
-                    {
+                    new() {
                         Title = "GameJam 2023",
                         Date = DateTime.Now.AddDays(120),
                         ShortDescription = "Create your own game in 48 hours",
@@ -131,8 +150,7 @@ namespace Persistence
 
                 var grants = new List<Grant>
                 {
-                    new Grant
-                    {
+                    new() {
                         Title = "Research Grant for Renewable Energy",
                         Date = DateTime.Now.AddDays(90),
                         ShortDescription = "Funding innovative projects in renewable energy",
@@ -142,8 +160,7 @@ namespace Persistence
                         AppUser = users[2],
                         GrantAmount = 10000
                     },
-                    new Grant
-                    {
+                    new() {
                         Title = "Artistic Innovation Grant",
                         Date = DateTime.Now.AddDays(120),
                         ShortDescription = "Supporting creativity and innovation in the arts",
@@ -153,8 +170,7 @@ namespace Persistence
                         AppUser = users[0],
                         GrantAmount = 5000
                     },
-                    new Grant
-                    {
+                    new() {
                         Title = "Community Development Grant",
                         Date = DateTime.Now.AddDays(150),
                         ShortDescription = "Empowering local communities",
@@ -170,16 +186,7 @@ namespace Persistence
                 context.Hackathons.AddRange(hackathons);
                 context.Grants.AddRange(grants);
                 await context.SaveChangesAsync();
-
-
-                await context.SaveChangesAsync();
-
             }
-
-
-
-
-
         }
     }
 }

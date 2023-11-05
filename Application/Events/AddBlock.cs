@@ -1,5 +1,4 @@
 using Application.Core;
-using Azure.Core;
 using Domain;
 using MediatR;
 using Persistence;

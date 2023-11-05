@@ -6,6 +6,7 @@ using Application.Profiles;
 using Application.Tags;
 using AutoMapper;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Core
 {
@@ -14,15 +15,20 @@ namespace Application.Core
         // d - destination
         // o - options!
         // s - source
+        // private readonly UserManager<AppUser> userManager;
         public MappingProfiles()
         {
+            // this.userManager = userManager;
+
             CreateMap<Event, Event>();
             CreateMap<Tag, TagDto>();
 
             CreateMap<AppUser, ProfileDto>()
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))
                 .ForMember(d => d.UserName, o => o.MapFrom(s => s.UserName))
-                .ForMember(d => d.Bio, o => o.MapFrom(s => s.Bio));
+                .ForMember(d => d.Bio, o => o.MapFrom(s => s.Bio))
+                // .ForMember(d => d.Role, o => o.MapFrom(s => userManager.GetRolesAsync(s)))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain).Url));
 
             CreateMap<Event, EventDto>()
                 .ForMember(d => d.CreatorProfile, o => o.MapFrom(s => s.AppUser))

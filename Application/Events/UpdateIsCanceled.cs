@@ -15,9 +15,9 @@ namespace Application.Events
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
-            private readonly IUserAccesor userAccesor;
+            private readonly IUserAccessor userAccesor;
             private readonly DataContext context;
-            public Handler(DataContext context, IUserAccesor userAccesor)
+            public Handler(DataContext context, IUserAccessor userAccesor)
             {
                 this.context = context;
                 this.userAccesor = userAccesor;
