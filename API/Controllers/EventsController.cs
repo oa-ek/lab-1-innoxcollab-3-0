@@ -8,6 +8,7 @@ namespace API.Controllers
     public class EventsController : BaseApiController
     {
         [HttpGet]
+        // [Authorize(Roles = "AppUser")]
         public async Task<IActionResult> GetEvents()
         {
             return HandleResult(await Mediator.Send(new List.Query()));

@@ -1,4 +1,4 @@
-using API.Extensions; 
+using API.Extensions;
 using API.Middleware;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +18,6 @@ builder.Services.AddControllers(opt =>
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
-
 
 var app = builder.Build();
 
@@ -45,8 +44,11 @@ try
 {
     var context = services.GetRequiredService<DataContext>();
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedData(context, userManager);
+    await Seed.SeedData(context, userManager
+    // , roleManager
+    );
 }
 catch (Exception ex)
 {

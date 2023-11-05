@@ -9,8 +9,9 @@ namespace Domain
         public string Description { get; set; }
         public string Venue { get; set; }
         public bool IsCanceled { get; set; }
-        public ICollection<Tag> Tags { get; set; }
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
         public ICollection<EventBlock> Blocks { get; set; } = new List<EventBlock>();
+        public ICollection<Photo> RelatedPhotos { get; set; } = new List<Photo>();
         public AppUser AppUser { get; set; }
 
     }

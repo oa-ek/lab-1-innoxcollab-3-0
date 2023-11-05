@@ -26,7 +26,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await userManager.FindByEmailAsync(loginDto.Email);
+            var user = await userManager.Users.Include(x => x.Photos).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if (user is null)
                 return Unauthorized();
@@ -36,7 +36,7 @@ namespace API.Controllers
             if (!result)
                 return Unauthorized();
 
-            return CreateUserObject(user);
+            return await CreateUserObject(user);
         }
 
         [AllowAnonymous]
@@ -58,7 +58,11 @@ namespace API.Controllers
             var result = await userManager.CreateAsync(user, registerDto.Password);
 
             if (result.Succeeded)
-                return CreateUserObject(user);
+            {
+                await userManager.AddToRoleAsync(user, "User");
+                return await CreateUserObject(user);
+            }
+
 
             return BadRequest(result.Errors);
         }
@@ -66,17 +70,21 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
-            return CreateUserObject(user);
+            var user = await userManager.Users.Include(p => p.Photos)
+                .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            return await CreateUserObject(user);
         }
 
-        private UserDto CreateUserObject(AppUser user)
+        private async Task<UserDto> CreateUserObject(AppUser user)
         {
+            if (user is null)
+                return null;
+
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Image = null,
-                Token = tokenService.CreateToken(user),
+                Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
+                Token = await tokenService.CreateToken(user),
                 UserName = user.UserName
             };
         }
