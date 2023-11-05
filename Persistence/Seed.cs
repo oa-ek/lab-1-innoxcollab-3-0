@@ -5,18 +5,16 @@ namespace Persistence
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager
-        // , RoleManager<IdentityRole> roleManager
-        )
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            // if (!context.Roles.Any())
-            // {
-            //     string[] roleNames = { "Admin", "Moderator", "User" };
-            //     foreach (var roleName in roleNames)
-            //     {
-            //         await roleManager.CreateAsync(new IdentityRole(roleName));
-            //     }
-            // }
+            if (!context.Roles.Any())
+            {
+                string[] roleNames = { "Admin", "Moderator", "User" };
+                foreach (var roleName in roleNames)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
             if (!context.Events.Any())
             {
                 var investors = new List<Investor>
@@ -55,9 +53,9 @@ namespace Persistence
                 foreach (var user in users)
                 {
                     var result = await userManager.CreateAsync(user, "Pa$$w0rd");
-                    // await userManager.AddToRoleAsync(user, "User");
-                    // if (result.Succeeded && user.UserName == "bob")
-                    //     await userManager.AddToRoleAsync(user, "Admin");
+                    await userManager.AddToRoleAsync(user, "User");
+                    if (result.Succeeded && user.UserName == "bob")
+                        await userManager.AddToRoleAsync(user, "Admin");
                 }
 
                 var tags = new List<Tag>

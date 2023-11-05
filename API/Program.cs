@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers(opt =>
 {
-    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().RequireRole("User").Build();
     opt.Filters.Add(new AuthorizeFilter(policy));
 });
 
@@ -44,11 +44,9 @@ try
 {
     var context = services.GetRequiredService<DataContext>();
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
-    // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedData(context, userManager
-    // , roleManager
-    );
+    await Seed.SeedData(context, userManager, roleManager);
 }
 catch (Exception ex)
 {

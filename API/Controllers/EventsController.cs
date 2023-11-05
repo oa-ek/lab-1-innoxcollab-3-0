@@ -8,7 +8,6 @@ namespace API.Controllers
     public class EventsController : BaseApiController
     {
         [HttpGet]
-        // [Authorize(Roles = "AppUser")]
         public async Task<IActionResult> GetEvents()
         {
             return HandleResult(await Mediator.Send(new List.Query()));
@@ -41,22 +40,24 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
 
+        [Authorize(Policy = "IsEventHost")]
         [HttpPost("{id}/cancel")]
         public async Task<ActionResult> CancelEvent(Guid id)
         {
             return HandleResult(await Mediator.Send(new UpdateIsCanceled.Command { Id = id }));
         }
 
-        [HttpGet("search")]
-        public async Task<ActionResult> Search(string searchTerm)
-        {
-            return HandleResult(await Mediator.Send(new Search.Query { SearchTerm = searchTerm }));
-        }
-
+        [Authorize(Policy = "IsEventHost")]
         [HttpPost("{id}/addBlock")]
         public async Task<ActionResult> AddBlock(Guid id, [FromBody] EventBlock eventBlock)
         {
             return HandleResult(await Mediator.Send(new AddBlock.Command { Id = id, EventBlock = eventBlock }));
+        }
+        
+        [HttpGet("search")]
+        public async Task<ActionResult> Search(string searchTerm)
+        {
+            return HandleResult(await Mediator.Send(new Search.Query { SearchTerm = searchTerm }));
         }
     }
 }
