@@ -3,6 +3,7 @@ import { store } from "./store";
 import { Profile } from "../models/Profile";
 import { Event, EventFormValues } from "../models/Event";
 import agent from "../api/agent";
+import { Pagination, PagingParams } from "../models/Pagination";
 
 export default class EventStore {
     eventRegistry = new Map<string, Event>();
@@ -10,9 +11,19 @@ export default class EventStore {
     editMode = false;
     loading = false;
     loadingInitial = true;
+    pagination: Pagination | null = null;
+    pagingParams = new PagingParams();
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+
+        return params;
     }
 
     get eventsByDate() {
@@ -33,9 +44,10 @@ export default class EventStore {
     loadEvents = async () => {
         this.setLoadingInitial(true);
         try {
-            const activities = await agent.Events.list();
-            activities.forEach(event =>
+            const result = await agent.Events.list(this.axiosParams);
+            result.data.forEach(event =>
                 this.setEvent(event));
+            this.setPagination(result.pagination);
             this.setLoadingInitial(false);
 
         } catch (error) {
@@ -65,6 +77,7 @@ export default class EventStore {
         }
 
     }
+
 
     private getEvent = (id: string) => {
         return this.eventRegistry.get(id);
@@ -149,5 +162,14 @@ export default class EventStore {
             })
         }
     }
+
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
+    }
+
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+
 
 }
