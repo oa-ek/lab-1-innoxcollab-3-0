@@ -24,9 +24,9 @@ namespace Application.Events
                     }
                 }
                 private readonly DataContext context;
-                private readonly IUserAccesor userAccesor;
+                private readonly IUserAccessor userAccesor;
 
-                public Handler(DataContext context, IUserAccesor userAccesor)
+                public Handler(DataContext context, IUserAccessor userAccesor)
                 {
                     this.context = context;
                     this.userAccesor = userAccesor;

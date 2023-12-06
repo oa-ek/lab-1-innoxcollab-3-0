@@ -5,6 +5,7 @@ import { store } from '../stores/store';
 import { User, UserFormValues } from '../models/User';
 import { Event, EventFormValues } from '../models/Event';
 import { EventBlock } from '../models/EventBlock';
+import { Profile } from '../models/Profile';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -77,18 +78,27 @@ const Events = {
     update: (event: EventFormValues) => requests.put<void>(`/events/${event.id}`, event),
     delete: (id: string) => requests.del<void>(`/events/${id}`),
     cancel: (id: string) => requests.post<void>(`/events/${id}/cancel`, {}),
-    addEventBlock: (id: string, eventBlock: EventBlock) => requests.post<void>(`/events/${id}/`, eventBlock) 
+    addEventBlock: (id: string, eventBlock: EventBlock) => requests.post<void>(`/events/${id}/`, eventBlock)
 }
 
 const Account = {
-    current: () => requests.get<User>('/account'),
+    current: () => requests.get<User>('/account/current'),
     login: (user: UserFormValues) => requests.post<User>('/account/login', user),
     register: (user: UserFormValues) => requests.post<User>('/account/register', user)
 }
 
+const Profiles = {
+    list: () => requests.get<Profile[]>(`/profiles`),
+    details: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+    create: (user: Partial<Profile>) => requests.post<void>(`/profiles`, user),
+    delete: (username: string) => requests.del<void>(`/profiles/${username}`),
+    edit: (id: string, user: Partial<Profile>) => requests.put<void>(`/profiles/${id}`, user)
+}
+
 const agent = {
     Events,
-    Account
+    Account,
+    Profiles
 }
 
 export default agent;

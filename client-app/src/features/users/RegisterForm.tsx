@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 import { LoadingButton } from "@mui/lab";
 import * as Yup from 'yup'
 import ValidationError from "../errors/ValidationError";
-import TextInput from "../../app/common/TextInput";
+import TextInput from "../../app/common/form/TextInput";
 
 export default observer(function RegisterForm() {
     const { userStore } = useStore();

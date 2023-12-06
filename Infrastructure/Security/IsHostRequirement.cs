@@ -40,7 +40,7 @@ namespace Infrastructure.Security
                 return Task.CompletedTask;
 
 
-            if (@event.AppUser.Id == userId)
+            if (@event.AppUserId == userId)
                 context.Succeed(requirement);
 
             return Task.CompletedTask;

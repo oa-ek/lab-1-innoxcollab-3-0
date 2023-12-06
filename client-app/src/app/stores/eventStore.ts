@@ -31,6 +31,7 @@ export default class EventStore {
     }
 
     loadEvents = async () => {
+        this.setLoadingInitial(true);
         try {
             const activities = await agent.Events.list();
             activities.forEach(event =>
@@ -64,7 +65,7 @@ export default class EventStore {
         }
 
     }
- 
+
     private getEvent = (id: string) => {
         return this.eventRegistry.get(id);
     }
@@ -73,8 +74,6 @@ export default class EventStore {
         const user = store.userStore.user;
         if (user) {
             event.isHost = event.creatorProfile?.userName === user.userName;
-            console.log(user.userName);
-            console.log(event.creatorProfile?.userName);
         }
         this.eventRegistry.set(event.id, event);
     }

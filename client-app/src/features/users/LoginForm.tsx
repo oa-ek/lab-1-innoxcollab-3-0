@@ -4,7 +4,7 @@ import { ErrorMessage, Form, Formik } from "formik";
 import { useStore } from "../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { LoadingButton } from "@mui/lab";
-import TextInput from "../../app/common/TextInput";
+import TextInput from "../../app/common/form/TextInput";
 
 export default observer(function LoginForm() {
     const { userStore } = useStore();
@@ -14,7 +14,7 @@ export default observer(function LoginForm() {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" sx={{ height: "91vh" }}>
             <CssBaseline />
             <Box
                 sx={{
@@ -47,7 +47,7 @@ export default observer(function LoginForm() {
                                             variant="body2" color="error">
                                             {errors.error}
                                         </Typography>
-                                    } 
+                                    }
                                 />
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" onChange={handleRememberMeChange} />}

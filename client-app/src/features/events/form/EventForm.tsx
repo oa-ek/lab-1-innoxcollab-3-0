@@ -1,21 +1,22 @@
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { LoadingButton } from "@mui/lab";
-import { Paper, Stack, Button, Typography, Box } from "@mui/material";
+import { Paper, Stack, Button, Typography, Box, Grid } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { EventFormValues } from "../../../app/models/Event";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { Form, Formik } from "formik";
 import * as Yup from 'yup';
 import { v4 as uuid } from 'uuid'
-import TextInput from "../../../app/common/TextInput";
-import DateInput from "../../../app/common/DateInput";
+import TextInput from "../../../app/common/form/TextInput";
+import DateInput from "../../../app/common/form/DateInput";
+import { router } from "../../../app/router/Routes";
 
 export default observer(function EventForm() {
     const { eventStore } = useStore();
     const { createEvent, updateEvent,
-        loadEvent, loadingInitial } = eventStore;
+        loadEvent, loadingInitial, deleteEvent, loading } = eventStore;
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -43,13 +44,19 @@ export default observer(function EventForm() {
         else {
             updateEvent(event).then(() => navigate(`/events/${event.id}`))
         }
-    } 
+    }
+
+    const [target, setTarget] = useState('');
+    function handleEventDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+        setTarget(e.currentTarget.name);
+        deleteEvent(id);
+        router.navigate('/events');
+    }
 
     if (loadingInitial) return <LoadingComponent />
 
     return (
         <Box sx={{ height: "100vh" }}>
-
             <Paper sx={{ p: "12px", borderRadius: "10px" }}>
                 <Formik
                     validationSchema={validationSchema}
@@ -67,16 +74,32 @@ export default observer(function EventForm() {
                                 <DateInput name="date" placeholder="Date" />
                                 <TextInput name="venue" placeholder="Venue" />
 
-                                <Stack direction="row" spacing={1} justifyContent="flex-end">
-                                    <Button variant="contained" component={Link} to={`/events/${event.id}`}>
-                                        Cancel
-                                    </Button>
-                                    <LoadingButton
-                                        disabled={isSubmitting || !dirty || !isValid}
-                                        loading={isSubmitting} variant="contained" type="submit">
-                                        Submit
-                                    </LoadingButton>
-                                </Stack>
+
+                                <Grid container direction="row">
+                                    <Grid item xs={2}>
+                                        <LoadingButton
+                                            name={event.id}
+                                            onClick={(e) => handleEventDelete(e, event.id!)}
+                                            variant="contained"
+                                            color="error"
+                                            loading={loading && target === event.id}
+                                        >
+                                            Delete
+                                        </LoadingButton>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Stack direction="row" spacing={1} justifyContent="flex-end">
+                                            <Button variant="contained" component={Link} to={`/events/${event.id}`}>
+                                                Cancel
+                                            </Button>
+                                            <LoadingButton
+                                                disabled={isSubmitting || !dirty || !isValid}
+                                                loading={isSubmitting} variant="contained" type="submit">
+                                                Submit
+                                            </LoadingButton>
+                                        </Stack>
+                                    </Grid>
+                                </Grid>
                             </Stack>
                         </Form>
                     )}

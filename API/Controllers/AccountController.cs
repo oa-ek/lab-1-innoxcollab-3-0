@@ -63,7 +63,7 @@ namespace API.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpGet]
+        [HttpGet("current")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
@@ -74,6 +74,7 @@ namespace API.Controllers
         {
             return new UserDto
             {
+                Id = user.Id,
                 DisplayName = user.DisplayName,
                 Image = null,
                 Token = tokenService.CreateToken(user),

@@ -3,7 +3,7 @@ import { User, UserFormValues } from "../models/User";
 import { store } from "./store";
 import { router } from "../router/Routes";
 import agent from "../api/agent";
- 
+
 export default class UserStore {
     user: User | null = null;
     rememberMe = false;
@@ -29,7 +29,7 @@ export default class UserStore {
     logout = () => {
         store.commonStore.setToken(null);
         this.user = null;
-        router.navigate('/')
+        location.reload();
     }
 
     getUser = async () => {
@@ -43,9 +43,20 @@ export default class UserStore {
         this.rememberMe = value;
     }
 
+    setDisplayName = (name: string) => {
+        if (this.user)
+            this.user.displayName = name;
+    }
+
+    setUserName = (name: string) => {
+        if (this.user)
+            this.user.userName = name;
+    }
+
     private logUser = (user: User) => {
         store.commonStore.setToken(user.token, this.rememberMe);
         runInAction(() => this.user = user);
+        store.eventStore.eventRegistry.clear();
         router.navigate('/events');
     }
 }

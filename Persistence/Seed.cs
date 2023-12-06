@@ -14,7 +14,8 @@ namespace Persistence
                     new() {
                         DisplayName = "Bob",
                         UserName = "bob",
-                        Email = "bob@test.com"
+                        Email = "bob@test.com",
+                        Bio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mattis mollis augue a convallis. Curabitur sed mattis nisl, porta pulvinar massa. Sed imperdiet lacus vel ex ullamcorper, eget porta ipsum placerat. Fusce molestie porta ex in pulvinar. Praesent rutrum, mauris in varius consequat, magna est accumsan sapien, id iaculis lectus libero sed lectus. Nullam enim enim, sagittis ut accumsan vel, egestas sodales turpis. Quisque non tellus magna."
                     },
                     new() {
                         DisplayName = "Jane",
@@ -169,17 +170,10 @@ namespace Persistence
                 context.Accelerators.AddRange(accelerators);
                 context.Hackathons.AddRange(hackathons);
                 context.Grants.AddRange(grants);
-                await context.SaveChangesAsync();
-
 
                 await context.SaveChangesAsync();
 
             }
-
-
-
-
-
         }
     }
 }

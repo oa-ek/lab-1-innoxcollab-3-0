@@ -16,13 +16,19 @@ namespace Application.Core
         // s - source
         public MappingProfiles()
         {
-            CreateMap<Event, Event>();
-            CreateMap<Tag, TagDto>();
+            CreateMap<Event, Event>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<Tag, TagDto>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<AppUser, AppUser>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<AppUser, ProfileDto>()
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))
                 .ForMember(d => d.UserName, o => o.MapFrom(s => s.UserName))
-                .ForMember(d => d.Bio, o => o.MapFrom(s => s.Bio));
+                .ForMember(d => d.Bio, o => o.MapFrom(s => s.Bio))
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.Email));
 
             CreateMap<Event, EventDto>()
                 .ForMember(d => d.CreatorProfile, o => o.MapFrom(s => s.AppUser))

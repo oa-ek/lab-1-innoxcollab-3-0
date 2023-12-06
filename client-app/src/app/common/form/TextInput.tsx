@@ -7,6 +7,7 @@ interface Props {
     label?: string;
     ml?: boolean;
     type?: string;
+    disabled?: boolean;
 }
 
 export default function TextInput(props: Props) {
@@ -21,6 +22,7 @@ export default function TextInput(props: Props) {
                 multiline={ml}
                 error={meta.touched && !!meta.error}
                 label={props.label} 
+                placeholder={props.placeholder}
                 {...field} 
                 {...otherProps}
             />

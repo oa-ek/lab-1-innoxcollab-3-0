@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { Link, NavLink } from 'react-router-dom';
-import { Avatar, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import { Avatar, IconButton, Menu, MenuItem, Stack, Tooltip } from '@mui/material';
 import { useStore } from '../stores/store';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
@@ -46,59 +46,83 @@ export default observer(function NavBar() {
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Button component={NavLink} to="/events"
-                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            sx={{ my: 2, color: 'white' }}
                         >
                             Events
                         </Button>
-                        <Button variant="contained" component={NavLink} to="/createEvent"
-                            sx={{ ml: 2, my: 2, color: 'white', display: 'block' }}
-                        >
-                            Create Event
-                        </Button>
-                    </Box>
- 
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <Box
-                                onClick={handleOpenUserMenu}
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    gap: "10px",
-                                    cursor: "pointer"
-                                }}>
-                                <IconButton sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src={user?.image} />
-                                </IconButton>
-                                <Typography>{user?.displayName}</Typography>
-                            </Box>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            <MenuItem component={Link} to={`/profile/${user?.userName}`} onClick={handleCloseUserMenu}>
-                                <Typography textAlign="center">My Account</Typography>
-                            </MenuItem>
-                            <MenuItem onClick={logout}>
-                                <Typography textAlign="center">Logout</Typography>
+                        {
+                            user && (
+                                <Stack direction="row" >
+                                    <Button component={NavLink} to="/createEvent"
+                                        sx={{ ml: 2, my: 2, color: 'white' }}
+                                    >
+                                        Create Event
+                                    </Button>
+                                    <Button component={NavLink} to="/admin/manageProfiles"
+                                        sx={{ ml: 2, my: 2, color: 'white' }}
+                                    >
+                                        Manage Users
+                                    </Button>
+                                </Stack>
 
-                            </MenuItem>
-                        </Menu>
+                            )
+                        }
+
                     </Box>
+
+                    {
+                        user ?
+                            (
+                                <Box sx={{ flexGrow: 0 }}>
+                                    <Tooltip title="Open settings">
+                                        <Box
+                                            onClick={handleOpenUserMenu}
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                gap: "10px",
+                                                cursor: "pointer"
+                                            }}>
+                                            <IconButton sx={{ p: 0 }}>
+                                                <Avatar alt="Remy Sharp" src={user?.image} />
+                                            </IconButton>
+                                            <Typography>{user?.displayName}</Typography>
+                                        </Box>
+                                    </Tooltip>
+                                    <Menu
+                                        sx={{ mt: '45px' }}
+                                        id="menu-appbar"
+                                        anchorEl={anchorElUser}
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        keepMounted
+                                        transformOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        open={Boolean(anchorElUser)}
+                                        onClose={handleCloseUserMenu}
+                                    >
+                                        <MenuItem component={Link} to={`/profile/${user?.userName}`} onClick={handleCloseUserMenu}>
+                                            <Typography textAlign="center">My Account</Typography>
+                                        </MenuItem>
+                                        <MenuItem onClick={logout}>
+                                            <Typography textAlign="center">Logout</Typography>
+
+                                        </MenuItem>
+                                    </Menu>
+                                </Box>
+                            ) : (
+                                <Stack direction="row" spacing={1}>
+                                    <Button color="inherit" component={Link} to="/login">Login</Button>
+                                    <Button color="inherit" component={Link} to="/register">Register</Button>
+                                </Stack>
+                            )
+                    }
+
                 </Toolbar>
             </Container>
         </AppBar>

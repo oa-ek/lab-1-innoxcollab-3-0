@@ -7,6 +7,7 @@ import EventDetails from "../../features/events/details/EventDetails";
 import LoginForm from "../../features/users/LoginForm";
 import RegisterForm from "../../features/users/RegisterForm";
 import EventForm from "../../features/events/form/EventForm";
+import ProfileAdminManagement from "../../features/profiles/ProfileAdminManagement";
 
 export const routes: RouteObject[] = [
     {
@@ -19,11 +20,12 @@ export const routes: RouteObject[] = [
             { path: 'manage/:id', element: <EventForm key="manage" /> },
             { path: 'login', element: <LoginForm /> },
             { path: 'register', element: <RegisterForm /> },
+            { path: 'admin/manageProfiles', element: <ProfileAdminManagement /> },
             { path: 'not-found', element: <NotFound /> },
             { path: 'server-error', element: <ServerError /> },
             { path: '*', element: <Navigate replace to="/not-found" /> },
         ]
     }
 ]
- 
+
 export const router = createBrowserRouter(routes)
