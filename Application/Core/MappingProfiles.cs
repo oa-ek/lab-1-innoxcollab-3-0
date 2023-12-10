@@ -17,6 +17,7 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<Event, Event>()
+                .ForMember(d => d.Tags, o => o.MapFrom(s => s.Tags))
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Tag, Tag>()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));

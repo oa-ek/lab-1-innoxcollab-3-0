@@ -1,6 +1,7 @@
 using Application.Core;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Tags
@@ -23,6 +24,9 @@ namespace Application.Tags
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                if (await context.Tags.AnyAsync(x => x.Name == request.Tag.Name))
+                    return Result<Unit>.Failure("Tag name must be unique");
+
                 await context.Tags.AddAsync(request.Tag);
                 var result = await context.SaveChangesAsync() > 0;
 

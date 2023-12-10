@@ -38,6 +38,13 @@ namespace Application.Events
 
                     request.Event.AppUser = user;
 
+                    var existingTags = new List<Tag>();
+
+                    foreach (var tag in request.Event.Tags)
+                        existingTags.Add(await context.Tags.FindAsync(tag.Id));
+
+                    request.Event.Tags = existingTags;
+
                     await context.Events.AddAsync(request.Event);
                     var result = await context.SaveChangesAsync() > 0;
 

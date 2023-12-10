@@ -1,7 +1,9 @@
+using System.Security.Cryptography.X509Certificates;
 using Application.Core;
 using AutoMapper;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Events
@@ -23,16 +25,24 @@ namespace Application.Events
             }
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var @event = await context.Events.FindAsync(request.Event.Id);
+                var @event = await context.Events.Include(x => x.Tags)
+                    .FirstOrDefaultAsync(x => x.Id == request.Event.Id);
 
                 if (@event is null)
                     return null;
 
-                mapper.Map(request.Event, @event);
+				var existingTags = new List<Tag>();
 
-                var result = await context.SaveChangesAsync() > 0;
-                
-                if (!result)
+                foreach (var tag in request.Event.Tags)
+                    existingTags.Add(await context.Tags.FindAsync(tag.Id));
+
+				mapper.Map(request.Event, @event);
+
+                @event.Tags = existingTags;
+
+				var result = await context.SaveChangesAsync() > 0;
+
+				if (!result)
                     return Result<Unit>.Failure("Failed to edit the event!");
 
                 return Result<Unit>.Success(Unit.Value);
