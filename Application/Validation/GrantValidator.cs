@@ -1,4 +1,5 @@
 using Domain;
+using FluentValidation;
 
 namespace Application.Validation
 {
@@ -6,7 +7,7 @@ namespace Application.Validation
     {
         public GrantValidator() : base()
         {
-            //RuleFor(x => x.GrantAmount).NotEmpty();
+            RuleFor(x => x.GrantAmount).GreaterThanOrEqualTo(0);
         }
     }
 }

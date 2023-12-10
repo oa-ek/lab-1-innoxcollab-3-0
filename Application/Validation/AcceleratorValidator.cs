@@ -4,7 +4,6 @@ using FluentValidation;
 namespace Application.Validation
 {
     public class AcceleratorValidator : EventValidator<Accelerator>
-    
     {
         public AcceleratorValidator() : base()
         {

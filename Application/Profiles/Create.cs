@@ -1,7 +1,9 @@
 using Application.Core;
+using Application.Validation;
 using Domain;
+using FluentValidation;
 using MediatR;
-using Persistence;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Profiles
 {
@@ -12,25 +14,35 @@ namespace Application.Profiles
             public AppUser User { get; set; }
         }
 
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.User.Email).NotEmpty().EmailAddress();
+                RuleFor(x => x.User.UserName).NotEmpty();
+                RuleFor(x => x.User.DisplayName).NotEmpty();
+            }
+        }
+
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
-            private readonly DataContext context;
+            private readonly UserManager<AppUser> userManager;
 
-            public Handler(DataContext context)
+            public Handler(UserManager<AppUser> userManager)
             {
-                this.context = context;
+                this.userManager = userManager;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                await context.Users.AddAsync(request.User);
+                const string temporaryPassword = "Test11!";
 
-                var result = await context.SaveChangesAsync() > 0;
+                var result = await userManager.CreateAsync(request.User, temporaryPassword);
 
-                if (!result)
-                    return Result<Unit>.Failure("Failed to create user");
+                if (result.Succeeded)
+                    return Result<Unit>.Success(Unit.Value);
 
-                return Result<Unit>.Success(Unit.Value);
+                return Result<Unit>.Failure("Failed to create User");
             }
         }
     }

@@ -1,4 +1,5 @@
 using Domain;
+using FluentValidation;
 
 namespace Application.Validation
 {
@@ -6,9 +7,8 @@ namespace Application.Validation
     {
         public HackathonValidator() : base()
         {
-            // RuleFor(x => x.ChallengeStatement).NotEmpty();
-            // RuleFor(x => x.Prize).NotEmpty();
-            // RuleFor(x => x.Prize).GreaterThanOrEqualTo(0);
+            RuleFor(x => x.ChallengeStatement).NotEmpty();
+            RuleFor(x => x.Prize).GreaterThanOrEqualTo(0);
         }
     }
 }

@@ -1,8 +1,9 @@
 using Application.Core;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 using MediatR;
-using Persistence;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Profiles
 {
@@ -16,24 +17,25 @@ namespace Application.Profiles
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly IMapper mapper;
-            private readonly DataContext context;
+            private readonly UserManager<AppUser> userManager;
 
-            public Handler(IMapper mapper, DataContext context)
+            public Handler(IMapper mapper, UserManager<AppUser> userManager)
             {
                 this.mapper = mapper;
-                this.context = context;
+                this.userManager = userManager;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await context.Users.FindAsync(request.User.Id);
+                var user = await userManager.FindByIdAsync(request.User.Id);
+
                 if (user is null)
                     return null;
 
                 mapper.Map(request.User, user);
+                var result = await userManager.UpdateAsync(user);
 
-                var result = await context.SaveChangesAsync() > 0;
-                if (!result)
+                if (!result.Succeeded)
                     return Result<Unit>.Failure("Failed to edit user");
 
                 return Result<Unit>.Success(Unit.Value);
