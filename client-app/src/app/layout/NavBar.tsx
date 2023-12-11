@@ -53,7 +53,7 @@ export default observer(function NavBar() {
                         {
                             user && (
                                 <Stack direction="row" >
-                                    <Button component={NavLink} to="/createEvent"
+                                    <Button component={Link} to="/createEvent"
                                         sx={{ ml: 2, my: 2, color: 'white' }}
                                     >
                                         Create Event

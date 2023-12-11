@@ -31,6 +31,7 @@ export class EventFormValues {
     description: string = '';
     date: string | null = dayjs().toISOString();
     venue: string = '';
+    tags: Tag[] = [];
 
     constructor(event?: EventFormValues) {
         if (event) {
@@ -40,6 +41,7 @@ export class EventFormValues {
             this.description = event.description;
             this.date = event.date;
             this.venue = event.venue;
+            this.tags = event.tags;
         }
     }
 }

@@ -5,7 +5,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { useField } from "formik";
 
 interface Props {
-    placeholder: string;
+    placeholder?: string;
     name: string;
     label?: string;
 }

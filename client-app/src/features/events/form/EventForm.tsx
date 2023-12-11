@@ -5,18 +5,18 @@ import { LoadingButton } from "@mui/lab";
 import { Paper, Stack, Button, Typography, Box, Grid } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { EventFormValues } from "../../../app/models/Event";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { Form, Formik } from "formik";
 import * as Yup from 'yup';
 import { v4 as uuid } from 'uuid'
 import TextInput from "../../../app/common/form/TextInput";
 import DateInput from "../../../app/common/form/DateInput";
 import { router } from "../../../app/router/Routes";
+import MultipleValues from "../../../app/common/form/MultipleValues";
 
 export default observer(function EventForm() {
     const { eventStore } = useStore();
     const { createEvent, updateEvent,
-        loadEvent, loadingInitial, deleteEvent, loading } = eventStore;
+        loadEvent, deleteEvent, loading, selectedEvent } = eventStore;
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -53,8 +53,6 @@ export default observer(function EventForm() {
         router.navigate('/events');
     }
 
-    if (loadingInitial) return <LoadingComponent />
-
     return (
         <Box sx={{ height: "100vh" }}>
             <Paper sx={{ p: "12px", borderRadius: "10px" }}>
@@ -68,24 +66,27 @@ export default observer(function EventForm() {
                         <Form onSubmit={handleSubmit} autoComplete="off" >
                             <Stack spacing={1}>
                                 <Typography variant="h6">Event Details</Typography>
-                                <TextInput name="title" placeholder="Title" />
-                                <TextInput ml name="description" placeholder="Description" />
-                                <TextInput name="shortDescription" placeholder="Short Description" />
-                                <DateInput name="date" placeholder="Date" />
-                                <TextInput name="venue" placeholder="Venue" />
-
+                                <TextInput name="title" label="Title" />
+                                <TextInput ml name="description" label="Description" />
+                                <TextInput name="shortDescription" label="Short Description" />
+                                <MultipleValues key={event.id ? "update" : "create"} name="tags"
+                                    eventTags={event.id ? selectedEvent?.tags : []} />
+                                <DateInput name="date" label="Date" />
+                                <TextInput name="venue" label="Venue" />
 
                                 <Grid container direction="row">
                                     <Grid item xs={2}>
-                                        <LoadingButton
-                                            name={event.id}
-                                            onClick={(e) => handleEventDelete(e, event.id!)}
-                                            variant="contained"
-                                            color="error"
-                                            loading={loading && target === event.id}
-                                        >
-                                            Delete
-                                        </LoadingButton>
+                                        {id &&
+                                            <LoadingButton
+                                                name={event.id}
+                                                onClick={(e) => handleEventDelete(e, event.id!)}
+                                                variant="contained"
+                                                color="error"
+                                                loading={loading && target === event.id}
+                                            >
+                                                Delete
+                                            </LoadingButton>
+                                        }
                                     </Grid>
                                     <Grid item xs={10}>
                                         <Stack direction="row" spacing={1} justifyContent="flex-end">

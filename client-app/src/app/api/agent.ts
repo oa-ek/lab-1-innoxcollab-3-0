@@ -7,6 +7,7 @@ import { Event, EventFormValues } from '../models/Event';
 import { EventBlock } from '../models/EventBlock';
 import { Profile } from '../models/Profile';
 import { PaginatedResult } from '../models/Pagination';
+import { Tag } from '../models/Tag';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -57,7 +58,7 @@ axios.interceptors.response.use(async response => {
             toast.error('unauthorized')
             break;
         case 403:
-            toast.error('forbidden')
+            toast.error('Action is forbidden')
             break;
         case 404:
             router.navigate('/not-found');
@@ -102,10 +103,19 @@ const Profiles = {
     edit: (id: string, user: Partial<Profile>) => requests.put<void>(`/profiles/${id}`, user)
 }
 
+const Tags = {
+    list: () => requests.get<Tag[]>(`/tags`),
+    details: (id: string) => requests.get<Tag>(`/tags/${id}`),
+    create: (tag: Tag) => requests.post<void>(`/tags`, tag),
+    edit: (id: string, tag: Tag) => requests.put<void>(`/tags/${id}`, tag),
+    delete: (id: string) => requests.del<void>(`/tags/${id}`)
+}
+
 const agent = {
     Events,
     Account,
-    Profiles
+    Profiles,
+    Tags
 }
 
 export default agent;

@@ -4,6 +4,7 @@ import UserStore from "./userStore";
 import EventStore from "./eventStore";
 import ProfileStore from "./profileStore";
 import ModalStore from "./modalStore";
+import TagStore from "./tagStore";
 
 
 interface Store {
@@ -12,6 +13,7 @@ interface Store {
     userStore: UserStore;
     profileStore: ProfileStore;
     modalStore: ModalStore;
+    tagStore: TagStore;
 }
 
 export const store: Store = {
@@ -19,8 +21,8 @@ export const store: Store = {
     commonStore: new CommonStore(),
     userStore: new UserStore(),
     profileStore: new ProfileStore(),
-    modalStore: new ModalStore()
-
+    modalStore: new ModalStore(),
+    tagStore: new TagStore()
 }
  
 export const StoreContext = createContext(store);
