@@ -14,45 +14,47 @@ namespace Application.Events
         public class Command : IRequest<Result<Unit>>
         {
             public Event Event { get; set; }
-            public class Handler : IRequestHandler<Command, Result<Unit>>
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
             {
-                public class CommandValidator : AbstractValidator<Command>
-                {
-                    public CommandValidator()
-                    {
-                        RuleFor(x => x.Event).SetValidator(new EventValidator<Event>());
-                    }
-                }
-                private readonly DataContext context;
-                private readonly IUserAccessor userAccesor;
+                RuleFor(x => x.Event).SetValidator(new EventValidator());
+            }
+        }
 
-                public Handler(DataContext context, IUserAccessor userAccesor)
-                {
-                    this.context = context;
-                    this.userAccesor = userAccesor;
-                }
-                public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
-                {
-                    var user = await context.Users
-                        .FirstOrDefaultAsync(x => x.UserName == userAccesor.GetUserName());
+        public class Handler : IRequestHandler<Command, Result<Unit>>
+        {
+            private readonly DataContext context;
+            private readonly IUserAccessor userAccesor;
 
-                    request.Event.AppUser = user;
+            public Handler(DataContext context, IUserAccessor userAccesor)
+            {
+                this.context = context;
+                this.userAccesor = userAccesor;
+            }
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            {
+                var user = await context.Users
+                    .FirstOrDefaultAsync(x => x.UserName == userAccesor.GetUserName());
 
-                    var existingTags = new List<Tag>();
+                request.Event.AppUser = user;
 
-                    foreach (var tag in request.Event.Tags)
-                        existingTags.Add(await context.Tags.FindAsync(tag.Id));
+                var existingTags = new List<Tag>();
 
-                    request.Event.Tags = existingTags;
+                foreach (var tag in request.Event.Tags)
+                    existingTags.Add(await context.Tags.FindAsync(tag.Id));
 
-                    await context.Events.AddAsync(request.Event);
-                    var result = await context.SaveChangesAsync() > 0;
+                request.Event.Tags = existingTags;
 
-                    if (!result)
-                        return Result<Unit>.Failure("Failed to create the event!");
+                await context.Events.AddAsync(request.Event);
+                var result = await context.SaveChangesAsync() > 0;
 
-                    return Result<Unit>.Success(Unit.Value);
-                }
+                if (!result)
+                    return Result<Unit>.Failure("Failed to create the event!");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validation
 {
-    public class EventValidator<T> : AbstractValidator<T> where T : Event
+    public class EventValidator : AbstractValidator<Event>
     {
         public EventValidator()
         {
