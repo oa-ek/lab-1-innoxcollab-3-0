@@ -1,0 +1,168 @@
+﻿@page "/editevent/{Id}"
+@using BlazorCRUDApp.Shared
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<h2>Edit Event</h2>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Title</span>
+            <input type="text" class="form-control" form="Title" @bind="@eventy.Title" aria-label="Title" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Short Description</span>
+            <input type="text" class="form-control" @bind="@eventy.ShortDescription" aria-label="ShortDescription" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Description</span>
+            <textarea class="form-control" @bind="@eventy.Description" aria-label="Description" aria-describedby="addon-wrapping"></textarea>
+        </div>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Venue</span>
+            <input type="text" class="form-control" @bind="@eventy.Venue" aria-label="Venue" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="IsCanceledCheckbox" @bind="@eventy.IsCanceled">
+            <label class="form-check-label" for="IsCanceledCheckbox">Is Canceled</label>
+        </div>
+    </div>
+</div>
+
+
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Type</span>
+            <input type="text" disabled class="form-control" @bind="@eventy.EventType" aria-label="EventType" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+
+
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Event Tags</span>
+            <select class="form-control" @bind="@SelectedTagIDs" multiple>
+                @foreach (var tag in Tags)
+                {
+                    <option value="@tag.Id"> @tag.Name </option>
+                }
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Type</span>
+            <input type="text" disabled class="form-control" @bind="@Creator" aria-label="Creator" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+
+<div class="row mt-1">
+    <div class="col-md-4">
+        <div class="form-group">
+            <div class="d-flex gap-4 align-items-center">
+                <input type="button" class="btn btn-danger p-2" @onclick="@Delete" value="Delete" />
+                <div class="ml-2">
+                    <input type="button" class="btn btn-primary p-2" @onclick="@Save" value="Save" />
+                    <input type="button" class="btn btn-dark p-2" @onclick="@Cancel" value="Cancel" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string Id{ get; set; }
+
+    EventDto eventy = new EventDto();
+
+
+    List<TagDto> Tags = new List<TagDto>();
+    string[] SelectedTagIDs { get; set; } = Array.Empty<string>();
+
+    string Creator;
+    protected override async Task OnInitializedAsync()
+    {
+        eventy = await Http.GetFromJsonAsync<EventDto>("api/events/" + Id);
+        Tags = await Http.GetFromJsonAsync<List<TagDto>>("api/tags");
+
+        SelectedTagIDs = eventy.Tags.Select(tag => tag.Id.ToString()).ToArray();
+
+
+        Creator = eventy.CreatorProfile.DisplayName;
+        Console.WriteLine("Event Details: " + System.Text.Json.JsonSerializer.Serialize(eventy) + "\n" + "Tags Details:" + System.Text.Json.JsonSerializer.Serialize(Tags));
+    }
+    protected async Task Save()
+    {
+        if (SelectedTagIDs == null)
+        {
+            return;
+        }
+
+        eventy.Tags = Tags.Where(t => SelectedTagIDs.Contains(t.Id.ToString())).ToList();
+
+        try
+        {
+            var response = await Http.PutAsJsonAsync("api/events/" + Id, @eventy);
+            response.EnsureSuccessStatusCode();
+
+            await JsRuntime.InvokeVoidAsync("alert", "Updated Successfully!");
+            NavigationManager.NavigateTo("eventlist");
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Event not found. Please check the ID and try again.");
+            }
+            else if (ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Bad request. Please check your data and try again.");
+            }
+            else
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Error updating event. Please try again later.");
+            }
+        }
+    }
+
+    protected async Task Delete()
+    {
+        var response = await Http.DeleteAsync("api/events/" + Id);
+        bool deleteResponse = true;
+        if (deleteResponse)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Deleted Successfully!");
+            NavigationManager.NavigateTo("eventlist");
+        }
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("eventlist");
+    }
+
+}

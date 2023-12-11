@@ -1,0 +1,51 @@
+﻿@page "/taglist"
+@using BlazorCRUDApp.Shared
+
+@inject HttpClient _httpClient
+
+<h1>Tag Detail</h1>
+<div>
+    <a href="/addtag" class="btn btn-primary mb-2">Create New Tag</a>
+
+    @if (tagList != null)
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th width="30%">Name</th>
+                    <th width="20%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in tagList)
+                {
+                    <tr>
+                        <td>
+                            @t.Name
+                        </td>
+                        <td>
+                            <a href="/edittag/@t.Id.ToString()" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="/deletetag/@t.Id.ToString()" class="btn btn-danger btn-sm" @onclick="()=>LogId(t.Id)">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<TagDto> tagList = new List<TagDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await _httpClient.GetAsync("api/tags");
+        response.EnsureSuccessStatusCode();
+        tagList = await response.Content.ReadFromJsonAsync<List<TagDto>>();
+    }
+
+    void LogId(Guid id)
+    {
+        Console.WriteLine($"Clicked Delete for Tag with Id: {id}");
+    }
+}

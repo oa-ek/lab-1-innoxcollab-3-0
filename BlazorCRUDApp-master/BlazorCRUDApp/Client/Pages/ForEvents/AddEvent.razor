@@ -1,0 +1,94 @@
+﻿@page "/addevent"
+@using BlazorCRUDApp.Shared
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<h2>Add Event</h2>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Title</span>
+            <input type="text" class="form-control" form="Title" @bind="@eventy.Title" aria-label="Title" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Short Description</span>
+            <input type="text" class="form-control" @bind="@eventy.ShortDescription" aria-label="ShortDescription" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Description</span>
+            <textarea class="form-control" @bind="@eventy.Description" aria-label="Description" aria-describedby="addon-wrapping"></textarea>
+        </div>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Venue</span>
+            <input type="text" class="form-control" @bind="@eventy.Venue" aria-label="Venue" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="IsCanceledCheckbox" @bind="@eventy.IsCanceled">
+            <label class="form-check-label" for="IsCanceledCheckbox">Is Canceled</label>
+        </div>
+    </div>
+</div>
+<select class="form-control" @bind="@SelectedTagIDs" multiple>
+    @foreach (var tag in Tags)
+    {
+        <option value="@tag.Id"> @tag.Name </option>
+    }
+</select>
+<div class="row mt-1">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-primary p-2" @onclick="@Save" value="Save" />
+            <input type="button" class="btn btn-dark p-2" @onclick="@Cancel" value="Cancel" />
+        </div>
+    </div>
+</div>
+@code {
+    EventDto eventy = new EventDto();
+    List<TagDto> Tags = new List<TagDto>();
+    string[] SelectedTagIDs { get; set; } = Array.Empty<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Tags = await Http.GetFromJsonAsync<List<TagDto>>("api/tags");
+    }
+
+    protected async Task Save()
+    {
+        if (SelectedTagIDs == null)
+        {
+            return;
+        }
+        eventy.Tags = Tags.Where(t => SelectedTagIDs.Contains(t.Id.ToString())).ToList();
+        var response = await Http.PostAsJsonAsync("api/events", @eventy);
+        EventDto eventyResponse = await response.Content.ReadFromJsonAsync<EventDto>();
+        if (eventyResponse?.Id != null)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Saved Successfully!");
+            NavigationManager.NavigateTo("eventlist");
+        }
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("eventlist");
+    }
+}
+   

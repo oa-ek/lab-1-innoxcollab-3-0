@@ -1,0 +1,60 @@
+﻿@page "/addtag"
+@using BlazorCRUDApp.Shared
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<h2>Add Tag</h2>
+<div class="row py-2">
+    <div class="col-md-6 ">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Tag name</span>
+            <input type="text" class="form-control" form="Name" @bind="@tag.Name" aria-label="Name" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-primary p-2" @onclick="@Save" value="Save" />
+            <input type="button" class="btn btn-dark p-2" @onclick="@Cancel" value="Cancel" />
+        </div>
+    </div>
+</div>
+@code {
+    TagDto tag = new TagDto();
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+    protected async Task Save()
+    {
+        var response = await Http.PostAsJsonAsync("api/tags", @tag);
+
+        if (response.IsSuccessStatusCode)
+        {
+            TagDto tagResponse = await response.Content.ReadFromJsonAsync<TagDto>();
+
+            if (tagResponse?.Id != null)
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Saved Successfully!");
+                NavigationManager.NavigateTo("taglist");
+            }
+            else
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Error saving tag. Please try again later.");
+            }
+        }
+        else
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Error saving tag. Please try again later. Status code: " + response.StatusCode);
+        }
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("taglist");
+    }
+
+}
+   

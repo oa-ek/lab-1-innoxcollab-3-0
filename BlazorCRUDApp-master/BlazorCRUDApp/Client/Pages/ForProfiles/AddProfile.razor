@@ -1,0 +1,83 @@
+﻿@page "/addprofile"
+@using BlazorCRUDApp.Shared
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<h2>Add Profile</h2>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">User Name</span>
+            <input type="text" class="form-control" form="UserName" @bind="@profile.UserName" aria-label="UserName" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Display Name</span>
+            <input type="text" class="form-control" form="DisplayName" @bind="@profile.DisplayName" aria-label="DisplayName" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-6">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Email</span>
+            <input type="text" class="form-control" form="Email" @bind="@profile.Email" aria-label="Email" aria-describedby="addon-wrapping">
+        </div>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-primary p-2" @onclick="@Save" value="Save" />
+            <input type="button" class="btn btn-dark p-2" @onclick="@Cancel" value="Cancel" />
+        </div>
+    </div>
+</div>
+@code {
+    ProfileDto profile = new ProfileDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    protected async Task Save()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/profiles", @profile);
+            response.EnsureSuccessStatusCode();
+
+            ProfileDto profileResponse = await response.Content.ReadFromJsonAsync<ProfileDto>();
+
+            if (profileResponse != null)
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Saved Successfully!");
+                NavigationManager.NavigateTo("profilelist");
+            }
+            else
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Error saving profile. Please try again later.");
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Bad request. Please check your data and try again.");
+            }
+            else
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Error saving profile. Please try again later.");
+            }
+        }
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("profilelist");
+    }
+}

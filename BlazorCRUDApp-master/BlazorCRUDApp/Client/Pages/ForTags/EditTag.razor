@@ -1,0 +1,67 @@
+﻿@page "/edittag/{Id}"
+@using BlazorCRUDApp.Shared
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<h2 class="">Edit tag</h2>
+<div class="">
+    <div class="row py-2">
+        <div class="col-md-6">
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text" id="addon-wrapping">Tag name</span>
+                <input type="text" class="form-control" form="Name" @bind="@tag.Name" aria-label="Name" aria-describedby="addon-wrapping">
+            </div>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary p-2" @onclick="@Save" value="Save" />
+                <input type="button" class="btn btn-dark p-2" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Id{ get; set; }
+
+    TagDto tag = new TagDto();
+    protected override async Task OnInitializedAsync()
+    {
+        tag = await Http.GetFromJsonAsync<TagDto>("api/tags/" + Id);
+    }
+    protected async Task Save()
+    {
+        try
+        {
+            var response = await Http.PutAsJsonAsync("api/tags/" + Id, @tag);
+            response.EnsureSuccessStatusCode();
+            await JsRuntime.InvokeVoidAsync("alert", "Updated Successfully!");
+            NavigationManager.NavigateTo("taglist");
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Tag not found. Please check the ID and try again.");
+            }
+            else if (ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Bad request. Please check your data and try again.");
+            }
+            else
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "Error updating tag. Please try again later.");
+            }
+        }
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("taglist");
+    }
+
+}

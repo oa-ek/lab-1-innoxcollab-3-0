@@ -1,0 +1,65 @@
+﻿@page "/eventlist"
+@using BlazorCRUDApp.Shared
+
+@inject HttpClient _httpClient
+
+<h1>Event Detail</h1>
+<div>
+    <a href="/addevent" class="btn btn-primary mb-2">Create New Event</a>
+
+    @if (eventList != null)
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th width="40%">Title</th>
+                    <th width="30%">Tags</th>
+                    <th width="10%">IsCanceled</th>
+                    <th width="20%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in eventList)
+                {
+                    <tr>
+                        <td>
+
+                            @e.Title
+                        </td>
+                        <td>
+                            @foreach (var t in e.Tags)
+                            {
+                                <span class="badge bg-secondary me-1">@t.Name</span>
+                            }
+                        </td>
+                        <td>
+                            <div style="display:flex; justify-content:center">
+                                <input type="checkbox" disabled class="form-check-input" id="IsCanceledCheckbox" @bind="@e.IsCanceled" style="pointer-events: none;">
+                            </div>
+                           
+                        </td>
+                        <td>
+                            <a href="/editevent/@e.Id.ToString()" class="btn btn-primary btn-sm w-100">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<EventDto> eventList = new List<EventDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await _httpClient.GetAsync("api/events");
+        response.EnsureSuccessStatusCode();
+        eventList = await response.Content.ReadFromJsonAsync<List<EventDto>>();
+    }
+
+    void LogId(Guid id)
+    {
+        Console.WriteLine($"Clicked Delete for Event with Id: {id}");
+    }
+}

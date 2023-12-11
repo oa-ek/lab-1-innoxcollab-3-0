@@ -1,0 +1,59 @@
+﻿@page "/profilelist"
+@using BlazorCRUDApp.Shared
+
+@inject HttpClient _httpClient
+
+<h1>Profile List</h1>
+<div>
+    <a href="/addprofile" class="btn btn-primary mb-2">Create New Profile</a>
+
+    @if (profileList != null)
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th width="20%">User Name</th>
+                    <th width="20%">Display Name</th>
+                    <th width="20%">Email</th>
+                    <th width="20%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var profile in profileList)
+                {
+                    <tr>
+                        <td>
+                            @profile.UserName
+                        </td>
+                        <td>
+                            @profile.DisplayName
+                        </td>
+                        <td>
+                            @profile.Email
+                        </td>
+                        <td>
+                            <a href="/editprofile/@profile.Id.ToString()/@profile.UserName.ToString()" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="/deleteprofile/@profile.Id.ToString()/@profile.UserName.ToString()" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    List<ProfileDto> profileList = new List<ProfileDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await _httpClient.GetAsync("api/profiles");
+        response.EnsureSuccessStatusCode();
+        profileList = await response.Content.ReadFromJsonAsync<List<ProfileDto>>();
+    }
+
+    void LogId(string id)
+    {
+        Console.WriteLine($"Clicked Edit for Profile with Id: {id}");
+    }
+}
