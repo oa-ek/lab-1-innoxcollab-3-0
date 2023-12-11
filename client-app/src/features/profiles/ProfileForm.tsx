@@ -6,6 +6,7 @@ import { Form, Formik } from "formik";
 import { Profile } from "../../app/models/Profile";
 import TextInput from "../../app/common/form/TextInput";
 import { LoadingButton } from "@mui/lab";
+import { toast } from "react-toastify";
 
 export default observer(function ProfileForm() {
     const { profileStore } = useStore();
@@ -22,7 +23,7 @@ export default observer(function ProfileForm() {
     function handleFormSubmit(profile: Partial<Profile>) {
         if (!profile.id) {
             if (profiles.find(x => x.userName === profile.userName)) {
-                alert("User with such username already exists! Please pick different username!");
+                toast.error("User with such username already exists! Please pick different username!");
             }
             else {
                 profile.id = uuid();
@@ -31,7 +32,7 @@ export default observer(function ProfileForm() {
         }
         else {
             if (profile.userName !== prf?.userName && profiles.find(x => x.userName === profile.userName)) {
-                alert("User with such username already exists! Please pick different username or remain the existing one!");
+                toast.error("User with such username already exists! Please pick different username or remain the existing one!");
             } else {
                 updateProfile(profile.id, profile);
             }

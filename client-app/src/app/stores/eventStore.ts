@@ -28,17 +28,7 @@ export default class EventStore {
 
     get eventsByDate() {
         return Array.from(this.eventRegistry.values())
-            .sort((a, b) => Date.parse(a.date) - Date.parse(b.date)).reverse();
-    }
-
-    get groupedEvents() {
-        return Object.entries(
-            this.eventsByDate.reduce((activities, event) => {
-                const date = event.date.split('T')[0];
-                activities[date] = activities[date] ? [...activities[date], event] : [event];
-                return activities;
-            }, {} as { [key: string]: Event[] })
-        )
+            .sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     }
 
     loadEvents = async () => {

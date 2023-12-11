@@ -6,10 +6,11 @@ import TextInput from "../../app/common/form/TextInput";
 import { LoadingButton } from "@mui/lab";
 import { Tag } from "../../app/models/Tag";
 import { v4 as uuid } from 'uuid'
+import { Box, Stack, Typography } from "@mui/material";
 
 
 export default observer(function TagForm() {
-    const { tagStore: { selectedTag, createTag, editTag, loading, tags } } = useStore();
+    const { tagStore: { selectedTag, createTag, editTag, buttonLoading, tags } } = useStore();
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Name is required!').min(2)
@@ -35,26 +36,31 @@ export default observer(function TagForm() {
     }
 
     return (
-        <Formik
-            validationSchema={validationSchema}
-            enableReinitialize
-            initialValues={selectedTag || new Tag()}
-            onSubmit={values => handleFormSubmit(values)}
-        >
-            {({ isValid, dirty }) => (
-                <Form>
-                    <TextInput name="name" label="Name" />
-                    <LoadingButton
-                        type="submit"
-                        loading={loading}
-                        variant="contained"
-                        disabled={loading || !dirty || !isValid}
-                    >
-                        Submit
-                    </LoadingButton>
-                </Form>
-            )}
+        <Stack direction="column" spacing={1}>
+            <Typography>{selectedTag ? "Editing tag" : "Creating tag"}</Typography>
+            <Formik
+                validationSchema={validationSchema}
+                enableReinitialize
+                initialValues={selectedTag || new Tag()}
+                onSubmit={values => handleFormSubmit(values)}
+            >
+                {({ isValid, dirty }) => (
+                    <Form>
+                        <TextInput name="name" label="Name" />
+                        <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                            <LoadingButton
+                                type="submit"
+                                loading={buttonLoading}
+                                variant="contained"
+                                disabled={buttonLoading || !dirty || !isValid}
+                            >
+                                Submit
+                            </LoadingButton>
+                        </Box>
+                    </Form>
+                )}
 
-        </Formik>
+            </Formik>
+        </Stack>
     );
 })

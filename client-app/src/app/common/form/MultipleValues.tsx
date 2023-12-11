@@ -1,11 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Autocomplete, Chip, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { Tag } from "../../models/Tag";
 import { useStore } from "../../stores/store";
-import { useEffect, useState } from "react";
 import { useField } from "formik";
-import BasicModal from "../modal/BasicModal";
-import TagForm from "../../../features/tags/TagForm";
 
 interface Props {
     name: string;
@@ -24,6 +22,7 @@ export default observer(function MultipleValues({ eventTags, name }: Props) {
     return (
         <>
             <Autocomplete
+                sx={{ width: "95%" }}
                 multiple
                 options={tags}
                 getOptionLabel={(option) => option.name}
@@ -44,11 +43,13 @@ export default observer(function MultipleValues({ eventTags, name }: Props) {
                     ))
                 }
                 renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        error={meta.touched && !!meta.error}
-                        label="Tags"
-                    />
+                    <>
+                        <TextField
+                            {...params}
+                            error={meta.touched && !!meta.error}
+                            label="Tags"
+                        />
+                    </>
                 )}
             />
             {meta.touched && meta.error && (
@@ -56,10 +57,6 @@ export default observer(function MultipleValues({ eventTags, name }: Props) {
                     {meta.error}
                 </Typography>
             )}
-
-            <BasicModal>
-                <TagForm />
-            </BasicModal>
         </>
     );
 });

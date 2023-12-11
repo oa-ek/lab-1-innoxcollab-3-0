@@ -2,7 +2,7 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { LoadingButton } from "@mui/lab";
-import { Paper, Stack, Button, Typography, Box, Grid } from "@mui/material";
+import { Paper, Stack, Button, Typography, Grid, IconButton } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { EventFormValues } from "../../../app/models/Event";
 import { Form, Formik } from "formik";
@@ -12,9 +12,12 @@ import TextInput from "../../../app/common/form/TextInput";
 import DateInput from "../../../app/common/form/DateInput";
 import { router } from "../../../app/router/Routes";
 import MultipleValues from "../../../app/common/form/MultipleValues";
+import AddIcon from '@mui/icons-material/Add';
+import BasicModal from "../../../app/common/modal/BasicModal";
+import TagForm from "../../tags/TagForm";
 
 export default observer(function EventForm() {
-    const { eventStore } = useStore();
+    const { eventStore, modalStore } = useStore();
     const { createEvent, updateEvent,
         loadEvent, deleteEvent, loading, selectedEvent } = eventStore;
 
@@ -54,58 +57,69 @@ export default observer(function EventForm() {
     }
 
     return (
-        <Box sx={{ height: "100vh" }}>
-            <Paper sx={{ p: "12px", borderRadius: "10px" }}>
-                <Formik
-                    validationSchema={validationSchema}
-                    enableReinitialize
-                    initialValues={event}
-                    onSubmit={values => handleFormSubmit(values)}
-                >
-                    {({ handleSubmit, isValid, isSubmitting, dirty }) => (
-                        <Form onSubmit={handleSubmit} autoComplete="off" >
-                            <Stack spacing={1}>
-                                <Typography variant="h6">Event Details</Typography>
-                                <TextInput name="title" label="Title" />
-                                <TextInput ml name="description" label="Description" />
-                                <TextInput name="shortDescription" label="Short Description" />
+        <Paper sx={{ p: "12px", borderRadius: "10px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Formik
+                validationSchema={validationSchema}
+                enableReinitialize
+                initialValues={event}
+                onSubmit={values => handleFormSubmit(values)}
+            >
+                {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+                    <Form onSubmit={handleSubmit}
+                        style={{ width: "90%" }}>
+                        <Stack spacing={1}>
+                            <Typography variant="h6">Event Details</Typography>
+                            <TextInput name="title" label="Title" />
+                            <TextInput ml name="description" label="Description" />
+                            <TextInput name="shortDescription" label="Short Description" />
+                            <Stack direction="row" spacing={1} alignItems="center">
                                 <MultipleValues key={event.id ? "update" : "create"} name="tags"
-                                    eventTags={event.id ? selectedEvent?.tags : []} />
-                                <DateInput name="date" label="Date" />
-                                <TextInput name="venue" label="Venue" />
-
-                                <Grid container direction="row">
-                                    <Grid item xs={2}>
-                                        {id &&
-                                            <LoadingButton
-                                                name={event.id}
-                                                onClick={(e) => handleEventDelete(e, event.id!)}
-                                                variant="contained"
-                                                color="error"
-                                                loading={loading && target === event.id}
-                                            >
-                                                Delete
-                                            </LoadingButton>
-                                        }
-                                    </Grid>
-                                    <Grid item xs={10}>
-                                        <Stack direction="row" spacing={1} justifyContent="flex-end">
-                                            <Button variant="contained" component={Link} to={`/events/${event.id}`}>
-                                                Cancel
-                                            </Button>
-                                            <LoadingButton
-                                                disabled={isSubmitting || !dirty || !isValid}
-                                                loading={isSubmitting} variant="contained" type="submit">
-                                                Submit
-                                            </LoadingButton>
-                                        </Stack>
-                                    </Grid>
-                                </Grid>
+                                    eventTags={event.id ? selectedEvent!.tags : []} />
+                                <IconButton
+                                    sx={{ width: "40px", height: "40px" }}
+                                    onClick={modalStore.handleOpen}
+                                >
+                                    <AddIcon />
+                                </IconButton>
                             </Stack>
-                        </Form>
-                    )}
-                </Formik>
-            </Paper>
-        </Box>
+                            <DateInput name="date" label="Date" />
+                            <TextInput name="venue" label="Venue" />
+
+                            <Grid container direction="row">
+                                <Grid item xs={2}>
+                                    {id &&
+                                        <LoadingButton
+                                            name={event.id}
+                                            onClick={(e) => handleEventDelete(e, event.id!)}
+                                            variant="contained"
+                                            color="error"
+                                            loading={loading && target === event.id}
+                                        >
+                                            Delete
+                                        </LoadingButton>
+                                    }
+                                </Grid>
+                                <Grid item xs={10}>
+                                    <Stack direction="row" spacing={1} justifyContent="flex-end">
+                                        <Button variant="contained" component={Link} to={`/events/${event.id}`}>
+                                            Cancel
+                                        </Button>
+                                        <LoadingButton
+                                            disabled={isSubmitting || !dirty || !isValid}
+                                            loading={isSubmitting} variant="contained" type="submit">
+                                            Submit
+                                        </LoadingButton>
+                                    </Stack>
+                                </Grid>
+                            </Grid>
+                        </Stack>
+                    </Form>
+                )}
+            </Formik>
+
+            <BasicModal>
+                <TagForm />
+            </BasicModal>
+        </Paper>
     )
 })
