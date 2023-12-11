@@ -112,8 +112,14 @@
 
         SelectedTagIDs = eventy.Tags.Select(tag => tag.Id.ToString()).ToArray();
 
-
-        Creator = eventy.CreatorProfile.DisplayName;
+        if (eventy.CreatorProfile != null)
+        {
+            Creator = eventy.CreatorProfile.DisplayName;
+        }
+        else
+        {
+            Creator = "The is no owner";
+        }
         Console.WriteLine("Event Details: " + System.Text.Json.JsonSerializer.Serialize(eventy) + "\n" + "Tags Details:" + System.Text.Json.JsonSerializer.Serialize(Tags));
     }
     protected async Task Save()
