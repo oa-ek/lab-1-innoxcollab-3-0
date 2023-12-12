@@ -62,7 +62,8 @@ namespace Persistence
                         AppUser = users[0],
                         ProgramDuration = DateTime.Now.AddDays(60),
                         ProgramOffer = "Up to $50,000 funding available",
-                        Tags = tags
+                        Tags = tags,
+                        Status = Domain.Enums.EventStatus.Active
                     },
                     new Accelerator
                     {
@@ -74,7 +75,8 @@ namespace Persistence
                         IsCanceled = false,
                         AppUser = users[1],
                         ProgramDuration = DateTime.Now.AddDays(90),
-                        ProgramOffer = "Mentorship and networking opportunities"
+                        ProgramOffer = "Mentorship and networking opportunities",
+                        Status = Domain.Enums.EventStatus.Active
                     },
                     new Accelerator
                     {
@@ -86,7 +88,8 @@ namespace Persistence
                         IsCanceled = false,
                         AppUser = users[2],
                         ProgramDuration = DateTime.Now.AddDays(120),
-                        ProgramOffer = "Access to state-of-the-art AI technologies"
+                        ProgramOffer = "Access to state-of-the-art AI technologies",
+                        Status = Domain.Enums.EventStatus.Planned
                     }
                 };
 
@@ -135,13 +138,14 @@ namespace Persistence
                     new Grant
                     {
                         Title = "Research Grant for Renewable Energy",
-                        Date = DateTime.Now.AddDays(90),
+                        Date = DateTime.Now.AddDays(-90),
                         ShortDescription = "Funding innovative projects in renewable energy",
                         Description = "Apply for our research grant to support projects focused on advancing renewable energy solutions.",
                         Venue = "Research Institute",
                         IsCanceled = false,
                         AppUser = users[2],
-                        GrantAmount = 10000
+                        GrantAmount = 10000,
+                        Status = Domain.Enums.EventStatus.Finished
                     },
                     new Grant
                     {
@@ -152,7 +156,8 @@ namespace Persistence
                         Venue = "Art Gallery",
                         IsCanceled = false,
                         AppUser = users[0],
-                        GrantAmount = 5000
+                        GrantAmount = 5000,
+                        Status = Domain.Enums.EventStatus.Active
                     },
                     new Grant
                     {
@@ -163,7 +168,8 @@ namespace Persistence
                         Venue = "Community Center",
                         IsCanceled = false,
                         AppUser = users[1],
-                        GrantAmount = 8000
+                        GrantAmount = 8000,
+                        Status = Domain.Enums.EventStatus.Active
                     }
                 };
 

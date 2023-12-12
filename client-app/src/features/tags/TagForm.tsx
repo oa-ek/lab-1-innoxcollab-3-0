@@ -37,7 +37,7 @@ export default observer(function TagForm() {
 
     return (
         <Stack direction="column" spacing={1}>
-            <Typography>{selectedTag ? "Editing tag" : "Creating tag"}</Typography>
+            <Typography color="white">{selectedTag ? "Editing tag" : "Creating tag"}</Typography>
             <Formik
                 validationSchema={validationSchema}
                 enableReinitialize
@@ -45,7 +45,7 @@ export default observer(function TagForm() {
                 onSubmit={values => handleFormSubmit(values)}
             >
                 {({ isValid, dirty }) => (
-                    <Form>
+                    <Form autoComplete="off">
                         <TextInput name="name" label="Name" />
                         <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                             <LoadingButton

@@ -15,6 +15,8 @@ import MultipleValues from "../../../app/common/form/MultipleValues";
 import AddIcon from '@mui/icons-material/Add';
 import BasicModal from "../../../app/common/modal/BasicModal";
 import TagForm from "../../tags/TagForm";
+import OptionsSelect from "../../../app/common/form/OptionsSelect";
+import WysiwygEditor from "../../../app/common/form/WysiwygEditor";
 
 export default observer(function EventForm() {
     const { eventStore, modalStore } = useStore();
@@ -27,7 +29,7 @@ export default observer(function EventForm() {
     const [event, setEvent] = useState<EventFormValues>(new EventFormValues())
 
     const validationSchema = Yup.object({
-        title: Yup.string().required('The event title is required'),
+        title: Yup.string().required('The event title is required').max(40, 'Title must be at most 40 characters'),
         shortDescription: Yup.string().required('The event short description is required'),
         description: Yup.string().required('The event description is required'),
         date: Yup.string().required('The event date is required'),
@@ -56,34 +58,50 @@ export default observer(function EventForm() {
         router.navigate('/events');
     }
 
+    const statusOptions = [
+        'Active',
+        'Finished',
+        'Planned'
+    ]
+
     return (
         <Paper sx={{ p: "12px", borderRadius: "10px", display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Formik
                 validationSchema={validationSchema}
                 enableReinitialize
                 initialValues={event}
-                onSubmit={values => handleFormSubmit(values)}
+                onSubmit={
+                    values => handleFormSubmit(values)
+                }
             >
                 {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                     <Form onSubmit={handleSubmit}
                         style={{ width: "90%" }}>
                         <Stack spacing={1}>
                             <Typography variant="h6">Event Details</Typography>
-                            <TextInput name="title" label="Title" />
-                            <TextInput ml name="description" label="Description" />
-                            <TextInput name="shortDescription" label="Short Description" />
-                            <Stack direction="row" spacing={1} alignItems="center">
-                                <MultipleValues key={event.id ? "update" : "create"} name="tags"
-                                    eventTags={event.id ? selectedEvent!.tags : []} />
-                                <IconButton
-                                    sx={{ width: "40px", height: "40px" }}
-                                    onClick={modalStore.handleOpen}
-                                >
-                                    <AddIcon />
-                                </IconButton>
+                            <Stack direction="row" spacing={2}>
+                                <TextInput name="title" label="Title" />
+                                <TextInput name="shortDescription" label="Short Description" />
                             </Stack>
-                            <DateInput name="date" label="Date" />
-                            <TextInput name="venue" label="Venue" />
+                            <Stack direction="row" spacing={2}>
+                                <DateInput name="date" label="Date" />
+                                <TextInput name="venue" label="Venue" />
+                            </Stack>
+
+                            <Stack direction="row" spacing={2}>
+                                <Stack direction="row" spacing={1} alignItems="center" sx={{ width: "100%" }}>
+                                    <MultipleValues key={event.id ? "update" : "create"} name="tags"
+                                        eventTags={event.id ? selectedEvent!.tags : []} />
+                                    <IconButton
+                                        sx={{ width: "40px", height: "40px" }}
+                                        onClick={modalStore.handleOpen}
+                                    >
+                                        <AddIcon />
+                                    </IconButton>
+                                </Stack>
+                                <OptionsSelect label="Status" name="status" options={statusOptions} />
+                            </Stack>
+                            <WysiwygEditor name="description" />
 
                             <Grid container direction="row">
                                 <Grid item xs={2}>
@@ -120,6 +138,6 @@ export default observer(function EventForm() {
             <BasicModal>
                 <TagForm />
             </BasicModal>
-        </Paper>
+        </Paper >
     )
 })

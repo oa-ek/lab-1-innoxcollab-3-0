@@ -1,4 +1,4 @@
-import { TextField, Typography } from "@mui/material";
+import { Stack, TextField, Typography } from "@mui/material";
 import { useField } from "formik";
 
 interface Props {
@@ -15,7 +15,7 @@ export default function TextInput(props: Props) {
     const { ml, ...otherProps } = props;
 
     return (
-        <>
+        <Stack spacing={1} sx={{ width: "100%" }}>
             <TextField
                 margin="normal"
                 fullWidth
@@ -29,6 +29,6 @@ export default function TextInput(props: Props) {
             {meta.touched && meta.error ? (
                 <Typography variant="body2" color="error" sx={{ mt: 1, ml: 1 }}>{meta.error}</Typography>
             ) : null}
-        </>
+        </Stack>
     )
 }

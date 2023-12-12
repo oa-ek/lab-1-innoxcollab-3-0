@@ -24,7 +24,6 @@ export default observer(function EventDetails() {
             justifyContent="center"
             direction="row"
             spacing={4}
-            sx={{ height: "100vh" }}
         >
             <Grid item xs={8}>
                 <EventDetailedHeader event={event} />

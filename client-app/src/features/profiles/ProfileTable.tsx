@@ -42,7 +42,7 @@ export default observer(function DataTable() {
             width: 130,
             renderCell: (params) => (
                 <Typography
-                    sx={{ textDecoration: "none", color: "#000000DE" }}
+                    sx={{ textDecoration: "none", color: "#ffffff" }}
                     component={Link} to={`/profiles/${params.row.userName}`}
                 >
                     {params.row.userName}

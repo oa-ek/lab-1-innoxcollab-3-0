@@ -7,7 +7,7 @@ namespace Application.Validation
     {
         public TagValidation()
         {
-            RuleFor(x => x.Name).NotEmpty().MinimumLength(2);
+            RuleFor(x => x.Name).NotEmpty().MinimumLength(2).MaximumLength(10);
         }
     }
 }

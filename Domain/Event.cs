@@ -1,3 +1,5 @@
+using Domain.Enums;
+
 namespace Domain
 {
     public class Event
@@ -9,10 +11,10 @@ namespace Domain
         public string Description { get; set; }
         public string Venue { get; set; }
         public bool IsCanceled { get; set; }
+        public EventStatus Status { get; set; }
         public ICollection<Tag> Tags { get; set; }
         public ICollection<EventBlock> Blocks { get; set; } = new List<EventBlock>();
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
-
     }
 }

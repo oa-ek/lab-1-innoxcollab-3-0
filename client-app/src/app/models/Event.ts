@@ -12,7 +12,8 @@ export interface Event {
     venue: string;
     eventType: string;
     isCanceled: boolean;
-    isHost: boolean; 
+    isHost: boolean;
+    status: number;
     creatorProfile?: Profile;
     blocks: EventBlock[];
     tags: Tag[]
@@ -31,6 +32,7 @@ export class EventFormValues {
     description: string = '';
     date: string | null = dayjs().toISOString();
     venue: string = '';
+    status: number = 0;
     tags: Tag[] = [];
 
     constructor(event?: EventFormValues) {

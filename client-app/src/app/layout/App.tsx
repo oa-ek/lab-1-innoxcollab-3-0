@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Container } from '@mui/material';
+import { Container, ThemeProvider } from '@mui/material';
 import NavBar from './NavBar';
 import LoadingComponent from './LoadingComponent';
 import { observer } from 'mobx-react-lite';
@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify';
 
 function App() {
   const location = useLocation();
-  const { commonStore, userStore } = useStore();
+  const { commonStore, userStore, themeStore: { theme } } = useStore();
 
   useEffect(() => {
     if (commonStore.token) {
@@ -22,8 +22,9 @@ function App() {
 
   if (!commonStore.appLoaded) return <LoadingComponent />
 
+
   return (
-    <>
+    <ThemeProvider theme={theme} >
       <ToastContainer position="bottom-right" theme="colored" />
       {location.pathname === '/' ? <HomePage /> : (
         <>
@@ -33,7 +34,7 @@ function App() {
           </Container>
         </>
       )}
-    </>
+    </ThemeProvider>
   )
 }
 

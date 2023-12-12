@@ -14,7 +14,7 @@ export default observer(function LoginForm() {
     };
 
     return (
-        <Container component="main" maxWidth="xs" sx={{ height: "91vh" }}>
+        <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
                 sx={{
@@ -30,14 +30,14 @@ export default observer(function LoginForm() {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <Box sx={{ mt: 1 }}>
+                <Box sx={{ mt: 1, width: "100%" }}>
                     <Formik
                         initialValues={{ email: '', password: '', error: null }}
                         onSubmit={(values, { setErrors }) => userStore.login(values)
                             .catch(() => setErrors({ error: 'Invalid email or password!' }))}
                     >
                         {({ handleSubmit, isSubmitting, errors }) => (
-                            <Form onSubmit={handleSubmit} autoComplete="off">
+                            <Form onSubmit={handleSubmit} autoComplete="off" >
                                 <TextInput label="Email" name="email" />
                                 <TextInput type="password" label="Password" name="password" />
                                 <ErrorMessage

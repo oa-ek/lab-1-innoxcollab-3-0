@@ -1,7 +1,5 @@
 import { Box, Divider, ListItemText, MenuItem, MenuList, Paper, Typography } from "@mui/material";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import Calendar from "react-calendar";
-
 export default function ActivityFilter() {
     return (
         <>
@@ -20,7 +18,6 @@ export default function ActivityFilter() {
                     </MenuItem>
                 </MenuList>
             </Paper>
-            <Calendar />
         </>
 
     )
