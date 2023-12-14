@@ -13,6 +13,7 @@ namespace Application.Events
         {
             public Guid Id { get; set; }
         }
+
         public class Handler : IRequestHandler<Query, Result<EventDto>>
         {
             private readonly DataContext context;
@@ -23,11 +24,12 @@ namespace Application.Events
                 this.context = context;
                 this.mapper = mapper;
             }
+
             public async Task<Result<EventDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var @event = await context.Events
-                .ProjectTo<EventDto>(mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(x => x.Id == request.Id);
+                    .ProjectTo<EventDto>(mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 return Result<EventDto>.Success(@event);
             }

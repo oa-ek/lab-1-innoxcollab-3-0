@@ -10,7 +10,7 @@ export default class EventStore {
     selectedEvent: Event | undefined = undefined;
     editMode = false;
     loading = false;
-    loadingInitial = true;
+    loadingInitial = false;
     pagination: Pagination | null = null;
     pagingParams = new PagingParams();
 

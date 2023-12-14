@@ -6,6 +6,7 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
+import EventDetailedDescription from "./EventDetailedDescription";
 
 export default observer(function EventDetails() {
     const { eventStore } = useStore();
@@ -25,9 +26,10 @@ export default observer(function EventDetails() {
             direction="row"
             spacing={4}
         >
-            <Grid item xs={8}>
+            <Grid item xs={12}>
                 <EventDetailedHeader event={event} />
                 <EventDetailedInfo event={event} />
+                <EventDetailedDescription event={event} />
             </Grid>
         </Grid>
     )

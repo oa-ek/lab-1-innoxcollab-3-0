@@ -38,6 +38,7 @@ namespace Application.Core
             CreateMap<Event, EventDto>()
                 .ForMember(d => d.CreatorProfile, o => o.MapFrom(s => s.AppUser))
                 .ForMember(d => d.EventType, o => o.MapFrom(s => s.GetType().Name))
+                .ForMember(d => d.RelatedPhoto, o => o.MapFrom(s => s.RelatedPhoto))
                 .ForMember(d => d.Blocks, o => o.MapFrom(s => s.Blocks));
 
             CreateMap<Accelerator, AcceleratorDto>()
@@ -55,5 +56,4 @@ namespace Application.Core
             CreateMap<EventBlock, EventBlockDto>();
         }
     }
-
 }

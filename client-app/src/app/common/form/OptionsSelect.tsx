@@ -18,12 +18,11 @@ export default observer(function OptionsSelect(props: Props) {
             <Select
                 labelId={props.name}
                 label={props.label}
-                defaultValue={1}
-                value={meta.value.index}
+                value={meta.value}
                 onChange={(event) => helpers.setValue(event.target.value as string)}
             >
                 {props.options.map((option, index) => (
-                    <MenuItem key={option} value={index + 1}>
+                    <MenuItem key={option} value={index}>
                         {option}
                     </MenuItem>
                 ))}

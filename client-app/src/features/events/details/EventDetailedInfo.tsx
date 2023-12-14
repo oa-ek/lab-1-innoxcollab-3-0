@@ -6,11 +6,11 @@ import PlaceIcon from '@mui/icons-material/Place';
 import dayjs from 'dayjs';
 import { observer } from 'mobx-react-lite';
 
-interface Props { 
+interface Props {
     event: Event;
 }
 
-export default observer (function EventDetailedInfo({ event }: Props) {
+export default observer(function EventDetailedInfo({ event }: Props) {
     return (
         <Card sx={{ my: 2 }}>
             <CardContent>
@@ -20,7 +20,7 @@ export default observer (function EventDetailedInfo({ event }: Props) {
                     </Grid>
                     <Grid item xs={11}>
                         <Typography variant="body1">
-                            {event.description}
+                            {event.shortDescription}
                         </Typography>
                     </Grid>
                 </Grid>

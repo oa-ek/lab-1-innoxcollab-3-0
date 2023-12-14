@@ -2,7 +2,6 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { LoadingButton } from "@mui/lab";
-import { Paper, Stack, Button, Typography, Grid, IconButton } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { EventFormValues } from "../../../app/models/Event";
 import { Form, Formik } from "formik";
@@ -16,11 +15,13 @@ import AddIcon from '@mui/icons-material/Add';
 import BasicModal from "../../../app/common/modal/BasicModal";
 import TagForm from "../../tags/TagForm";
 import OptionsSelect from "../../../app/common/form/OptionsSelect";
-import WysiwygEditor from "../../../app/common/form/WysiwygEditor";
+import { Paper, Stack, Typography, IconButton, Grid, Button, Box, CircularProgress } from "@mui/material";
+import TextEditor from "../../../app/common/form/textEditor/TextEditor";
+import CloudinaryPhotoUpload from "../../../app/common/imageUpload/CloudinaryPhotoUpload";
 
 export default observer(function EventForm() {
     const { eventStore, modalStore } = useStore();
-    const { createEvent, updateEvent,
+    const { createEvent, updateEvent, loadingInitial,
         loadEvent, deleteEvent, loading, selectedEvent } = eventStore;
 
     const { id } = useParams();
@@ -40,7 +41,6 @@ export default observer(function EventForm() {
         if (id) loadEvent(id).then(event => setEvent(new EventFormValues(event)));
     }, [id, loadEvent])
 
-
     function handleFormSubmit(event: EventFormValues) {
         if (!event.id) {
             event.id = uuid();
@@ -58,14 +58,25 @@ export default observer(function EventForm() {
         router.navigate('/events');
     }
 
+    function openModal(modalName: string) {
+        setTarget(modalName);
+        modalStore.handleOpen();
+    }
+
     const statusOptions = [
+        'Planned',
         'Active',
         'Finished',
-        'Planned'
     ]
 
+    if (loadingInitial) return (
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "800px" }}>
+            <CircularProgress />
+        </Box>
+    )
+
     return (
-        <Paper sx={{ p: "12px", borderRadius: "10px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Paper sx={{ p: 2, display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Formik
                 validationSchema={validationSchema}
                 enableReinitialize
@@ -87,21 +98,28 @@ export default observer(function EventForm() {
                                 <DateInput name="date" label="Date" />
                                 <TextInput name="venue" label="Venue" />
                             </Stack>
-
                             <Stack direction="row" spacing={2}>
                                 <Stack direction="row" spacing={1} alignItems="center" sx={{ width: "100%" }}>
                                     <MultipleValues key={event.id ? "update" : "create"} name="tags"
                                         eventTags={event.id ? selectedEvent!.tags : []} />
                                     <IconButton
                                         sx={{ width: "40px", height: "40px" }}
-                                        onClick={modalStore.handleOpen}
+                                        onClick={() => openModal('tagForm')}
                                     >
                                         <AddIcon />
                                     </IconButton>
                                 </Stack>
-                                <OptionsSelect label="Status" name="status" options={statusOptions} />
+                                <Stack direction="row" spacing={2} sx={{ width: "100%" }}>
+                                    <OptionsSelect label="Status" name="status" options={statusOptions} />
+                                    <Button variant="outlined" fullWidth
+                                        onClick={() => openModal('photoUpload')}
+                                    >
+                                        View Related Photo
+                                    </Button>
+                                </Stack>
                             </Stack>
-                            <WysiwygEditor name="description" />
+
+                            <TextEditor name="description" />
 
                             <Grid container direction="row">
                                 <Grid item xs={2}>
@@ -129,15 +147,26 @@ export default observer(function EventForm() {
                                         </LoadingButton>
                                     </Stack>
                                 </Grid>
+                                {
+                                    target === 'photoUpload' && (
+                                        <BasicModal>
+                                            <CloudinaryPhotoUpload name="relatedPhoto" />
+                                        </BasicModal>
+                                    )
+                                }
                             </Grid>
                         </Stack>
                     </Form>
                 )}
             </Formik>
-
-            <BasicModal>
-                <TagForm />
-            </BasicModal>
+            {
+                target === 'tagForm' && (
+                    <BasicModal>
+                        <TagForm />
+                    </BasicModal>
+                )
+            }
         </Paper >
+
     )
 })

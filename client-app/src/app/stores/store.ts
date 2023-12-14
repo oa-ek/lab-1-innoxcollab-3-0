@@ -7,7 +7,6 @@ import ModalStore from "./modalStore";
 import TagStore from "./tagStore";
 import ThemeStore from "./themeStore";
 
-
 interface Store {
     eventStore: EventStore;
     commonStore: CommonStore;
@@ -25,7 +24,7 @@ export const store: Store = {
     profileStore: new ProfileStore(),
     modalStore: new ModalStore(),
     tagStore: new TagStore(),
-    themeStore: new ThemeStore()
+    themeStore: new ThemeStore(),
 }
 
 export const StoreContext = createContext(store);

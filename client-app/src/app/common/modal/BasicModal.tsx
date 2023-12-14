@@ -19,12 +19,12 @@ interface Props {
 }
 
 export default observer(function BasicModal({ children }: Props) {
-    const { modalStore: { open, handleOpen: handleOpenChange } } = useStore();
+    const { modalStore: { open, handleOpen } } = useStore();
 
     return (
         <Modal
             open={open}
-            onClose={handleOpenChange}>
+            onClose={handleOpen}>
             <Box sx={style}>
                 {children}
             </Box>

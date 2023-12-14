@@ -1,5 +1,4 @@
 using Domain;
-using Domain.Enums;
 using FluentValidation;
 
 namespace Application.Validation
@@ -12,7 +11,7 @@ namespace Application.Validation
             RuleFor(x => x.Date).NotEmpty();
             RuleFor(x => x.ShortDescription).NotEmpty().MaximumLength(40);
             RuleFor(x => x.Description).NotEmpty();
-            RuleFor(x => x.Venue).NotEmpty().MaximumLength(40);
+            RuleFor(x => x.Venue).NotEmpty().MaximumLength(80);
             RuleFor(x => x.Status).IsInEnum().WithMessage("Invalid event status");
         }
     }

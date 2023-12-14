@@ -11,6 +11,7 @@ namespace Domain
         public string Description { get; set; }
         public string Venue { get; set; }
         public bool IsCanceled { get; set; }
+        public string RelatedPhoto { get; set; }
         public EventStatus Status { get; set; }
         public ICollection<Tag> Tags { get; set; }
         public ICollection<EventBlock> Blocks { get; set; } = new List<EventBlock>();

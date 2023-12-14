@@ -37,7 +37,7 @@ export default observer(function LoginForm() {
                             .catch(() => setErrors({ error: 'Invalid email or password!' }))}
                     >
                         {({ handleSubmit, isSubmitting, errors }) => (
-                            <Form onSubmit={handleSubmit} autoComplete="off" >
+                            <Form onSubmit={handleSubmit}>
                                 <TextInput label="Email" name="email" />
                                 <TextInput type="password" label="Password" name="password" />
                                 <ErrorMessage

@@ -14,6 +14,7 @@ export interface Event {
     isCanceled: boolean;
     isHost: boolean;
     status: number;
+    relatedPhoto: string;
     creatorProfile?: Profile;
     blocks: EventBlock[];
     tags: Tag[]
@@ -33,6 +34,7 @@ export class EventFormValues {
     date: string | null = dayjs().toISOString();
     venue: string = '';
     status: number = 0;
+    relatedPhoto: string = '';
     tags: Tag[] = [];
 
     constructor(event?: EventFormValues) {
@@ -43,6 +45,8 @@ export class EventFormValues {
             this.description = event.description;
             this.date = event.date;
             this.venue = event.venue;
+            this.status = event.status;
+            this.relatedPhoto = event.relatedPhoto;
             this.tags = event.tags;
         }
     }
