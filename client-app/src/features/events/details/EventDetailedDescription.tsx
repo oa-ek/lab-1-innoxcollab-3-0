@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Event } from "../../../app/models/Event";
-import { Typography } from "@mui/material";
+import { Paper } from "@mui/material";
 import { useStore } from "../../../app/stores/store";
 
 interface Props {
@@ -9,15 +9,14 @@ interface Props {
 
 
 export default observer(function EventDetailedDescription({ event }: Props) {
-    const { themeStore } = useStore();
+    useStore();
 
     const descriptionHTML = { __html: event.description };
 
     return (
-        <>
-            <Typography variant="h2" color={themeStore.fontColor}>About event</Typography>
+        <Paper sx={{p: 5}}>
             <div className="eventContent"
                 dangerouslySetInnerHTML={descriptionHTML} />
-        </>
+        </Paper>
     );
 });

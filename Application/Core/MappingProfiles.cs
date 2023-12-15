@@ -19,6 +19,7 @@ namespace Application.Core
             CreateMap<Event, Event>()
                 .ForMember(d => d.Tags, o => o.MapFrom(s => s.Tags))
                 .ForMember(d => d.Status, o => o.MapFrom(s => s.Status))
+                .ForMember(d => d.Blocks, o => o.MapFrom(s => s.Blocks))
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Tag, Tag>()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));

@@ -17,6 +17,7 @@ namespace Persistence
         public DbSet<Accelerator> Accelerators { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<EventBlock> EventBlocks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

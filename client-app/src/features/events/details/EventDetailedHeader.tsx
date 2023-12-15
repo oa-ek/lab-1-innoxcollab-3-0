@@ -1,5 +1,5 @@
 import { Event } from '../../../app/models/Event';
-import { Card, Typography, Box, CardMedia, Stack, Chip, MenuItem } from '@mui/material';
+import { Card, Typography, Stack, Chip, MenuItem, CardMedia } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
@@ -10,26 +10,27 @@ interface Props {
 }
 
 export default observer(function EventDetailedHeader({ event }: Props) {
-    const { themeStore, eventStore: { cancelEventToggle } } = useStore();
-
+    const { eventStore: { cancelEventToggle } } = useStore();
     return (
         <Card>
-            <Box sx={{ height: "400px", display: "flex", alignItems: "center", mx: 5 }}>
+            <Stack alignItems="center" justifyContent="center" sx={{ position: "relative", height: "800px" }}>
+                {event.isHost && (
+                    <div style={{ position: "absolute", top: 0, right: 0, padding: 20 }}>
+                        <LongMenu>
+                            <MenuItem component={Link} to={`/manage/${event.id}`}>Edit event</MenuItem>
+                            <MenuItem onClick={cancelEventToggle}>{event.isCanceled ? "Re-activate event" : "Cancel event"} </MenuItem>
+                        </LongMenu>
+                    </div>
+                )}
                 <Stack
                     spacing={1.5}
-                    sx={{
-                        height: "100%",
-                        justifyContent: "flex-end",
-                        direction: "column",
-                        width: "60%",
-                        mb: 15, mx: 5,
-                        color: themeStore.fontColor
-                    }}>
+                    direction="column"
+                    alignItems="center">
                     <Typography variant="h3" color="primary">
                         {event.title}
                     </Typography>
                     <Typography variant="h5">
-                        Author: <Link style={{ textDecoration: "none", color: "white" }}
+                        Author: <Link style={{ textDecoration: "none" }}
                             to={`/profiles/${event.creatorProfile?.userName}`}>
                             {event.creatorProfile?.displayName}
                         </Link>
@@ -56,36 +57,16 @@ export default observer(function EventDetailedHeader({ event }: Props) {
                             <Chip key={tag.id} label={tag.name} color="primary" />
                         ))}
                     </Stack>
-                    {event.isHost && (
-                        <LongMenu>
-                            <MenuItem component={Link} to={`/manage/${event.id}`}>Edit event</MenuItem>
-                            <MenuItem onClick={cancelEventToggle}>{event.isCanceled ? "Re-activate event" : "Cancel event"} </MenuItem>
-                        </LongMenu>
-                    )}
+                    {
+                        event.relatedPhoto && (
+                            <CardMedia>
+                                <img src={event.relatedPhoto} alt={event.title} style={{ maxHeight: "450px" }} />
+                            </CardMedia>
+                        )
+                    }
+
                 </Stack>
-                <CardMedia sx={{
-                    width: "300px", position: "relative",
-                    display: "flex", height: "300px",
-                    mr: 5, my: 10,
-                    borderRadius: "75%", // Додаємо властивість для зроблення зображення круглим
-                }}>
-                    {/* <img src="https://assets-global.website-files.com/623b6654432a9010953e67cf/6257ebfa239b7de12105fee0_Subtract%20(3).svg"
-                        style={{
-                            maxWidth: "100%",
-                            maxHeight: "100%",
-                            position: "absolute",
-                            zIndex: 3,
-                            top: 0, bottom: 0, left: 0, right: 0,
-                            borderRadius: "75%", // Додаємо властивість для зроблення зображення круглим
-                        }} /> */}
-                    <img src={event.relatedPhoto} alt={event.title}
-                        style={{
-                            width: "100%", height: "100%", zIndex: 2,
-                            position: "absolute", top: 0, bottom: 0, left: "auto", right: 0, overflow: "hidden",
-                            borderRadius: "75%", // Додаємо властивість для зроблення зображення круглим
-                        }} />
-                </CardMedia>
-            </Box>
+            </Stack>
         </Card >
     );
 })

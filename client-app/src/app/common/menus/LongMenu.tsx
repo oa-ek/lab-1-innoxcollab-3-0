@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Menu from '@mui/material/Menu';
-import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface Props {
     children?: React.ReactNode;
@@ -18,8 +19,7 @@ export default function LongMenu({ children }: Props) {
 
     return (
         <div>
-            <Button
-                variant="outlined"
+            <IconButton
                 aria-label="more"
                 id="long-button"
                 aria-controls={open ? 'long-menu' : undefined}
@@ -27,8 +27,8 @@ export default function LongMenu({ children }: Props) {
                 aria-haspopup="true"
                 onClick={handleClick}
             >
-                Manage event
-            </Button>
+                <MoreVertIcon />
+            </IconButton>
             <Menu
                 id="long-menu"
                 MenuListProps={{

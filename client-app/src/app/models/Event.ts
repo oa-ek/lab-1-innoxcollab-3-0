@@ -36,6 +36,7 @@ export class EventFormValues {
     status: number = 0;
     relatedPhoto: string = '';
     tags: Tag[] = [];
+    blocks: EventBlock[] = [];
 
     constructor(event?: EventFormValues) {
         if (event) {
@@ -48,6 +49,7 @@ export class EventFormValues {
             this.status = event.status;
             this.relatedPhoto = event.relatedPhoto;
             this.tags = event.tags;
+            this.blocks = event.blocks;
         }
     }
 }

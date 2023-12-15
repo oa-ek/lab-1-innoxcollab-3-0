@@ -16,4 +16,11 @@ export class EventBlockFormValues {
     title: string = '';
     description: string = '';
     attachedFileUrl: string = '';
+
+    constructor(eventBlock: EventBlock) {
+        this.id = eventBlock.id;
+        this.title = eventBlock.title;
+        this.description = eventBlock.description;
+        this.attachedFileUrl = eventBlock.attachedFileUrl;
+    }
 } 

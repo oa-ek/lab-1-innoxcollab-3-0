@@ -18,6 +18,9 @@ import OptionsSelect from "../../../app/common/form/OptionsSelect";
 import { Paper, Stack, Typography, IconButton, Grid, Button, Box, CircularProgress } from "@mui/material";
 import TextEditor from "../../../app/common/form/textEditor/TextEditor";
 import CloudinaryPhotoUpload from "../../../app/common/imageUpload/CloudinaryPhotoUpload";
+import EventBlockForm from "../../eventBlocks/EventBlockForm";
+import { EventBlock } from "../../../app/models/EventBlock";
+import EventBlocks from "../../eventBlocks/EventBlocks";
 
 export default observer(function EventForm() {
     const { eventStore, modalStore } = useStore();
@@ -27,7 +30,34 @@ export default observer(function EventForm() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [event, setEvent] = useState<EventFormValues>(new EventFormValues())
+    const [event, setEvent] = useState<EventFormValues>(new EventFormValues());
+
+
+    const [eventBlocks, setEventBlocks] = useState<EventBlock[]>([]);
+    const [eventBlock, setEventBlock] = useState<EventBlock>();
+
+    const [touched, setTouched] = useState(false);
+
+    function handleEventBlockSubmit(_eventBlock: EventBlock) {
+        if (eventBlock) {
+            editEventBlock(eventBlock.id!, _eventBlock);
+        } else {
+            addEventBlock(_eventBlock);
+        }
+        modalStore.handleOpen();
+    };
+
+    function addEventBlock(eventBlock: EventBlock) {
+        setEventBlocks([...eventBlocks, { ...eventBlock, id: uuid() }]);
+    };
+
+    function editEventBlock(id: string, updatedEventBlock: EventBlock) {
+        setEventBlocks(eventBlocks.map(block => (block.id === id ? { ...block, ...updatedEventBlock } : block)));
+    };
+
+    function deleteEventBlock(id: string) {
+        setEventBlocks(eventBlocks.filter(block => block.id !== id));
+    };
 
     const validationSchema = Yup.object({
         title: Yup.string().required('The event title is required').max(40, 'Title must be at most 40 characters'),
@@ -38,10 +68,14 @@ export default observer(function EventForm() {
     })
 
     useEffect(() => {
-        if (id) loadEvent(id).then(event => setEvent(new EventFormValues(event)));
+        if (id) loadEvent(id).then(event => {
+            setEvent(new EventFormValues(event));
+            setEventBlocks(event!.blocks);
+        });
     }, [id, loadEvent])
 
     function handleFormSubmit(event: EventFormValues) {
+        event.blocks = eventBlocks;
         if (!event.id) {
             event.id = uuid();
             createEvent(event).then(() => navigate(`/events/${event.id}`))
@@ -118,6 +152,11 @@ export default observer(function EventForm() {
                                     </Button>
                                 </Stack>
                             </Stack>
+                            <EventBlocks
+                                deleteEventBlock={deleteEventBlock}
+                                eventBlocks={eventBlocks} setEventBlock={setEventBlock}
+                                openModal={openModal} setTarget={setTarget}
+                                setTouched={setTouched} />
 
                             <TextEditor name="description" />
 
@@ -141,7 +180,7 @@ export default observer(function EventForm() {
                                             Cancel
                                         </Button>
                                         <LoadingButton
-                                            disabled={isSubmitting || !dirty || !isValid}
+                                            disabled={(isSubmitting || !dirty || !isValid) && !touched}
                                             loading={isSubmitting} variant="contained" type="submit">
                                             Submit
                                         </LoadingButton>
@@ -151,6 +190,14 @@ export default observer(function EventForm() {
                                     target === 'photoUpload' && (
                                         <BasicModal>
                                             <CloudinaryPhotoUpload name="relatedPhoto" />
+                                        </BasicModal>
+                                    )
+                                }
+                                {
+                                    target === 'eventBlockForm' && (
+                                        <BasicModal>
+                                            <EventBlockForm initialEventBlock={eventBlock}
+                                                onSubmit={handleEventBlockSubmit} setTouched={setTouched} />
                                         </BasicModal>
                                     )
                                 }
