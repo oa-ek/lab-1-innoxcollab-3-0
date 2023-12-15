@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Container, ThemeProvider } from '@mui/material';
-import NavBar from './NavBar';
+import NavBar from './navbar/NavBar';
 import LoadingComponent from './LoadingComponent';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../stores/store';

@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231102234120_EventBlocksAdded")]
-    partial class EventBlocksAdded
+    [Migration("20231215154507_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,8 +118,14 @@ namespace Persistence.Migrations
                     b.Property<bool>("IsCanceled")
                         .HasColumnType("bit");
 
+                    b.Property<string>("RelatedPhoto")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ShortDescription")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -160,7 +166,23 @@ namespace Persistence.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("EventBlock");
+                    b.ToTable("EventBlocks");
+                });
+
+            modelBuilder.Entity("Domain.Photo", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("Domain.Tag", b =>
@@ -342,8 +364,8 @@ namespace Persistence.Migrations
                 {
                     b.HasBaseType("Domain.Event");
 
-                    b.Property<decimal>("GrantAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("GrantAmount")
+                        .HasColumnType("float");
 
                     b.HasDiscriminator().HasValue("Grant");
                 });
@@ -355,8 +377,8 @@ namespace Persistence.Migrations
                     b.Property<string>("ChallengeStatement")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Prize")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Prize")
+                        .HasColumnType("float");
 
                     b.HasDiscriminator().HasValue("Hackathon");
                 });
@@ -365,7 +387,8 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.AppUser", "AppUser")
                         .WithMany("Events")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("AppUser");
                 });

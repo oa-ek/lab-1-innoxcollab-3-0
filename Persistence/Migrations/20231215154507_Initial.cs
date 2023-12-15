@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -49,6 +50,19 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsMain = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,13 +194,15 @@ namespace Persistence.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Venue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsCanceled = table.Column<bool>(type: "bit", nullable: false),
+                    RelatedPhoto = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProgramDuration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ProgramOffer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GrantAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    GrantAmount = table.Column<double>(type: "float", nullable: true),
                     ChallengeStatement = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Prize = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    Prize = table.Column<double>(type: "float", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -195,7 +211,29 @@ namespace Persistence.Migrations
                         name: "FK_Events_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventBlocks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AttachedFileUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventBlocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EventBlocks_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,6 +300,11 @@ namespace Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EventBlocks_EventId",
+                table: "EventBlocks",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Events_AppUserId",
                 table: "Events",
                 column: "AppUserId");
@@ -291,7 +334,13 @@ namespace Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "EventBlocks");
+
+            migrationBuilder.DropTable(
                 name: "EventTag");
+
+            migrationBuilder.DropTable(
+                name: "Photos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

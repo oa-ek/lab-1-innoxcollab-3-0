@@ -1,5 +1,6 @@
 using Application.Core;
 using Application.Events;
+using Application.Events.Helpers;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +10,12 @@ namespace API.Controllers
     public class EventsController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetEvents([FromQuery] PagingParams pagingParams)
+        public async Task<IActionResult> GetEvents([FromQuery] EventParams pagingParams)
         {
             return HandlePagedResult(await Mediator.Send(new List.Query { Params = pagingParams }));
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetEvent(Guid id)
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
@@ -51,12 +52,6 @@ namespace API.Controllers
         public async Task<ActionResult> Search(string searchTerm)
         {
             return HandleResult(await Mediator.Send(new Search.Query { SearchTerm = searchTerm }));
-        }
-
-        [HttpPost("{id}/addBlock")]
-        public async Task<ActionResult> AddBlock(Guid id, [FromBody] EventBlock eventBlock)
-        {
-            return HandleResult(await Mediator.Send(new AddBlock.Command { Id = id, EventBlock = eventBlock }));
         }
     }
 }

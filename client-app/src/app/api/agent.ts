@@ -86,7 +86,8 @@ const Events = {
     update: (event: EventFormValues) => requests.put<void>(`/events/${event.id}`, event),
     delete: (id: string) => requests.del<void>(`/events/${id}`),
     cancel: (id: string) => requests.post<void>(`/events/${id}/cancel`, {}),
-    addEventBlock: (id: string, eventBlock: EventBlock) => requests.post<void>(`/events/${id}/`, eventBlock)
+    addEventBlock: (id: string, eventBlock: EventBlock) => requests.post<void>(`/events/${id}/`, eventBlock),
+    search: (searchTerm: string) => requests.get<Event[]>(`/events/search?searchTerm=${searchTerm}`)
 }
 
 const Account = {

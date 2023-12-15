@@ -50,7 +50,6 @@ namespace Application.Events
 
                 mapper.Map(request.Event, @event);
 
-                @event.Blocks = request.Event.Blocks;
                 @event.Tags = existingTags;
 
                 var result = await context.SaveChangesAsync() > 0;

@@ -13,7 +13,8 @@ export default observer(function EventDetailedHeader({ event }: Props) {
     const { eventStore: { cancelEventToggle } } = useStore();
     return (
         <Card>
-            <Stack alignItems="center" justifyContent="center" sx={{ position: "relative", height: "800px" }}>
+            <Stack alignItems="center" justifyContent="center"
+                sx={{ position: "relative", minHeight: "400px", maxHeight: "800px" }}>
                 {event.isHost && (
                     <div style={{ position: "absolute", top: 0, right: 0, padding: 20 }}>
                         <LongMenu>
@@ -64,7 +65,6 @@ export default observer(function EventDetailedHeader({ event }: Props) {
                             </CardMedia>
                         )
                     }
-
                 </Stack>
             </Stack>
         </Card >

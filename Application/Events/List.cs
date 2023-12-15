@@ -1,7 +1,9 @@
 using Application.Core;
+using Application.Events.Helpers;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Events
@@ -10,7 +12,7 @@ namespace Application.Events
     {
         public class Query : IRequest<Result<PagedList<EventDto>>>
         {
-            public PagingParams Params { get; set; }
+            public EventParams Params { get; set; }
         }
 
 
@@ -24,16 +26,33 @@ namespace Application.Events
                 this.context = context;
                 this.mapper = mapper;
             }
+
             public async Task<Result<PagedList<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var query = context.Events
                     .ProjectTo<EventDto>(mapper.ConfigurationProvider)
                     .AsQueryable();
 
+                if (request.Params.Status > -1)
+                    query = query.Where(x => x.Status == request.Params.Status);
+
+                if (request.Params.TagName is not null)
+                    query = query.Where(e => e.Tags.Any(x => x.Name == request.Params.TagName));
+
+                if (request.Params.SearchTerm is not null)
+                {
+                    query = query.Where(e =>
+                        EF.Functions.Like(e.Title, $"%{request.Params.SearchTerm}%") ||
+                        EF.Functions.Like(e.Description, $"%{request.Params.SearchTerm}%") ||
+                        EF.Functions.Like(e.ShortDescription, $"%{request.Params.SearchTerm}%") ||
+                        EF.Functions.Like(e.Venue, $"%{request.Params.SearchTerm}%") ||
+                        EF.Functions.Like(e.CreatorProfile.DisplayName, $"%{request.Params.SearchTerm}%") ||
+                        e.Tags.Any(t => EF.Functions.Like(t.Name, $"%{request.Params.SearchTerm}%")));
+                }
+
                 return Result<PagedList<EventDto>>.Success(await PagedList<EventDto>
                     .CreateAsync(query, request.Params.PageNumber, request.Params.PageSize));
             }
         }
     }
-
 }

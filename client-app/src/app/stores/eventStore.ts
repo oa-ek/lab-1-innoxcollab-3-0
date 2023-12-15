@@ -4,6 +4,7 @@ import { Profile } from "../models/Profile";
 import { Event, EventFormValues } from "../models/Event";
 import agent from "../api/agent";
 import { Pagination, PagingParams } from "../models/Pagination";
+import { toast } from "react-toastify";
 
 export default class EventStore {
     eventRegistry = new Map<string, Event>();
@@ -13,6 +14,7 @@ export default class EventStore {
     loadingInitial = false;
     pagination: Pagination | null = null;
     pagingParams = new PagingParams();
+    searchResult: Event[] = [];
 
     constructor() {
         makeAutoObservable(this)
@@ -65,9 +67,7 @@ export default class EventStore {
                 this.setLoadingInitial(false);
             }
         }
-
     }
-
 
     private getEvent = (id: string) => {
         return this.eventRegistry.get(id);
@@ -92,10 +92,11 @@ export default class EventStore {
             await agent.Events.create(event);
             const newEvent = new Event(event);
             newEvent.creatorProfile = host;
-            this.setEvent(new Event);
+            this.setEvent(newEvent);
             runInAction(() => {
                 this.selectedEvent = newEvent;
-            })
+            });
+            toast.info('Event created successfully!');
         } catch (error) {
             console.log(error);
         }
@@ -111,6 +112,7 @@ export default class EventStore {
                     this.selectedEvent = updatedEvent as Event;
                 }
             })
+            toast.info('Event updated successfully!');
         } catch (error) {
             console.log(error);
             runInAction(() => {
@@ -127,6 +129,7 @@ export default class EventStore {
                 this.eventRegistry.delete(id);
                 this.loading = false;
             })
+            toast.info('Event deleted successfully!');
 
         } catch (error) {
             console.log(error);
@@ -161,5 +164,21 @@ export default class EventStore {
         this.pagingParams = pagingParams;
     }
 
+    search = async (searchTerm: string) => {
+        this.loadingInitial = true;
+        try {
+            const searchResult = await agent.Events.search(searchTerm);
+            runInAction(() => {
+                this.searchResult = searchResult;
+                this.loadingInitial = false;
+                console.log(this.searchResult);
+            });
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.loadingInitial = false;
+            });
+        }
+    }
 
 }
