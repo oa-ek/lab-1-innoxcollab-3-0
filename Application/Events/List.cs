@@ -12,9 +12,8 @@ namespace Application.Events
     {
         public class Query : IRequest<Result<PagedList<EventDto>>>
         {
-            public EventParams Params { get; set; }
+            public EventParams Params { get; init; }
         }
-
 
         public class Handler : IRequestHandler<Query, Result<PagedList<EventDto>>>
         {
@@ -38,6 +37,11 @@ namespace Application.Events
 
                 if (request.Params.TagName is not null)
                     query = query.Where(e => e.Tags.Any(x => x.Name == request.Params.TagName));
+
+                if (request.Params.EventType is not null)
+                {
+                    query = query.Where(e => e.Type == request.Params.EventType);
+                }
 
                 if (request.Params.SearchTerm is not null)
                 {

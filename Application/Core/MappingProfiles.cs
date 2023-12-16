@@ -1,11 +1,11 @@
-using Application.Accelerators;
+using Application.Companies;
 using Application.Events;
-using Application.Grants;
-using Application.Hackathons;
 using Application.Profiles;
 using Application.Tags;
+using Application.Types;
 using AutoMapper;
 using Domain;
+using Type = Domain.Type;
 
 namespace Application.Core
 {
@@ -21,8 +21,13 @@ namespace Application.Core
                 .ForMember(d => d.Status, o => o.MapFrom(s => s.Status))
                 .ForMember(d => d.Blocks, o => o.MapFrom(s => s.Blocks))
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+
             CreateMap<Tag, Tag>()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<Company, Company>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+
             CreateMap<AppUser, AppUser>()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
@@ -34,27 +39,23 @@ namespace Application.Core
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))
                 .ForMember(d => d.UserName, o => o.MapFrom(s => s.UserName))
                 .ForMember(d => d.Bio, o => o.MapFrom(s => s.Bio))
-                .ForMember(d => d.Email, o => o.MapFrom(s => s.Email));
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
+                .ForMember(d => d.Company, o => o.MapFrom(s => s.Company))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Photo.Url));
 
             CreateMap<Event, EventDto>()
                 .ForMember(d => d.CreatorProfile, o => o.MapFrom(s => s.AppUser))
-                .ForMember(d => d.EventType, o => o.MapFrom(s => s.GetType().Name))
+                .ForMember(d => d.Type, o => o.MapFrom(s => s.Type.Name))
                 .ForMember(d => d.RelatedPhoto, o => o.MapFrom(s => s.RelatedPhoto))
                 .ForMember(d => d.Blocks, o => o.MapFrom(s => s.Blocks));
 
-            CreateMap<Accelerator, AcceleratorDto>()
-                .ForMember(d => d.CreatorProfile, o => o.MapFrom(s => s.AppUser))
-                .ForMember(d => d.Blocks, o => o.MapFrom(s => s.Blocks));
-
-            CreateMap<Grant, GrantDto>()
-                .ForMember(d => d.CreatorProfile, o => o.MapFrom(s => s.AppUser))
-                .ForMember(d => d.Blocks, o => o.MapFrom(s => s.Blocks));
-
-            CreateMap<Hackathon, HackathonDto>()
-                .ForMember(d => d.CreatorProfile, o => o.MapFrom(s => s.AppUser))
-                .ForMember(d => d.Blocks, o => o.MapFrom(s => s.Blocks));
-
             CreateMap<EventBlock, EventBlockDto>();
+
+            CreateMap<Company, CompanyDto>()
+                .ForMember(d => d.Representers, o => o.MapFrom(s => s.Representers))
+                .ForMember(d => d.Events, o => o.MapFrom(s => s.Events));
+
+            CreateMap<Type, TypeDto>();
         }
     }
 }

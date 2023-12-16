@@ -1,5 +1,7 @@
 using Domain;
+using Domain.Enums;
 using Microsoft.AspNetCore.Identity;
+using Type = Domain.Type;
 
 namespace Persistence
 {
@@ -9,27 +11,99 @@ namespace Persistence
         {
             if (!context.Events.Any())
             {
+                var types = new List<Type>
+                {
+                    new()
+                    {
+                        Name = "Hackathon",
+                    },
+                    new()
+                    {
+                        Name = "Grant",
+                    },
+                    new()
+                    {
+                        Name = "Accelerator",
+                    }
+                };
+
+                await context.AddRangeAsync(types);
+
+                var companies = new List<Company>
+                {
+                    new()
+                    {
+                        Title = "InnoxCollab"
+                    },
+                    new()
+                    {
+                        Title = "ROGA TA KOPYTA",
+                        Description = "We provide... things... that are... useful... sometimes...",
+                        Url = "https://rogatakopyta.com/"
+                    },
+                    new()
+                    {
+                        Title = "IT HUB OA",
+                        Description =
+                            "We provide thing that are completely useless and can't do shit. We don't even work anymore",
+                        Url = "https//ithub.oa.edu.ua/"
+                    },
+                };
+
+                await context.Companies.AddRangeAsync(companies);
+
+                var photos = new List<Photo>
+                {
+                    new()
+                    {
+                        Id = "todrjbpggdchhzm1sgkg",
+                        Url = "https://res.cloudinary.com/duormgto9/image/upload/v1699132706/todrjbpggdchhzm1sgkg.png",
+                        IsMain = true
+                    },
+                    new()
+                    {
+                        Id = "ptwkbtzjnnych6sweys5",
+                        Url = "https://res.cloudinary.com/duormgto9/image/upload/v1695166717/ptwkbtzjnnych6sweys5.jpg",
+                        IsMain = true
+                    }
+                };
+
                 var users = new List<AppUser>
                 {
+                    new()
+                    {
+                        DisplayName = "VIKTOR ZHUKOVSKYI",
+                        UserName = "admin",
+                        Email = "admin@test.com",
+                        Bio = "sunglasses",
+                        Company = companies[0],
+                        Photo = photos[0],
+                    },
                     new()
                     {
                         DisplayName = "Bob",
                         UserName = "bob",
                         Email = "bob@test.com",
                         Bio =
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mattis mollis augue a convallis. Curabitur sed mattis nisl, porta pulvinar massa. Sed imperdiet lacus vel ex ullamcorper, eget porta ipsum placerat. Fusce molestie porta ex in pulvinar. Praesent rutrum, mauris in varius consequat, magna est accumsan sapien, id iaculis lectus libero sed lectus. Nullam enim enim, sagittis ut accumsan vel, egestas sodales turpis. Quisque non tellus magna."
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mattis mollis augue a convallis. Curabitur sed mattis nisl, porta pulvinar massa. Sed imperdiet lacus vel ex ullamcorper, eget porta ipsum placerat. Fusce molestie porta ex in pulvinar. Praesent rutrum, mauris in varius consequat, magna est accumsan sapien, id iaculis lectus libero sed lectus. Nullam enim enim, sagittis ut accumsan vel, egestas sodales turpis. Quisque non tellus magna.",
+                        Company = companies[1],
+                        Photo = photos[1]
                     },
                     new()
                     {
                         DisplayName = "Jane",
                         UserName = "jane",
-                        Email = "jane@test.com"
+                        Email = "jane@test.com",
+                        Bio = "Weirdo",
+                        Company = companies[2]
                     },
                     new()
                     {
                         DisplayName = "Tom",
                         UserName = "tom",
-                        Email = "tom@test.com"
+                        Email = "tom@test.com",
+                        Bio = "Nice guy",
+                        Company = companies[1]
                     },
                 };
 
@@ -53,7 +127,7 @@ namespace Persistence
 
                 await context.Tags.AddRangeAsync(tags);
 
-                var accelerators = new List<Accelerator>
+                var accelerators = new List<Event>
                 {
                     new()
                     {
@@ -65,10 +139,10 @@ namespace Persistence
                         Venue = "Tech Hub",
                         IsCanceled = false,
                         AppUser = users[0],
-                        ProgramDuration = DateTime.Now.AddDays(60),
-                        ProgramOffer = "Up to $50,000 funding available",
+                        Type = types[2],
+                        FundingAmount = 50000,
                         Tags = tags,
-                        Status = Domain.Enums.EventStatus.Active
+                        Status = EventStatus.Active
                     },
                     new()
                     {
@@ -80,9 +154,9 @@ namespace Persistence
                         Venue = "Community Center",
                         IsCanceled = false,
                         AppUser = users[1],
-                        ProgramDuration = DateTime.Now.AddDays(90),
-                        ProgramOffer = "Mentorship and networking opportunities",
-                        Status = Domain.Enums.EventStatus.Active
+                        Type = types[2],
+                        FundingAmount = 10000,
+                        Status = EventStatus.Active
                     },
                     new()
                     {
@@ -94,13 +168,13 @@ namespace Persistence
                         Venue = "Innovation Lab",
                         IsCanceled = false,
                         AppUser = users[2],
-                        ProgramDuration = DateTime.Now.AddDays(120),
-                        ProgramOffer = "Access to state-of-the-art AI technologies",
-                        Status = Domain.Enums.EventStatus.Planned
+                        Type = types[2],
+                        FundingAmount = 5000,
+                        Status = EventStatus.Planned
                     }
                 };
 
-                var hackathons = new List<Hackathon>
+                var hackathons = new List<Event>
                 {
                     new()
                     {
@@ -112,8 +186,9 @@ namespace Persistence
                         Venue = "Convention Center",
                         IsCanceled = false,
                         AppUser = users[1],
-                        ChallengeStatement = "Create a web app that solves a real-world problem",
-                        Prize = 3000
+                        Type = types[0],
+                        FundingAmount = 3000,
+                        Status = EventStatus.Active
                     },
                     new()
                     {
@@ -125,8 +200,9 @@ namespace Persistence
                         Venue = "Co-working Space",
                         IsCanceled = false,
                         AppUser = users[2],
-                        ChallengeStatement = "Develop a solution for sustainable agriculture",
-                        Prize = 5000
+                        Type = types[0],
+                        FundingAmount = 5000,
+                        Status = EventStatus.Active
                     },
                     new()
                     {
@@ -138,12 +214,13 @@ namespace Persistence
                         Venue = "Gaming Studio",
                         IsCanceled = false,
                         AppUser = users[0],
-                        ChallengeStatement = "Design a game with a unique gameplay mechanic",
-                        Prize = 2000
+                        Type = types[0],
+                        FundingAmount = 2000,
+                        Status = EventStatus.Planned
                     }
                 };
 
-                var grants = new List<Grant>
+                var grants = new List<Event>
                 {
                     new()
                     {
@@ -155,8 +232,9 @@ namespace Persistence
                         Venue = "Research Institute",
                         IsCanceled = false,
                         AppUser = users[2],
-                        GrantAmount = 10000,
-                        Status = Domain.Enums.EventStatus.Finished
+                        Type = types[1],
+                        FundingAmount = 10000,
+                        Status = EventStatus.Finished
                     },
                     new()
                     {
@@ -168,8 +246,9 @@ namespace Persistence
                         Venue = "Art Gallery",
                         IsCanceled = false,
                         AppUser = users[0],
-                        GrantAmount = 5000,
-                        Status = Domain.Enums.EventStatus.Active
+                        Type = types[1],
+                        FundingAmount = 5000,
+                        Status = EventStatus.Active
                     },
                     new()
                     {
@@ -181,14 +260,15 @@ namespace Persistence
                         Venue = "Community Center",
                         IsCanceled = false,
                         AppUser = users[1],
-                        GrantAmount = 8000,
-                        Status = Domain.Enums.EventStatus.Active
+                        Type = types[1],
+                        FundingAmount = 8000,
+                        Status = EventStatus.Active
                     }
                 };
 
-                context.Accelerators.AddRange(accelerators);
-                context.Hackathons.AddRange(hackathons);
-                context.Grants.AddRange(grants);
+                context.Events.AddRange(accelerators);
+                context.Events.AddRange(hackathons);
+                context.Events.AddRange(grants);
 
                 await context.SaveChangesAsync();
             }

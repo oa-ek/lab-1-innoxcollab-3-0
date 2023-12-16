@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Application.Validation
 {
-    public class TagValidation : AbstractValidator<Tag>
+    public class TagValidator : AbstractValidator<Tag>
     {
-        public TagValidation()
+        public TagValidator()
         {
             RuleFor(x => x.Name).NotEmpty().MinimumLength(2).MaximumLength(10);
         }

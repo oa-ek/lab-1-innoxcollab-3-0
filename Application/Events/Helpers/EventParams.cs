@@ -6,6 +6,7 @@ namespace Application.Events.Helpers
     {
         public int Status { get; set; } = -1;
         public string SearchTerm { get; set; }
+        public string EventType { get; set; }
         public string TagName { get; set; }
     }
 }

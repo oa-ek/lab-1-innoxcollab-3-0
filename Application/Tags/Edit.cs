@@ -10,7 +10,6 @@ namespace Application.Tags
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid Id { get; set; }
             public Tag Tag { get; set; }
         }
 
@@ -27,7 +26,7 @@ namespace Application.Tags
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var tag = await context.Tags.FindAsync(request.Id);
+                var tag = await context.Tags.FindAsync(request.Tag.Id);
 
                 if (tag is null)
                     return null;

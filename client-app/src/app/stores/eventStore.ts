@@ -15,6 +15,7 @@ export default class EventStore {
     pagination: Pagination | null = null;
     pagingParams = new PagingParams();
     searchResult: Event[] = [];
+    predicate = new Map().set('all', true)
 
     constructor() {
         makeAutoObservable(this)

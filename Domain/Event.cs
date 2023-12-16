@@ -12,10 +12,12 @@ namespace Domain
         public string Venue { get; set; }
         public bool IsCanceled { get; set; }
         public string RelatedPhoto { get; set; }
+        public double FundingAmount { get; set; }
+        public Type Type { get; set; }
         public EventStatus Status { get; set; }
         public ICollection<Tag> Tags { get; set; }
         public ICollection<EventBlock> Blocks { get; set; } = new List<EventBlock>();
-        public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
+        public string AppUserId { get; set; }
     }
 }

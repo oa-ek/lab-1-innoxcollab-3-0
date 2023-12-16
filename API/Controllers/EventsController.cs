@@ -1,4 +1,3 @@
-using Application.Core;
 using Application.Events;
 using Application.Events.Helpers;
 using Domain;

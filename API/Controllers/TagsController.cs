@@ -28,7 +28,7 @@ namespace API.Controllers
         public async Task<IActionResult> EditTag(Guid id, [FromBody] Tag tag)
         {
             tag.Id = id;
-            return HandleResult(await Mediator.Send(new Edit.Command { Id = id, Tag = tag }));
+            return HandleResult(await Mediator.Send(new Edit.Command { Tag = tag }));
         }
 
         [HttpDelete("{id}")]

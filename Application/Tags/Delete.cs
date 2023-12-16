@@ -24,6 +24,8 @@ namespace Application.Tags
             {
                 var tag = await context.Tags.FindAsync(request.Id);
 
+                if (tag is null) return null;
+
                 context.Tags.Remove(tag);
 
                 var result = await context.SaveChangesAsync() > 0;
