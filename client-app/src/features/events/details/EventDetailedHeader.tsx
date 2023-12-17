@@ -3,7 +3,7 @@ import { Card, Typography, Stack, Chip, MenuItem, CardMedia } from '@mui/materia
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
-import LongMenu from '../../../app/common/menus/LongMenu';
+import ListMenu from '../../../app/common/menus/ListMenu';
 
 interface Props {
     event: Event;
@@ -17,10 +17,10 @@ export default observer(function EventDetailedHeader({ event }: Props) {
                 sx={{ position: "relative", minHeight: "400px", maxHeight: "800px" }}>
                 {event.isHost && (
                     <div style={{ position: "absolute", top: 0, right: 0, padding: 20 }}>
-                        <LongMenu>
+                        <ListMenu dots>
                             <MenuItem component={Link} to={`/manage/${event.id}`}>Edit event</MenuItem>
                             <MenuItem onClick={cancelEventToggle}>{event.isCanceled ? "Re-activate event" : "Cancel event"} </MenuItem>
-                        </LongMenu>
+                        </ListMenu>
                     </div>
                 )}
                 <Stack
@@ -31,13 +31,13 @@ export default observer(function EventDetailedHeader({ event }: Props) {
                         {event.title}
                     </Typography>
                     <Typography variant="h5">
-                        Author: <Link style={{ textDecoration: "none" }}
+                        Author: <Link style={{ textDecoration: "none", color: "white" }}
                             to={`/profiles/${event.creatorProfile?.userName}`}>
                             {event.creatorProfile?.displayName}
                         </Link>
                     </Typography>
                     <Stack direction="row" spacing={2} alignItems="center">
-                        <Typography variant="h5">{event.eventType}</Typography>
+                        <Typography variant="h5">{event.type.name}</Typography>
                         {
                             event.isCanceled ? (
                                 <Chip label="Canceled" color="error" />

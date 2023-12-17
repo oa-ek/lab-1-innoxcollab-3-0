@@ -17,6 +17,7 @@ namespace Domain
         public EventStatus Status { get; set; }
         public ICollection<Tag> Tags { get; set; }
         public ICollection<EventBlock> Blocks { get; set; } = new List<EventBlock>();
+        public Company Company { get; set; }
         public AppUser AppUser { get; set; }
         public string AppUserId { get; set; }
     }

@@ -8,6 +8,8 @@ import { EventBlock } from '../models/EventBlock';
 import { Profile } from '../models/Profile';
 import { PaginatedResult } from '../models/Pagination';
 import { Tag } from '../models/Tag';
+import { Type } from '../models/Type';
+import { Company } from '../models/Company';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -112,11 +114,28 @@ const Tags = {
     delete: (id: string) => requests.del<void>(`/tags/${id}`)
 }
 
+const Types = {
+    list: () => requests.get<Type[]>(`/types`),
+    create: (type: Type) => requests.post<void>(`/types`, type),
+    edit: (id: string, type: Type) => requests.put<void>(`/types/${id}`, type),
+    delete: (id: string) => requests.del<void>(`/types/${id}`)
+}
+
+const Companies = {
+    list: () => requests.get<Company[]>(`/companies`),
+    details: (id: string) => requests.get<Company>(`/comanies/${id}`),
+    create: (company: Company) => requests.post<void>(`/companies/`, company),
+    edit: (id: string, company: Company) => requests.put(`/companies/${id}`, company),
+    delete: (id: string) => requests.del(`/companies/${id}`)
+}
+
 const agent = {
     Events,
     Account,
     Profiles,
-    Tags
+    Tags,
+    Types,
+    Companies
 }
 
 export default agent;

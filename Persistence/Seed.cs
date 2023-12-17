@@ -33,7 +33,9 @@ namespace Persistence
                 {
                     new()
                     {
-                        Title = "InnoxCollab"
+                        Title = "InnoxCollab",
+                        Description = "rofl",
+                        Url = "https://innoxcollab.com"
                     },
                     new()
                     {
@@ -46,7 +48,7 @@ namespace Persistence
                         Title = "IT HUB OA",
                         Description =
                             "We provide thing that are completely useless and can't do shit. We don't even work anymore",
-                        Url = "https//ithub.oa.edu.ua/"
+                        Url = "https://ithub.oa.edu.ua/"
                     },
                 };
 
@@ -87,7 +89,7 @@ namespace Persistence
                         Bio =
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mattis mollis augue a convallis. Curabitur sed mattis nisl, porta pulvinar massa. Sed imperdiet lacus vel ex ullamcorper, eget porta ipsum placerat. Fusce molestie porta ex in pulvinar. Praesent rutrum, mauris in varius consequat, magna est accumsan sapien, id iaculis lectus libero sed lectus. Nullam enim enim, sagittis ut accumsan vel, egestas sodales turpis. Quisque non tellus magna.",
                         Company = companies[1],
-                        Photo = photos[1]
+                        Photo = photos[0],
                     },
                     new()
                     {
@@ -95,7 +97,8 @@ namespace Persistence
                         UserName = "jane",
                         Email = "jane@test.com",
                         Bio = "Weirdo",
-                        Company = companies[2]
+                        Company = companies[2],
+                        Photo = photos[1],
                     },
                     new()
                     {
@@ -138,11 +141,12 @@ namespace Persistence
                             "Join our accelerator program and get access to mentorship, funding, and resources.",
                         Venue = "Tech Hub",
                         IsCanceled = false,
-                        AppUser = users[0],
+                        AppUser = users[1],
                         Type = types[2],
                         FundingAmount = 50000,
                         Tags = tags,
-                        Status = EventStatus.Active
+                        Status = EventStatus.Active,
+                        Company = users[1].Company
                     },
                     new()
                     {
@@ -153,10 +157,11 @@ namespace Persistence
                             "Our accelerator focuses on startups making a social impact. Join us to make a difference.",
                         Venue = "Community Center",
                         IsCanceled = false,
-                        AppUser = users[1],
+                        AppUser = users[2],
                         Type = types[2],
                         FundingAmount = 10000,
-                        Status = EventStatus.Active
+                        Status = EventStatus.Active,
+                        Company = users[2].Company
                     },
                     new()
                     {
@@ -167,10 +172,11 @@ namespace Persistence
                             "If you're working on cutting-edge AI or ML projects, our accelerator is the place for you.",
                         Venue = "Innovation Lab",
                         IsCanceled = false,
-                        AppUser = users[2],
+                        AppUser = users[3],
                         Type = types[2],
                         FundingAmount = 5000,
-                        Status = EventStatus.Planned
+                        Status = EventStatus.Planned,
+                        Company = users[3].Company
                     }
                 };
 
@@ -185,10 +191,11 @@ namespace Persistence
                             "CodeFest is a 48-hour coding marathon where developers compete to build amazing projects.",
                         Venue = "Convention Center",
                         IsCanceled = false,
-                        AppUser = users[1],
+                        AppUser = users[2],
                         Type = types[0],
                         FundingAmount = 3000,
-                        Status = EventStatus.Active
+                        Status = EventStatus.Active,
+                        Company = users[2].Company
                     },
                     new()
                     {
@@ -199,10 +206,11 @@ namespace Persistence
                             "Join us to use your hacking skills for positive social impact. Together, we can make a difference.",
                         Venue = "Co-working Space",
                         IsCanceled = false,
-                        AppUser = users[2],
+                        AppUser = users[3],
                         Type = types[0],
                         FundingAmount = 5000,
-                        Status = EventStatus.Active
+                        Status = EventStatus.Active,
+                        Company = users[3].Company
                     },
                     new()
                     {
@@ -213,10 +221,11 @@ namespace Persistence
                             "GameJam is a game development competition where participants create games from scratch in just 2 days.",
                         Venue = "Gaming Studio",
                         IsCanceled = false,
-                        AppUser = users[0],
+                        AppUser = users[1],
                         Type = types[0],
                         FundingAmount = 2000,
-                        Status = EventStatus.Planned
+                        Status = EventStatus.Planned,
+                        Company = users[1].Company
                     }
                 };
 
@@ -231,10 +240,12 @@ namespace Persistence
                             "Apply for our research grant to support projects focused on advancing renewable energy solutions.",
                         Venue = "Research Institute",
                         IsCanceled = false,
-                        AppUser = users[2],
+                        AppUser = users[3],
                         Type = types[1],
                         FundingAmount = 10000,
-                        Status = EventStatus.Finished
+                        Status = EventStatus.Finished,
+                        Tags = tags,
+                        Company = users[3].Company
                     },
                     new()
                     {
@@ -245,10 +256,12 @@ namespace Persistence
                             "Our grant program aims to fund artists and creators who are pushing boundaries in their craft.",
                         Venue = "Art Gallery",
                         IsCanceled = false,
-                        AppUser = users[0],
+                        AppUser = users[1],
                         Type = types[1],
                         FundingAmount = 5000,
-                        Status = EventStatus.Active
+                        Status = EventStatus.Active,
+                        Company = users[1].Company
+
                     },
                     new()
                     {
@@ -259,12 +272,14 @@ namespace Persistence
                             "This grant is designed to support projects that make a positive impact on local communities.",
                         Venue = "Community Center",
                         IsCanceled = false,
-                        AppUser = users[1],
+                        AppUser = users[2],
                         Type = types[1],
                         FundingAmount = 8000,
-                        Status = EventStatus.Active
+                        Status = EventStatus.Active,
+                        Company = users[2].Company
                     }
                 };
+
 
                 context.Events.AddRange(accelerators);
                 context.Events.AddRange(hackathons);

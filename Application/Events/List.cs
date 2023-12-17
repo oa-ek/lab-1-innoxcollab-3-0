@@ -39,9 +39,7 @@ namespace Application.Events
                     query = query.Where(e => e.Tags.Any(x => x.Name == request.Params.TagName));
 
                 if (request.Params.EventType is not null)
-                {
-                    query = query.Where(e => e.Type == request.Params.EventType);
-                }
+                    query = query.Where(e => e.Type.Name == request.Params.EventType);
 
                 if (request.Params.SearchTerm is not null)
                 {

@@ -1,3 +1,5 @@
+import { Company } from "./Company";
+import { Event } from "./Event";
 import { User } from "./User";
 
 export interface Profile {
@@ -7,6 +9,8 @@ export interface Profile {
     image?: string;
     bio?: string;
     email: string;
+    company?: Company;
+    events: Event[];
 }
 
 export class Profile implements Profile {
@@ -17,12 +21,13 @@ export class Profile implements Profile {
     }
 }
 
-export class ProfileFormValues implements Profile {
+export class ProfileFormValues {
     id: string = "";
     userName: string = "";
     displayName: string = "";
     bio?: string | undefined = "";
     email: string = "";
+    company?: Company | undefined = undefined;
 
     constructor(profile?: ProfileFormValues) {
         if (profile) {
@@ -31,6 +36,7 @@ export class ProfileFormValues implements Profile {
             this.displayName = profile.displayName;
             this.bio = profile.displayName;
             this.email = profile.email;
+            this.company = profile.company;
         }
     }
 }

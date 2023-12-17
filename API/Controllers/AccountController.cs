@@ -66,7 +66,8 @@ namespace API.Controllers
         [HttpGet("current")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var user = await userManager.Users.Include(p => p.Photo)
+                .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
             return CreateUserObject(user);
         }
 
@@ -76,7 +77,7 @@ namespace API.Controllers
             {
                 Id = user.Id,
                 DisplayName = user.DisplayName,
-                Image = null,
+                Image = user.Photo?.Url,
                 Token = tokenService.CreateToken(user),
                 UserName = user.UserName
             };

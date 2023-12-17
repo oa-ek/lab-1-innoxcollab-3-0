@@ -1,31 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Autocomplete, Chip, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { Tag } from "../../models/Tag";
-import { useStore } from "../../stores/store";
 import { useField } from "formik";
 
 interface Props {
     name: string;
-    eventTags: Tag[];
+    values: any[];
+    options: any[];
+    loading: boolean;
+    label: string;
 }
 
-export default observer(function MultipleValues({ eventTags, name }: Props) {
+export default observer(function MultipleValues({ values, name, options, loading, label }: Props) {
     const [_field, meta, helpers] = useField(name);
-    const { tagStore: { tags, loading, loadTags } } = useStore();
-    const [autocompleteValue, setAutocompleteValue] = useState<Tag[]>(eventTags || []);
-
-    useEffect(() => {
-        loadTags();
-    }, [loadTags, setAutocompleteValue, eventTags]);
+    const [autocompleteValue, setAutocompleteValue] = useState<any[]>(values || []);
 
     return (
         <>
             <Autocomplete
-                sx={{ width: "95%" }}
+                sx={{ width: "100%" }}
                 multiple
-                options={tags}
-                getOptionLabel={(option) => option.name}
+                options={options}
+                getOptionLabel={(option) => option.name || option.displayName || option.title}
                 loading={loading}
                 value={autocompleteValue}
                 onChange={(_, newValue) => {
@@ -33,11 +29,11 @@ export default observer(function MultipleValues({ eventTags, name }: Props) {
                     helpers.setValue(newValue);
                 }}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
-                renderTags={(value: Tag[], getTagProps) =>
-                    value.map((tag: Tag, index: number) => (
+                renderTags={(value: any[], getTagProps) =>
+                    value.map((option: any, index: number) => (
                         <Chip
                             color="primary"
-                            label={tag.name}
+                            label={option.name || option.displayName || option.title}
                             {...getTagProps({ index })}
                         />
                     ))
@@ -47,7 +43,7 @@ export default observer(function MultipleValues({ eventTags, name }: Props) {
                         <TextField
                             {...params}
                             error={meta.touched && !!meta.error}
-                            label="Tags"
+                            label={label}
                         />
                     </>
                 )}

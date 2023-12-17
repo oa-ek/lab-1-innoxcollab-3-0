@@ -21,22 +21,32 @@ import CloudinaryPhotoUpload from "../../../app/common/imageUpload/CloudinaryPho
 import EventBlockForm from "../../eventBlocks/EventBlockForm";
 import { EventBlock } from "../../../app/models/EventBlock";
 import EventBlocks from "../../eventBlocks/EventBlocks";
+import TypeAutocomplete from "../../../app/common/form/TypeAutocomplete";
 
 export default observer(function EventForm() {
     const { eventStore, modalStore } = useStore();
     const { createEvent, updateEvent, loadingInitial,
-        loadEvent, deleteEvent, loading, selectedEvent } = eventStore;
+        loadEvent, deleteEvent, loading: loadingEvents, selectedEvent } = eventStore;
 
     const { id } = useParams();
     const navigate = useNavigate();
 
     const [event, setEvent] = useState<EventFormValues>(new EventFormValues());
 
+    const { tagStore: { tags, loading, loadTags } } = useStore();
 
     const [eventBlocks, setEventBlocks] = useState<EventBlock[]>([]);
     const [eventBlock, setEventBlock] = useState<EventBlock>();
 
     const [touched, setTouched] = useState(false);
+
+    useEffect(() => {
+        if (id) loadEvent(id).then(event => {
+            setEvent(new EventFormValues(event));
+            setEventBlocks(event!.blocks);
+        });
+        loadTags();
+    }, [id, loadEvent, loadTags]);
 
     function handleEventBlockSubmit(_eventBlock: EventBlock) {
         if (eventBlock) {
@@ -65,14 +75,10 @@ export default observer(function EventForm() {
         description: Yup.string().required('The event description is required'),
         date: Yup.string().required('The event date is required'),
         venue: Yup.string().required('The event venue is required'),
+        type: Yup.object().required('The event type is required!'),
+        fundingAmount: Yup.number().required('The event funding amount is required')
+            .min(0, 'Funding amount must be more or equal than 0')
     })
-
-    useEffect(() => {
-        if (id) loadEvent(id).then(event => {
-            setEvent(new EventFormValues(event));
-            setEventBlocks(event!.blocks);
-        });
-    }, [id, loadEvent])
 
     function handleFormSubmit(event: EventFormValues) {
         event.blocks = eventBlocks;
@@ -129,13 +135,21 @@ export default observer(function EventForm() {
                                 <TextInput name="shortDescription" label="Short Description" />
                             </Stack>
                             <Stack direction="row" spacing={2}>
-                                <DateInput name="date" label="Date" />
                                 <TextInput name="venue" label="Venue" />
+                                <DateInput name="date" label="Date" />
+                            </Stack>
+                            <Stack direction="row" spacing={2}>
+                                <TypeAutocomplete name="type" type={selectedEvent?.type!} />
+                                <TextInput name="fundingAmount" label="Funding amount" />
                             </Stack>
                             <Stack direction="row" spacing={2}>
                                 <Stack direction="row" spacing={1} alignItems="center" sx={{ width: "100%" }}>
                                     <MultipleValues key={event.id ? "update" : "create"} name="tags"
-                                        eventTags={event.id ? selectedEvent!.tags : []} />
+                                        values={event.id ? selectedEvent!.tags : []}
+                                        loading={loading}
+                                        options={tags}
+                                        label="Tags"
+                                    />
                                     <IconButton
                                         sx={{ width: "40px", height: "40px" }}
                                         onClick={() => openModal('tagForm')}
@@ -168,7 +182,7 @@ export default observer(function EventForm() {
                                             onClick={(e) => handleEventDelete(e, event.id!)}
                                             variant="contained"
                                             color="error"
-                                            loading={loading && target === event.id}
+                                            loading={loadingEvents && target === event.id}
                                         >
                                             Delete
                                         </LoadingButton>

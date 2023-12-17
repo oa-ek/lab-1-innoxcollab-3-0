@@ -1,28 +1,29 @@
 import { observer } from "mobx-react-lite";
 import { store, useStore } from "../../app/stores/store";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import BasicModal from "../../app/common/modal/BasicModal";
-import TagForm from "./TagForm";
-import { Tag } from "../../app/models/Tag";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { LoadingButton } from "@mui/lab";
 import { useEffect, useState } from "react";
+import { Company } from "../../app/models/Company";
+import CompanyForm from "./CompanyForm";
 
-export default observer(function TagTable() {
-    const { tagStore, modalStore } = useStore();
-    const { tags, setSelectedTag, deleteTag,
-        loading, buttonLoading, loadTags } = tagStore;
+export default observer(function CompanyTable() {
+    const { companyStore, modalStore, themeStore } = useStore();
+    const { companies, setSelectedCompany, deleteCompany,
+        loading, loadingButton, loadCompanies } = companyStore;
 
-    function handleModalOpen(tag: Tag | undefined) {
-        if (tag)
-            setSelectedTag(tag);
+    function handleModalOpen(company: Company | null) {
+        setSelectedCompany(company);
         modalStore.handleOpen();
     }
 
     const [target, setTarget] = useState('');
-    function handleTagDelete(id: string) {
+
+
+    function handleCompanyDelete(id: string) {
         setTarget(id);
-        deleteTag(id);
+        deleteCompany(id);
     }
 
     const columns: GridColDef[] = [
@@ -32,9 +33,19 @@ export default observer(function TagTable() {
             width: 300
         },
         {
-            field: 'name',
-            headerName: 'Name',
-            width: 300
+            field: 'title',
+            headerName: 'Title',
+            width: 200
+        },
+        {
+            field: 'url',
+            headerName: 'Url',
+            width: 300,
+            renderCell: (params) => (
+                <Typography color={themeStore.fontColor} variant="body2" component="a" href={params.row.url}>
+                    {params.row.url}
+                </Typography>
+            )
         },
         {
             field: 'actions',
@@ -52,10 +63,10 @@ export default observer(function TagTable() {
                     <LoadingButton
                         disabled={params.row.userName === store.userStore.user?.userName}
                         name={params.row.id}
-                        onClick={() => handleTagDelete(params.row.id)}
+                        onClick={() => handleCompanyDelete(params.row.id)}
                         variant="contained"
                         color="error"
-                        loading={buttonLoading && target === params.row.id}
+                        loading={loadingButton && target === params.row.id}
                     >
                         Delete
                     </LoadingButton>
@@ -65,22 +76,22 @@ export default observer(function TagTable() {
     ]
 
     useEffect(() => {
-        loadTags();
-    }, [loadTags])
+        loadCompanies();
+    }, [loadCompanies])
 
     return (
         <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Box>
                 <BasicModal>
-                    <TagForm />
+                    <CompanyForm />
                 </BasicModal>
                 <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", my: 2 }}>
-                    <Button variant="contained" onClick={() => handleModalOpen(undefined)}>Create</Button>
+                    <Button variant="contained" onClick={() => handleModalOpen(null)}>Create</Button>
                 </Box>
-                <div style={{ width: "830px", height: "600px" }}>
+                <div style={{ width: "1030px", height: "600px" }}>
                     <DataGrid
                         columns={columns}
-                        rows={tags}
+                        rows={companies}
                         initialState={{
                             pagination: {
                                 paginationModel: { page: 0, pageSize: 20 },

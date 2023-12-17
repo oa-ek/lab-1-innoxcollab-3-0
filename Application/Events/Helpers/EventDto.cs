@@ -1,5 +1,7 @@
+using Application.Companies;
 using Application.Profiles;
 using Application.Tags;
+using Application.Types;
 
 namespace Application.Events
 {
@@ -14,7 +16,7 @@ namespace Application.Events
         public bool IsCanceled { get; set; }
         public int Status { get; set; }
         public string RelatedPhoto { get; set; }
-        public string Type { get; set; }
+        public TypeDto Type { get; set; }
         public double FundingAmount { get; set; }
         public ICollection<TagDto> Tags { get; set; }
         public ICollection<EventBlockDto> Blocks { get; set; }

@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { Profile } from "./Profile";
 import { Tag } from "./Tag";
 import { EventBlock } from "./EventBlock";
+import { Type } from "./Type";
 
 export interface Event {
     id: string;
@@ -10,10 +11,11 @@ export interface Event {
     shortDescription: string;
     description: string;
     venue: string;
-    eventType: string;
     isCanceled: boolean;
     isHost: boolean;
     status: number;
+    fundingAmount: number;
+    type: Type;
     relatedPhoto: string;
     creatorProfile?: Profile;
     blocks: EventBlock[];
@@ -34,6 +36,8 @@ export class EventFormValues {
     date: string | null = dayjs().toISOString();
     venue: string = '';
     status: number = 0;
+    fundingAmount: number = 0;
+    type: Type | undefined = undefined;
     relatedPhoto: string = '';
     tags: Tag[] = [];
     blocks: EventBlock[] = [];
@@ -47,6 +51,8 @@ export class EventFormValues {
             this.date = event.date;
             this.venue = event.venue;
             this.status = event.status;
+            this.fundingAmount = event.fundingAmount;
+            this.type = event.type;
             this.relatedPhoto = event.relatedPhoto;
             this.tags = event.tags;
             this.blocks = event.blocks;

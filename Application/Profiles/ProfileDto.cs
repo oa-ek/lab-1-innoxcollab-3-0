@@ -1,4 +1,5 @@
 using Application.Companies;
+using Application.Events;
 
 namespace Application.Profiles
 {
@@ -11,5 +12,6 @@ namespace Application.Profiles
         public string Email { get; set; }
         public string Image { get; set; }
         public CompanyDto Company { get; set; }
+        public IEnumerable<EventDto> Events { get; set; }
     }
 }

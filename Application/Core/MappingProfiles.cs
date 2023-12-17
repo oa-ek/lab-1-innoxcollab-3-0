@@ -45,7 +45,7 @@ namespace Application.Core
 
             CreateMap<Event, EventDto>()
                 .ForMember(d => d.CreatorProfile, o => o.MapFrom(s => s.AppUser))
-                .ForMember(d => d.Type, o => o.MapFrom(s => s.Type.Name))
+                .ForMember(d => d.Type, o => o.MapFrom(s => s.Type))
                 .ForMember(d => d.RelatedPhoto, o => o.MapFrom(s => s.RelatedPhoto))
                 .ForMember(d => d.Blocks, o => o.MapFrom(s => s.Blocks));
 

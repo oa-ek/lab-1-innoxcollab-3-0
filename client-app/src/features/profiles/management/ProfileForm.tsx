@@ -1,12 +1,13 @@
 import { observer } from "mobx-react-lite";
-import { useStore } from "../../app/stores/store";
+import { useStore } from "../../../app/stores/store";
 import * as Yup from 'yup';
 import { v4 as uuid } from 'uuid'
 import { Form, Formik } from "formik";
-import { Profile } from "../../app/models/Profile";
-import TextInput from "../../app/common/form/TextInput";
+import { Profile } from "../../../app/models/Profile";
+import TextInput from "../../../app/common/form/TextInput";
 import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
+import { Stack } from "@mui/material";
 
 export default observer(function ProfileForm() {
     const { profileStore } = useStore();
@@ -54,25 +55,27 @@ export default observer(function ProfileForm() {
         >
             {({ isValid, dirty }) => (
                 <Form>
-                    <TextInput label="Username"
-                        name='userName' />
-                    <TextInput label="Display Name"
-                        name='displayName' />
-                    <TextInput ml label="Bio"
-                        name='bio' />
-                    <TextInput label="Email"
-                        name='email' />
-                    <LoadingButton
-                        variant="contained"
-                        type='submit'
-                        loading={loading}
-                        disabled={loading || !dirty || !isValid}
-                        sx={{ mt: 1 }}
-                    >
-                        {prf!.id ? "Update profile" : "Create profile"}
-                    </LoadingButton>
+                    <Stack spacing={3}>
+                        <TextInput label="Username"
+                            name='userName' />
+                        <TextInput label="Display Name"
+                            name='displayName' />
+                        <TextInput ml label="Bio"
+                            name='bio' />
+                        <TextInput label="Email"
+                            name='email' />
+                        <LoadingButton
+                            variant="contained"
+                            type='submit'
+                            loading={loading}
+                            disabled={loading || !dirty || !isValid}
+                            sx={{ mt: 1 }}
+                        >
+                            {prf!.id ? "Update profile" : "Create profile"}
+                        </LoadingButton>
+                    </Stack>
                 </Form>
             )}
-        </Formik>
+        </Formik >
     )
 })

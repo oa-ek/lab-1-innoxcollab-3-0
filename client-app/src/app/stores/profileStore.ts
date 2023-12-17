@@ -8,6 +8,7 @@ export default class ProfileStore {
     profiles: Profile[] = [];
     loadingProfile = false; // for <LoadingComponent />
     loading = false; // for deleteButton or something idk
+    activeTab = 0;
 
     constructor() {
         makeAutoObservable(this);
@@ -18,6 +19,10 @@ export default class ProfileStore {
             return store.userStore.user.userName === this.profile.userName;
         }
         return false;
+    }
+
+    setActiveTab = (activeTab: number) => {
+        this.activeTab = activeTab;
     }
 
     loadProfile = async (username: string) => {
@@ -83,23 +88,27 @@ export default class ProfileStore {
         }
     }
 
-    // updatePersonalProfile = async (id: string, profile: Partial<UserFormValues>) => {
-    //     this.loading = true;
-    //     try {
-    //         await agent.Profiles.edit(id, profile);
-    //         runInAction(() => {
-    //             if (profile.displayName && profile.displayName !==
-    //                 store.userStore.user?.displayName) {
-    //                 store.userStore.setDisplayName(profile.displayName);
-    //             }
-    //             this.profile = { ...this.profile, ...profile as Profile };
-    //             this.loading = false;
-    //         })
-    //     } catch (error) {
-    //         console.log(error);
-    //         runInAction(() => this.loading = false);
-    //     }
-    // }
+    updatePersonalProfile = async (id: string, profile: Partial<Profile>) => {
+        this.loading = true;
+        try {
+            await agent.Profiles.edit(id, profile);
+            runInAction(() => {
+                if (profile.displayName && profile.displayName !==
+                    store.userStore.user?.displayName) {
+                    store.userStore.setDisplayName(profile.displayName);
+                }
+                if (profile.userName && profile.userName !==
+                    store.userStore.user?.userName) {
+                    store.userStore.setUserName(profile.userName);
+                }
+                this.profile = { ...this.profile, ...profile as Profile };
+                this.loading = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => this.loading = false);
+        }
+    }
 
     deleteProfile = async (username: string) => {
         this.loading = true;

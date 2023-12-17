@@ -42,7 +42,6 @@ export default observer(function EventDashboard() {
                                 Load more
                             </LoadingButton>
                         </Box>
-
                     </>
                 )
             }

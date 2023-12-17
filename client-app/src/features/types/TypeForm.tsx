@@ -4,45 +4,45 @@ import * as Yup from 'yup';
 import { Form, Formik } from "formik";
 import TextInput from "../../app/common/form/TextInput";
 import { LoadingButton } from "@mui/lab";
-import { Tag } from "../../app/models/Tag";
+import { Type } from "../../app/models/Type";
 import { v4 as uuid } from 'uuid'
 import { Box, Stack, Typography } from "@mui/material";
 import { toast } from "react-toastify";
 
 
-export default observer(function TagForm() {
-    const { tagStore: { selectedTag, createTag, editTag, buttonLoading, tags }, themeStore } = useStore();
+export default observer(function TypeForm() {
+    const { typeStore: { selectedType, createType, editType, loadingButton, types }, themeStore } = useStore();
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Name is required!').min(2)
     });
 
-    function handleFormSubmit(tag: Tag) {
-        if (!tag.id) {
-            if (tags.find(x => x.name === tag.name)) {
-                toast.error("Tag with such name already exists!");
+    function handleFormSubmit(type: Type) {
+        if (!type.id) {
+            if (types.find(x => x.name === type.name)) {
+                toast.error("Type with such name already exists!");
             }
             else {
-                tag.id = uuid();
-                createTag(tag);
+                type.id = uuid();
+                createType(type);
             }
         }
         else {
-            if (tag.name !== tag?.name && tags.find(x => x.name === tag.name)) {
-                toast.error("Tag with such name already exists! Please pick different name or remain the existing one!");
+            if (type.name !== type?.name && types.find(x => x.name === type.name)) {
+                toast.error("Type with such name already exists! Please pick different name or remain the existing one!");
             } else {
-                editTag(tag.id, tag);
+                editType(type.id, type);
             }
         }
     }
 
     return (
-        <Stack direction="column" spacing={3}>
-            <Typography color={themeStore.fontColor}>{selectedTag ? "Editing tag" : "Creating tag"}</Typography>
+        <Stack direction="column" spacing={2}>
+            <Typography color={themeStore.fontColor}>{selectedType ? "Editing type" : "Creating type"}</Typography>
             <Formik
                 validationSchema={validationSchema}
                 enableReinitialize
-                initialValues={selectedTag || new Tag()}
+                initialValues={selectedType || new Type()}
                 onSubmit={values => handleFormSubmit(values)}
             >
                 {({ isValid, dirty }) => (
@@ -51,16 +51,15 @@ export default observer(function TagForm() {
                         <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 1 }}>
                             <LoadingButton
                                 type="submit"
-                                loading={buttonLoading}
+                                loading={loadingButton}
                                 variant="contained"
-                                disabled={buttonLoading || !dirty || !isValid}
+                                disabled={loadingButton || !dirty || !isValid}
                             >
                                 Submit
                             </LoadingButton>
                         </Box>
                     </Form>
                 )}
-
             </Formik>
         </Stack>
     );

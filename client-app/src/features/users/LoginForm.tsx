@@ -1,4 +1,4 @@
-import { Container, CssBaseline, Box, Avatar, Typography, Checkbox, FormControlLabel, Grid, Link } from "@mui/material";
+import { Container, CssBaseline, Box, Avatar, Typography, Checkbox, FormControlLabel, Grid, Link, Stack } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { ErrorMessage, Form, Formik } from "formik";
 import { useStore } from "../../app/stores/store";
@@ -38,42 +38,45 @@ export default observer(function LoginForm() {
                     >
                         {({ handleSubmit, isSubmitting, errors }) => (
                             <Form onSubmit={handleSubmit}>
-                                <TextInput label="Email" name="email" />
-                                <TextInput type="password" label="Password" name="password" />
-                                <ErrorMessage
-                                    name='error'
-                                    render={() =>
-                                        <Typography
-                                            variant="body2" color="error">
-                                            {errors.error}
-                                        </Typography>
-                                    }
-                                />
-                                <FormControlLabel
-                                    control={<Checkbox value="remember" color="primary" onChange={handleRememberMeChange} />}
-                                    label="Remember me"
-                                />
-                                <LoadingButton
-                                    loading={isSubmitting}
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{ mt: 3, mb: 2 }}
-                                >
-                                    Sign In
-                                </LoadingButton>
-                                <Grid container>
-                                    <Grid item xs>
-                                        <Link href="#" variant="body2">
-                                            Forgot password?
-                                        </Link>
+                                <Stack spacing={2}>
+                                    <TextInput label="Email" name="email" />
+                                    <TextInput type="password" label="Password" name="password" />
+                                    <ErrorMessage
+                                        name='error'
+                                        render={() =>
+                                            <Typography
+                                                variant="body2" color="error">
+                                                {errors.error}
+                                            </Typography>
+                                        }
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox value="remember" color="primary" onChange={handleRememberMeChange} />}
+                                        label="Remember me"
+                                    />
+                                    <LoadingButton
+                                        loading={isSubmitting}
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        sx={{ mt: 3, mb: 2 }}
+                                    >
+                                        Sign In
+                                    </LoadingButton>
+                                    <Grid container>
+                                        <Grid item xs>
+                                            <Link href="#" variant="body2">
+                                                Forgot password?
+                                            </Link>
+                                        </Grid>
+                                        <Grid item>
+                                            <Link href="/register" variant="body2">
+                                                Don't have an account? Sign Up
+                                            </Link>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item>
-                                        <Link href="/register" variant="body2">
-                                            Don't have an account? Sign Up
-                                        </Link>
-                                    </Grid>
-                                </Grid>
+                                </Stack>
+
                             </Form>
                         )}
                     </Formik>

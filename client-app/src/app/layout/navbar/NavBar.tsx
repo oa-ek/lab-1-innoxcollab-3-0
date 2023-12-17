@@ -10,6 +10,7 @@ import { useStore } from '../../stores/store';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import Search from './Search';
+import ListMenu from '../../common/menus/ListMenu';
 
 
 export default observer(function NavBar() {
@@ -46,7 +47,7 @@ export default observer(function NavBar() {
                         </Typography>
                     </MenuItem>
 
-                    <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+                    <Box sx={{ flexGrow: 1, display: { md: 'flex', alignItems: "center" } }}>
                         <Button component={NavLink} to="/events"
                             sx={{ my: 2, color: 'white' }}
                         >
@@ -54,23 +55,27 @@ export default observer(function NavBar() {
                         </Button>
                         {
                             user && (
-                                <Stack direction="row" >
+                                <>
                                     <Button component={Link} to="/createEvent"
                                         sx={{ ml: 2, my: 2, color: 'white' }}
                                     >
                                         Create Event
                                     </Button>
-                                    <Button component={NavLink} to="/admin/manageProfiles"
-                                        sx={{ ml: 2, my: 2, color: 'white' }}
-                                    >
-                                        Manage Users
-                                    </Button>
-                                    <Button component={NavLink} to="/admin/manageTags"
-                                        sx={{ ml: 2, my: 2, color: 'white' }}
-                                    >
-                                        Manage Tags
-                                    </Button>
-                                </Stack>
+                                    <ListMenu label="Admin">
+                                        <MenuItem component={NavLink} to="/admin/manageProfiles">
+                                            Manage Users
+                                        </MenuItem>
+                                        <MenuItem component={NavLink} to="/admin/manageTags">
+                                            Manage Tags
+                                        </MenuItem>
+                                        <MenuItem component={NavLink} to="/admin/manageTypes">
+                                            Manage Types
+                                        </MenuItem>
+                                        <MenuItem component={NavLink} to="/admin/manageCompanies">
+                                            Manage Companies
+                                        </MenuItem>
+                                    </ListMenu>
+                                </>
                             )
                         }
                     </Box>
@@ -112,7 +117,7 @@ export default observer(function NavBar() {
                                             open={Boolean(anchorElUser)}
                                             onClose={handleCloseUserMenu}
                                         >
-                                            <MenuItem component={Link} to={`/profile/${user?.userName}`} onClick={handleCloseUserMenu}>
+                                            <MenuItem component={Link} to={`/profiles/${user?.userName}`} onClick={handleCloseUserMenu}>
                                                 <Typography textAlign="center">My Account</Typography>
                                             </MenuItem>
                                             <MenuItem onClick={logout}>

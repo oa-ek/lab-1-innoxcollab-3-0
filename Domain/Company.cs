@@ -6,6 +6,6 @@ public class Company
     public string Title { get; set; }
     public string Description { get; set; }
     public string Url { get; set; }
-    public IEnumerable<AppUser> Representers { get; set; }
-    public IEnumerable<Event> Events { get; set; }
+    public ICollection<AppUser> Representers { get; set; }
+    public ICollection<Event> Events { get; set; }
 }

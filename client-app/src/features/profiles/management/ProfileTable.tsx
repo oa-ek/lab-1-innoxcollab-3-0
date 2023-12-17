@@ -1,11 +1,11 @@
 import { GridColDef, DataGrid } from "@mui/x-data-grid";
 import { observer } from "mobx-react-lite";
-import { store, useStore } from "../../app/stores/store";
+import { store, useStore } from "../../../app/stores/store";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import BasicModal from "../../app/common/modal/BasicModal";
+import BasicModal from "../../../app/common/modal/BasicModal";
 import ProfileForm from "./ProfileForm";
 
 
