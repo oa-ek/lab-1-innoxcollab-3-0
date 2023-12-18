@@ -26,7 +26,8 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await userManager.FindByEmailAsync(loginDto.Email);
+            var user = await userManager.Users.Include(x => x.Photo)
+                .FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if (user is null)
                 return Unauthorized();
@@ -36,7 +37,7 @@ namespace API.Controllers
             if (!result)
                 return Unauthorized();
 
-            return CreateUserObject(user);
+            return await CreateUserObject(user);
         }
 
         [AllowAnonymous]
@@ -58,7 +59,7 @@ namespace API.Controllers
             var result = await userManager.CreateAsync(user, registerDto.Password);
 
             if (result.Succeeded)
-                return CreateUserObject(user);
+                return await CreateUserObject(user);
 
             return BadRequest(result.Errors);
         }
@@ -68,18 +69,20 @@ namespace API.Controllers
         {
             var user = await userManager.Users.Include(p => p.Photo)
                 .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
-            return CreateUserObject(user);
+            return await CreateUserObject(user);
         }
 
-        private UserDto CreateUserObject(AppUser user)
+        private async Task<UserDto> CreateUserObject(AppUser user)
         {
+            var roles = await userManager.GetRolesAsync(user);
             return new UserDto
             {
                 Id = user.Id,
                 DisplayName = user.DisplayName,
                 Image = user.Photo?.Url,
-                Token = tokenService.CreateToken(user),
-                UserName = user.UserName
+                Token = await tokenService.CreateToken(user),
+                UserName = user.UserName,
+                Roles = roles
             };
         }
     }

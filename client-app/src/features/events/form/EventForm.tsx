@@ -94,8 +94,7 @@ export default observer(function EventForm() {
     const [target, setTarget] = useState('');
     function handleEventDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name);
-        deleteEvent(id);
-        router.navigate('/events');
+        deleteEvent(id).then(() => router.navigate(`/events`));
     }
 
     function openModal(modalName: string) {
@@ -190,7 +189,8 @@ export default observer(function EventForm() {
                                 </Grid>
                                 <Grid item xs={10}>
                                     <Stack direction="row" spacing={1} justifyContent="flex-end">
-                                        <Button variant="contained" component={Link} to={`/events/${event.id}`}>
+                                        <Button variant="contained" component={Link}
+                                            to={event.id ? `/events/${event.id}` : `/events`}>
                                             Cancel
                                         </Button>
                                         <LoadingButton

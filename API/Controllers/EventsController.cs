@@ -20,6 +20,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
 
+        [Authorize(Roles = "Publisher,Moderator,Admin")]
         [HttpPost]
         public async Task<ActionResult> CreateEvent([FromBody] Event @event)
         {
@@ -41,16 +42,11 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
 
+        [Authorize(Policy = "IsEventHost")]
         [HttpPost("{id}/cancel")]
         public async Task<ActionResult> CancelEvent(Guid id)
         {
             return HandleResult(await Mediator.Send(new UpdateIsCanceled.Command { Id = id }));
-        }
-
-        [HttpGet("search")]
-        public async Task<ActionResult> Search(string searchTerm)
-        {
-            return HandleResult(await Mediator.Send(new Search.Query { SearchTerm = searchTerm }));
         }
     }
 }

@@ -22,9 +22,15 @@ const modules = {
         matchVisual: false,
     }
 }
-
 export default observer(function TextEditor(props: Props) {
     const [field, meta, helpers] = useField(props.name);
+
+    const handleBlur = () => {
+        if (field) {
+            helpers.setTouched(true);
+        }
+    };
+
     return (
         <>
             <Typography variant="h5" sx={{ pl: "5px", pt: "10px" }}>
@@ -37,8 +43,9 @@ export default observer(function TextEditor(props: Props) {
                     style={{ height: "100%" }}
                     theme="snow"
                     value={meta.value}
+                    onBlur={handleBlur}  // Змінено тут
                     onChange={(value) => helpers.setValue(value)} />
             </div>
         </>
     );
-})
+});

@@ -17,6 +17,7 @@ namespace Application.Events
         {
             private readonly IUserAccessor userAccesor;
             private readonly DataContext context;
+
             public Handler(DataContext context, IUserAccessor userAccesor)
             {
                 this.context = context;
@@ -31,18 +32,7 @@ namespace Application.Events
                 if (@event is null)
                     return null;
 
-                var user = await context.Users
-                    .FirstOrDefaultAsync(x => x.UserName == userAccesor.GetUserName());
-
-                if (user is null)
-                    return null;
-
-                var hostUserName = @event.AppUser.UserName;
-
-                if (hostUserName == userAccesor.GetUserName())
-                {
-                    @event.IsCanceled = !@event.IsCanceled;
-                }
+                @event.IsCanceled = !@event.IsCanceled;
 
                 var result = await context.SaveChangesAsync() > 0;
 
@@ -50,7 +40,6 @@ namespace Application.Events
                     return Result<Unit>.Failure("Problem canceling event");
 
                 return Result<Unit>.Success(Unit.Value);
-
             }
         }
     }

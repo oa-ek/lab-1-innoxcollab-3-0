@@ -36,8 +36,9 @@ namespace Application.Events
 
                 var existingTags = new List<Tag>();
 
-                foreach (var tag in request.Event.Tags)
-                    existingTags.Add(await context.Tags.FindAsync(tag.Id));
+                if (request.Event.Tags is not null)
+                    foreach (var tag in request.Event.Tags)
+                        existingTags.Add(await context.Tags.FindAsync(tag.Id));
 
                 if (!Equals(@event.Blocks, request.Event.Blocks))
                 {

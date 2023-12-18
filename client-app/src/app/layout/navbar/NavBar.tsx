@@ -55,27 +55,32 @@ export default observer(function NavBar() {
                             Events
                         </Button>
                         {
-                            user && (
+                            user && user.roles.find(x => x === "Publisher" || x === "Moderator" || x === "Admin") && (
                                 <>
                                     <Button component={Link} to="/createEvent"
                                         sx={{ ml: 2, my: 2, color: 'white' }}
                                     >
                                         Create Event
                                     </Button>
-                                    <ListMenu label="Admin">
-                                        <MenuItem component={NavLink} to="/admin/manageProfiles">
-                                            Manage Users
-                                        </MenuItem>
-                                        <MenuItem component={NavLink} to="/admin/manageTags">
-                                            Manage Tags
-                                        </MenuItem>
-                                        <MenuItem component={NavLink} to="/admin/manageTypes">
-                                            Manage Types
-                                        </MenuItem>
-                                        <MenuItem component={NavLink} to="/admin/manageCompanies">
-                                            Manage Companies
-                                        </MenuItem>
-                                    </ListMenu>
+                                    {
+                                        user.roles.find(x => x === "Moderator" || x === "Admin") && (
+                                            <ListMenu label="Admin">
+                                                <MenuItem component={NavLink} to="/admin/manageProfiles">
+                                                    Manage Users
+                                                </MenuItem>
+                                                <MenuItem component={NavLink} to="/admin/manageTags">
+                                                    Manage Tags
+                                                </MenuItem>
+                                                <MenuItem component={NavLink} to="/admin/manageTypes">
+                                                    Manage Types
+                                                </MenuItem>
+                                                <MenuItem component={NavLink} to="/admin/manageCompanies">
+                                                    Manage Companies
+                                                </MenuItem>
+                                            </ListMenu>
+                                        )
+                                    }
+
                                 </>
                             )
                         }

@@ -44,6 +44,15 @@ export default observer(function EventDashboard() {
                 </Grid>
                 <Grid item xs={10}>
                     {
+                        !eventStore.loadingInitial && eventRegistry.size === 0 && (
+                            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "800px" }}>
+                                <Typography color={themeStore.fontColor} variant="h3">
+                                    No events were found!
+                                </Typography>
+                            </Box>
+                        )
+                    }
+                    {
                         eventStore.loadingInitial && eventRegistry.size === 0 && !loadingNext ? (
                             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "800px" }}>
                                 <CircularProgress />
@@ -52,7 +61,7 @@ export default observer(function EventDashboard() {
                             <>
                                 <EventList />
                                 {
-                                    !(pagination?.totalPages === pagination?.currentPage) && (
+                                    !(pagination?.totalPages === pagination?.currentPage) && !(eventRegistry.size === 0) && (
                                         <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                                             <LoadingButton
                                                 variant="outlined"

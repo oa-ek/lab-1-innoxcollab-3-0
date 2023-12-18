@@ -7,8 +7,18 @@ namespace Persistence
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
+            if (!context.Roles.Any())
+            {
+                string[] roleNames = { "Admin", "Moderator", "Publisher", "User" };
+                foreach (var roleName in roleNames)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
             if (!context.Events.Any())
             {
                 var types = new List<Type>
@@ -110,7 +120,17 @@ namespace Persistence
                     },
                 };
 
-                foreach (var user in users) await userManager.CreateAsync(user, "Pa$$w0rd");
+                foreach (var user in users)
+                {
+                    var result = await userManager.CreateAsync(user, "Pa$$w0rd");
+                    await userManager.AddToRoleAsync(user, "User");
+                    if (result.Succeeded && user.UserName == "admin")
+                        await userManager.AddToRoleAsync(user, "Admin");
+                    if (result.Succeeded && user.UserName == "bob")
+                        await userManager.AddToRoleAsync(user, "Moderator");
+                    if (result.Succeeded && user.UserName == "jane" || user.UserName == "tom")
+                        await userManager.AddToRoleAsync(user, "Publisher");
+                }
 
                 var tags = new List<Tag>
                 {
@@ -261,7 +281,6 @@ namespace Persistence
                         FundingAmount = 5000,
                         Status = EventStatus.Active,
                         Company = users[1].Company
-
                     },
                     new()
                     {

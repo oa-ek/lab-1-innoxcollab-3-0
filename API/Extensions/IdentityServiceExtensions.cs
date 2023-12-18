@@ -4,6 +4,7 @@ using Domain;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 
@@ -12,35 +13,34 @@ namespace API.Extensions
     public static class IdentityServiceExtensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services,
-         IConfiguration config)
+            IConfiguration config)
         {
             services.AddIdentityCore<AppUser>(opt =>
-            {
-                opt.User.RequireUniqueEmail = true;
-                opt.Password.RequireDigit = true;
-            })
-            .AddEntityFrameworkStores<DataContext>();
+                {
+                    opt.User.RequireUniqueEmail = true;
+                    opt.Password.RequireDigit = true;
+                })
+                .AddRoles<IdentityRole>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddEntityFrameworkStores<DataContext>();
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]!));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(opt =>
-            {
-                opt.TokenValidationParameters = new TokenValidationParameters
+                .AddJwtBearer(opt =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = key,
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             services.AddAuthorization(opt =>
             {
-                opt.AddPolicy("IsEventHost", policy =>
-                {
-                    policy.Requirements.Add(new IsHostRequirement());
-                });
+                opt.AddPolicy("IsEventHost", policy => { policy.Requirements.Add(new IsHostRequirement()); });
             });
 
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();

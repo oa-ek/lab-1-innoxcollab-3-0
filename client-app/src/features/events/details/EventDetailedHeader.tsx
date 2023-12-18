@@ -10,12 +10,12 @@ interface Props {
 }
 
 export default observer(function EventDetailedHeader({ event }: Props) {
-    const { eventStore: { cancelEventToggle } } = useStore();
+    const { eventStore: { cancelEventToggle }, userStore: { user } } = useStore();
     return (
         <Card>
             <Stack alignItems="center" justifyContent="center"
                 sx={{ position: "relative", minHeight: "400px", maxHeight: "800px" }}>
-                {event.isHost && (
+                {event.isHost || user?.roles.find(x => x === "Moderator" || x === "Admin") && (
                     <div style={{ position: "absolute", top: 0, right: 0, padding: 20 }}>
                         <ListMenu dots>
                             <MenuItem component={Link} to={`/manage/${event.id}`}>Edit event</MenuItem>

@@ -44,13 +44,17 @@ public class Create
 
             var existingTags = new List<Tag>();
 
-            foreach (var tag in request.Event.Tags)
-                existingTags.Add(await context.Tags.FindAsync(tag.Id));
+            if (request.Event.Tags is not null)
+                foreach (var tag in request.Event.Tags)
+                    existingTags.Add(await context.Tags.FindAsync(tag.Id));
 
             foreach (var block in request.Event.Blocks)
                 await context.AddAsync(block);
 
             request.Event.Tags = existingTags;
+
+            var type = await context.Types.FirstOrDefaultAsync(x => x.Id == request.Event.Type.Id);
+            request.Event.Type = type;
 
             await context.Events.AddAsync(request.Event);
 
