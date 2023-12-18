@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx"
+import { makeAutoObservable, reaction, runInAction } from "mobx"
 import { store } from "./store";
 import { Profile } from "../models/Profile";
 import { Event, EventFormValues } from "../models/Event";
@@ -15,17 +15,27 @@ export default class EventStore {
     pagination: Pagination | null = null;
     pagingParams = new PagingParams();
     searchResult: Event[] = [];
-    predicate = new Map().set('all', true)
+    predicate = new Map<string, string>().set('all', 'true');
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
+        reaction(
+            () => this.predicate.keys(),
+            () => {
+                this.pagingParams = new PagingParams();
+                this.eventRegistry.clear();
+                this.loadEvents();
+            }
+        );
     }
 
     get axiosParams() {
         const params = new URLSearchParams();
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
-
+        this.predicate.forEach((value, key) => {
+            params.append(key, value);
+        });
         return params;
     }
 
@@ -165,21 +175,31 @@ export default class EventStore {
         this.pagingParams = pagingParams;
     }
 
-    search = async (searchTerm: string) => {
-        this.loadingInitial = true;
-        try {
-            const searchResult = await agent.Events.search(searchTerm);
-            runInAction(() => {
-                this.searchResult = searchResult;
-                this.loadingInitial = false;
-                console.log(this.searchResult);
-            });
-        } catch (error) {
-            console.log(error);
-            runInAction(() => {
-                this.loadingInitial = false;
-            });
+
+    setPredicate = (key: string, value: string) => {
+        const resetPredicate = () => {
+            this.predicate.clear();
         }
+        runInAction(() => {
+            switch (key) {
+                case 'all':
+                    resetPredicate();
+                    break;
+                case 'statuses':
+                case 'eventTypes':
+                case 'tagName':
+                    this.removePredicate(key);
+                    this.predicate.set(key, value);
+                    break;
+                case 'searchTerm':
+                    resetPredicate();
+                    this.predicate.set(key, value);
+                    break;
+            }
+        });
     }
 
+    removePredicate = (key: string) => {
+        this.predicate.delete(key);
+    }
 }

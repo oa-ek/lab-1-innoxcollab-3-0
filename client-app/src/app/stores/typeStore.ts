@@ -14,7 +14,7 @@ export default class TypeStore {
         makeAutoObservable(this);
     }
 
-    setSelectedType = (type: Type) => {
+    setSelectedType = (type: Type | null) => {
         this.selectedType = type;
     }
 

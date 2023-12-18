@@ -1,5 +1,4 @@
-using Application.Companies;
-using Application.Profiles;
+using Application.Events.Helpers;
 using Application.Tags;
 using Application.Types;
 
@@ -20,6 +19,6 @@ namespace Application.Events
         public double FundingAmount { get; set; }
         public ICollection<TagDto> Tags { get; set; }
         public ICollection<EventBlockDto> Blocks { get; set; }
-        public ProfileDto CreatorProfile { get; set; }
+        public CreatorDto CreatorProfile { get; set; }
     }
 }

@@ -30,16 +30,17 @@ namespace Application.Events
             {
                 var query = context.Events
                     .ProjectTo<EventDto>(mapper.ConfigurationProvider)
+                    .OrderByDescending(x => x.Date)
                     .AsQueryable();
 
-                if (request.Params.Status > -1)
-                    query = query.Where(x => x.Status == request.Params.Status);
+                if (request.Params.Statuses is not null)
+                    query = query.Where(e => request.Params.Statuses.Contains(e.Status));
 
                 if (request.Params.TagName is not null)
                     query = query.Where(e => e.Tags.Any(x => x.Name == request.Params.TagName));
 
-                if (request.Params.EventType is not null)
-                    query = query.Where(e => e.Type.Name == request.Params.EventType);
+                if (request.Params.EventTypes is not null)
+                    query = query.Where(e => request.Params.EventTypes.Contains(e.Type.Name));
 
                 if (request.Params.SearchTerm is not null)
                 {

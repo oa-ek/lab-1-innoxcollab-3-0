@@ -1,5 +1,6 @@
 using Application.Companies;
 using Application.Events;
+using Application.Events.Helpers;
 using Application.Profiles;
 using Application.Tags;
 using Application.Types;
@@ -42,6 +43,12 @@ namespace Application.Core
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
                 .ForMember(d => d.Company, o => o.MapFrom(s => s.Company))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.Photo.Url));
+
+            CreateMap<AppUser, CreatorDto>()
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))
+                .ForMember(d => d.UserName, o => o.MapFrom(s => s.UserName))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Bio));
 
             CreateMap<Event, EventDto>()
                 .ForMember(d => d.CreatorProfile, o => o.MapFrom(s => s.AppUser))

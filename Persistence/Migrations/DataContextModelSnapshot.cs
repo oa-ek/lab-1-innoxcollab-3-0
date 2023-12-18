@@ -120,7 +120,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Event", b =>
@@ -173,7 +173,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("Domain.EventBlock", b =>
@@ -198,7 +198,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("EventBlocks");
+                    b.ToTable("EventBlocks", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Photo", b =>
@@ -214,7 +214,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photos", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Tag", b =>
@@ -228,7 +228,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Type", b =>
@@ -242,7 +242,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Types");
+                    b.ToTable("Types", (string)null);
                 });
 
             modelBuilder.Entity("EventTag", b =>
@@ -257,7 +257,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("EventTag");
+                    b.ToTable("EventTag", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

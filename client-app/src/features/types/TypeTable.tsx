@@ -13,9 +13,8 @@ export default observer(function TypeTable() {
     const { types, setSelectedType, deleteType,
         loadingTypes, loadingButton, loadTypes, selectedType } = typeStore;
 
-    function handleModalOpen(type: Type | undefined) {
-        if (type)
-            setSelectedType(type);
+    function handleModalOpen(type: Type | null) {
+        setSelectedType(type);
         modalStore.handleOpen();
     }
 
@@ -104,7 +103,11 @@ export default observer(function TypeTable() {
                 }
 
                 <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", my: 2 }}>
-                    <Button variant="contained" onClick={() => handleModalOpen(undefined)}>Create</Button>
+                    <Button variant="contained" onClick={() => {
+                        setTarget("typeForm");
+                        handleModalOpen(null);
+                    }}>
+                        Create</Button>
                 </Box>
                 <div style={{ width: "830px", height: "600px" }}>
                     <DataGrid

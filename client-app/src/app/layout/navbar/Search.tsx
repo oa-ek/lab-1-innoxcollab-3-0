@@ -1,9 +1,9 @@
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import { IconButton } from '@mui/material';
 import { useStore } from '../../stores/store';
 import { FormEvent } from 'react';
-import { IconButton } from '@mui/material';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -47,16 +47,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchAppBar() {
-    const { eventStore: { loadingInitial, searchResult, search } } = useStore();
-
-    function handleSearchSubmit(searchTerm: string) {
-        search(searchTerm);
-    }
+    const { eventStore } = useStore();
+    const { setPredicate } = eventStore;
 
     function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const searchTerm = event.currentTarget.searchInput.value;
-        handleSearchSubmit(searchTerm);
+        setPredicate('searchTerm', searchTerm);
     }
 
     return (

@@ -20,7 +20,9 @@ namespace API.Extensions
 
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseSqlServer(config.GetConnectionString("SqlServerConnection"));
+                opt.UseSqlServer(config.GetConnectionString("SqlServerConnection"),
+                    o => { o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery); });
+
                 //opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
 

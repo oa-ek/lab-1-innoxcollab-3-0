@@ -14,7 +14,7 @@ import ListMenu from '../../common/menus/ListMenu';
 
 
 export default observer(function NavBar() {
-    const { userStore: { user, logout } } = useStore();
+    const { userStore: { user, logout }, eventStore: { removePredicate } } = useStore();
 
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -49,7 +49,8 @@ export default observer(function NavBar() {
 
                     <Box sx={{ flexGrow: 1, display: { md: 'flex', alignItems: "center" } }}>
                         <Button component={NavLink} to="/events"
-                            sx={{ my: 2, color: 'white' }}
+                            sx={{ color: 'white' }}
+                            onClick={() => removePredicate('searchTerm')}
                         >
                             Events
                         </Button>
