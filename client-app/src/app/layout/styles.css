@@ -5,9 +5,9 @@ body {
 
 .NavBar {
     background-image: linear-gradient(135deg,
-            rgb(30, 53, 141) 0%,
-            rgb(70, 148, 197),
-            rgb(11, 88, 123));
+    rgb(30, 53, 141) 0%,
+    rgb(70, 148, 197),
+    rgb(11, 88, 123));
 }
 
 .active {
@@ -30,9 +30,9 @@ body {
     display: flex;
     align-items: center;
     background-image: linear-gradient(135deg,
-            rgb(24, 42, 115) 0%,
-            rgb(33, 138, 174) 69%,
-            rgb(32, 167, 172) 89%) !important;
+    rgb(24, 42, 115) 0%,
+    rgb(33, 138, 174) 69%,
+    rgb(32, 167, 172) 89%) !important;
     height: 100vh;
 }
 
@@ -53,3 +53,73 @@ body {
     color: #a0a0a0;
     font-style: italic;
 }
+
+/* Для homePage */
+
+.containerH{
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(public/Image/background2.png);
+    background-position: center;
+    background-size: cover;
+    padding-left: 14%;
+    padding-right: 14%;
+    box-sizing: border-box;
+}
+
+.rowH{
+    display: flex;
+    height: 88%;
+    align-items: center;
+}
+
+.colH{
+    flex-basis: 50%;
+}
+
+.colH1{
+    display: flex;
+    flex-direction: column;
+}
+
+.h1H{
+    color: #fff;
+    font-size: 100px;
+}
+.pH{
+    color: #fff;
+    font-size: 24px;
+    line-height: 24px;
+}
+.buttonH{
+    width: 180px;
+    color: #000;
+    font-size: 12px;
+    padding: 12px 12px 12px 12px;
+    background: #fff;
+    border: 0;
+    border-radius: 20px;
+    outline: none;
+    margin-top: 30px;
+}
+
+.cardH{
+    width: 210px;
+    height: 240px;
+    display: inline-block;
+    border-radius: 10px;
+    padding: 15px 25px;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin: 10px 15px;
+    background-image: url('public/Image/pic-1.png');
+    background-position: center;
+    background-size: cover;
+    transition: transform 0.5s, box-shadow 0.3s;
+}
+
+.cardH:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
